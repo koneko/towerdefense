@@ -8,17 +8,17 @@ Bastion is a Tower Defense type of game.
 
 The game offers the player various missions that he can play.
 In each mission the player is tasked to defend a path going from the entrance of the map to exit of the map.
-Each mission is split into multiple rounds. Each level consists of two phases:
+Each mission is split into multiple rounds. Each round consists of two phases:
 
 1. Phase 1 (Buy phase) - The player can buy towers and place them on the map.
 2. Phase 2 (Combat phase) - In this phase there the enemies spawn at the entrance of the map and start moving towards the exit. The towers will attack the enemies and try to stop them from reaching the exit. More enemies may spawn during the combat phase.
 
 For every creep killed by the player, the player will receive Gold resource.
-Every time a level is finished (Combat phase completes) the player will also receive one Gem resource.
+Every time a level is finished (Combat phase completes) the player will also receive one Gem.
 The player can use the Gold to buy more towers or upgrade the existing ones.
 If a creep reaches the exit, the player will lose a some health points (HP).
 If the player loses all his HP, the game is over and the player has lost.
-If the player completes all the rounds of a level, the player wins and receives a Score which places him at a leaderboard.
+If the player completes all the rounds of a mission, the player wins and receives a Score which places him at a leaderboard.
 
 # Functional description
 
@@ -87,6 +87,8 @@ After the player has finished spending their resources/strategizing, they may en
 
 ### Sidebar - Buy phase
 
+During the buy phase the sidebar is split into 2 tabs, the Tower menu and the Gem bag. The tower menu contains towers which you can place on the map grid taking up 1x1 space. You may purchase towers with Gold, and certain towers can be empowered with Gems while others can not. Towers themselves can not be upgraded instead you upgrade your Gems.
+
 ## Game screen - Combat phase
 
 ## Towers
@@ -108,14 +110,21 @@ Currently there are 6 Gems:
    - Description: A cold and wet gem rarely found worn by Yeti leaders in the tundra biome, this gem [WIP]
 3. Titalium Gem (#FFFFFF) (white)
    - Description: [WIP]
-4. Soulforge Gem (#00FF00) (green)
+4. Soulforge Gem (#00FFFF) (cyan)
    - Description: [WIP]
 5. Rift Gem (#FF00FF) (purple)
    - Description: [WIP]
-6. Phantom Gem (#00FFFF) (cyan)
+6. Divinity Gem (#00FF00) (green)
    - Description: [WIP]
 
+(idealno 6 \* 5 combos)
+(impossible combos:
+fire + yeti
+soulforge + divinity
+rift + titalium
+)
 (kasnija ideja svakih 5 rundi dobit "utility" gem koji mozda ubrzava attack speed ili daje neke specificnije buffove)
+(ideja: merchanting gem, gemovi koji su kombinirani s ovim gemom kostaju 10% manje, round down)
 
 ### HP
 

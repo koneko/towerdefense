@@ -87,11 +87,65 @@ After the player has finished spending their resources/strategizing, they may en
 
 ### Sidebar - Buy phase
 
-During the buy phase the sidebar is split into 2 tabs, the Tower menu and the Gem bag. The tower menu contains towers which you can place on the map grid taking up 1x1 space. You may purchase towers with Gold, and certain towers can be empowered with Gems while others can not. Towers themselves can not be upgraded instead you upgrade your Gems.
+During the buy phase the sidebar is split into 2 tabs, the Tower menu and the Gem bag. The tower menu contains towers which you can place on the map grid.
+You may purchase towers with Gold, and certain towers can be empowered with Gems while others can not. Towers themselves can not be upgraded instead you upgrade your Gems.
+Gems are given at the start of the buy phase (specifically only 1 picked out of 3) and are subsequently placed into the gem bag.
+From the Gem bag they can be slotted into a tower, upgraded or combined with other gems.
 
-## Game screen - Combat phase
+_(razmisljam o tome da se gemovi na pocetku buy phasea moraju kupit i/ili mogu se rerollat i/ili da se "upgradeani" ili vec "craftani" gemovi isto mogu kupit)_
+_(takodjer razmisljam da ima market tower koji se moze buildat)_
+
+## Game screen - Combat phase [WIP]
+
+### Sidebar - Combat phase [WIP]
 
 ## Towers
+
+Towers are the buildings you build on the map grid which attack/help you in defeating the creeps that are traversing the path.
+They always have a circular range around them within which they will attack creeps.
+Placing a tower on the grid costs a certain amount of Gold defined by the tower, while empowering it via Gem does not cost anything (Gems are not consumed, more like "slotted" as they can be repossesed).
+Towers on their own can not be upgraded, only the Gems that are empowering them can be.
+Not all towers can be empowered and they would serve more for utility purposes instead of attacking creeps.
+
+### Shooting Tower
+
+Basic tower that shoots 1 projectile at the closest creep.
+
+- Damage: 1
+- Attack Cooldown: 1s
+- Empowerable: Yes
+- Cost: 100g
+- Range: 100 pixels
+
+### Circular Tower [WIP]
+
+### Line tower [WIP]
+
+### Chain tower [WIP]
+
+## Map grid [WIP]
+
+## Creeps
+
+Creeps are the "things" that travel down the pre determined path of the map from the beginning to the end, which the towers will automatically target and which have a set amount of HP.
+Upon reaching the end of the path, they will take away the amount of HP they have from the player's HP (if creep clears the path with 5 HP, player 100 -> 95 HP).
+There are multiple types of creeps with varying amounts of HP, movement speed and special attributes (only vulnerable to divine attacks, etc).
+
+### Basic Creep [WIP]
+
+### Quick Creep [WIP]
+
+### Bulky Creep [WIP]
+
+### Undead Creep
+
+Requires tower to be empowered with a divinity gem to deal damage, otherwise immune to damage.
+
+- Health: 5 HP
+- Speed: 40 pixels per second
+- Special attributes: Undead, Weak to Divinity, Resistant to Soulforge
+
+## Creep waves [WIP]
 
 ## Resources
 
@@ -107,7 +161,7 @@ Currently there are 6 Gems:
 1. Fire Gem (#FF0000) (fire)
    - Description: A firey gem found inside the ancient ruins of a lost volcano dwelling civilization, this gem is infused with many eons of firey, quicky, volcanic energy to deliver fast and burning blows to all creeps.
 2. Yeti Gem (#0000FF) (ice)
-   - Description: A cold and wet gem rarely found worn by Yeti leaders in the tundra biome, this gem [WIP]
+   - Description: [WIP]
 3. Titalium Gem (#FFFFFF) (white)
    - Description: [WIP]
 4. Soulforge Gem (#00FFFF) (cyan)
@@ -117,14 +171,15 @@ Currently there are 6 Gems:
 6. Divinity Gem (#00FF00) (green)
    - Description: [WIP]
 
-(idealno 6 \* 5 combos)
-(impossible combos:
-fire + yeti
-soulforge + divinity
-rift + titalium
-)
-(kasnija ideja svakih 5 rundi dobit "utility" gem koji mozda ubrzava attack speed ili daje neke specificnije buffove)
-(ideja: merchanting gem, gemovi koji su kombinirani s ovim gemom kostaju 10% manje, round down)
+_(idealno 6 \* 4 combos)_  
+_(impossible combos:_  
+_fire + yeti_  
+_soulforge + divinity_  
+_rift + titalium_
+_)_  
+_(kasnija ideja svakih 5 rundi dobit "utility" gem koji mozda ubrzava attack speed ili daje neke specificnije buffove)_  
+_(ideja: merchanting gem, gemovi koji su kombinirani s ovim gemom kostaju 10% manje, round down)_  
+_(ideja: scavenger gem, gemovi koji su kombinirani s ovim gemom 25% vise golda nego sto creep normalno daje, round up)_
 
 ### HP
 
@@ -132,4 +187,4 @@ HP (Health Points) is the resource that you always start with 100 of and you mus
 
 ### Score
 
-# Data structures and algorithms
+# Data structures and algorithms [WIP]

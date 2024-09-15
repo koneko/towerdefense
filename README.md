@@ -173,10 +173,10 @@ Currently there are 6 Gems:
 
 _(idealno 6 \* 4 combos)_  
 _(impossible combos:_  
-_fire + yeti_  
 _soulforge + divinity_  
 _rift + titalium_
 _)_  
+_fire + yeti gives frostfire_
 _(kasnija ideja svakih 5 rundi dobit "utility" gem koji mozda ubrzava attack speed ili daje neke specificnije buffove)_  
 _(ideja: merchanting gem, gemovi koji su kombinirani s ovim gemom kostaju 10% manje, round down)_  
 _(ideja: scavenger gem, gemovi koji su kombinirani s ovim gemom 25% vise golda nego sto creep normalno daje, round up)_

@@ -87,6 +87,7 @@ After the player has finished spending their resources/strategizing, they may en
 
 ### Sidebar - Buy phase
 
+The player starts with 200g and 100 HP.
 During the buy phase the sidebar is split into 2 tabs, the Tower menu and the Gem bag. The tower menu contains towers which you can place on the map grid.
 You may purchase towers with Gold, and certain towers can be empowered with Gems while others can not. Towers themselves can not be upgraded instead you upgrade your Gems.
 Gems are given at the start of the buy phase (specifically only 1 picked out of 3) and are subsequently placed into the gem bag.
@@ -112,7 +113,7 @@ Not all towers can be empowered and they would serve more for utility purposes i
 Basic tower that shoots 1 projectile at the closest creep.
 
 - Damage: 1
-- Attack Cooldown: 1s
+- Attack Cooldown: 2s
 - Empowerable: Yes
 - Cost: 100g
 - Range: 100 pixels
@@ -131,7 +132,11 @@ Creeps are the "things" that travel down the pre determined path of the map from
 Upon reaching the end of the path, they will take away the amount of HP they have from the player's HP (if creep clears the path with 5 HP, player 100 -> 95 HP).
 There are multiple types of creeps with varying amounts of HP, movement speed and special attributes (only vulnerable to divine attacks, etc).
 
-### Basic Creep [WIP]
+### Basic Creep
+
+- Health: 2 HP
+- Speed: 35 pixels per second
+- Special attributes: None
 
 ### Quick Creep [WIP]
 

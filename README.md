@@ -100,7 +100,7 @@ After the player has finished spending their resources/strategizing, they may en
 It is possible to sell a tower by clicking on the tower, this will bring up a sell button which will refund the player a portion of the Gold spent on the tower (if the tower was bought in the current buy phase then the player will receive the full amount of Gold back).
 Any sloted gems will be returned to the Gem bag.
 It is possible to remove a gem from a tower by clicking on the tower, this will bring up a remove button which will remove the gem from the tower and return it to the Gem bag. This can be done at any time during the buy phase regardless when the Gem was slotted.
-
+TODO: Gem leveling interface
 
 ### Sidebar - Buy phase
 
@@ -136,6 +136,20 @@ Placing a tower on the grid costs a certain amount of Gold defined by the tower,
 Towers on their own can not be upgraded, only the Gems that are empowering them can be.
 Not all towers can be empowered (via Gems) and they would serve more for utility purposes instead of attacking creeps.
 
+### Tower effects
+There are several possible tower effects which describe the general behavior of the tower:
+
+#### Shooter
+This is standard effect available to each tower.
+It enables the tower to attack the creeps by shooting projectile(s) at them.
+
+#### Trap
+The tower places a trap on the ground which will deal damage to the creeps that pass over it.
+The trap is placed in the range of the tower randomly
+
+#### Necromancer tower
+This tower spawns creeps which will attack the other creeps. The spawned creeps will have a limited lifespan and will die after a certain amount of time. When this anti-creep meets another creep then one of them will 'die' instantly depending on the their health.
+
 ### Shooting Tower
 Basic tower that shoots 1 projectile at the closest creep.
 
@@ -144,12 +158,21 @@ Basic tower that shoots 1 projectile at the closest creep.
 - Slot count: 3
 - Cost: 100g
 - Range: 2.5 Grid units
+- Default effects: Shooter
 
 ### Circular Tower [WIP]
 
 ### Line tower [WIP]
 
 ### Chain tower [WIP]
+
+### Damage types
+We have several types of damage within the game:
+- Physical (default damage type)
+- Divine
+- Fire
+- Ice
+- FrostFire
 
 ## Creeps
 
@@ -160,11 +183,21 @@ Each creep follows the same 'line' through the cells which represent the path on
 Creeps may go through another creep if they are faster (they may overlap).
 Creeps may have special attributes.
 
+### Creep resistance and weaknesses
+Creep may be resistant or weak to a specific type of damage.
+For each creep there will be a percentage of damage reduction/increase for each damage type.
+
 ### Basic Creep
 
 - Health: 2 HP
 - Speed: 1 Grid unit per second
 - Special attributes: None
+- Damage resistance:
+  - Physical: 0%
+  - Divine: 0%
+  - Fire: 0%
+  - Ice: 0%
+  - FrostFire: 0%
 
 ### Quick Creep [WIP]
 
@@ -177,6 +210,12 @@ Requires tower to be empowered with a divinity gem to deal damage, otherwise imm
 - Health: 5 HP
 - Speed: 40 pixels per second
 - Special attributes: Undead, Weak to Divinity, Resistant to Soulforge
+- Damage resistance:
+  - Physical: 100%
+  - Divine: -50%
+  - Fire: 100%
+  - Ice: 100%
+  - FrostFire: 100%
 
 ## Creep waves 
 Each round may have multiple waves of creeps. 
@@ -194,6 +233,29 @@ The player starts the game with 200 Gold and can not go below 0 Gold.
 ### Gems
 
 Gems are not a number resource like Gold is, rather you earn one of the possible Gems upon completing a round. They are placed in your Gem bag which is accessible via the sidebar.
+Gem has the following properties:
+- Name
+- Color (used for visual representation)
+- Description
+- Damage type (used for empowering towers)
+- Game effects (used for empowering towers)
+- Level
+
+
+#### Possible gem effects
+Games can only be sloted in towers. When slotted the gem may provide following effects for that tower:
+- Increase damage
+- Change the damage type
+- Increase attack speed
+- Increase range
+- Increase number of targets (multi shot)
+- Increase number of projectiles
+
+#### Gem level
+Gem level is a number from 1 to 5. Each level of a Gem enhances the effect of the Gem. The higher the level the more powerful the Gem is.
+The actual effect of the level depends on the Gem type.
+
+#### Gem types
 Currently there are 6 Gems:
 
 1. Fire Gem (#FF0000) (fire)
@@ -231,17 +293,102 @@ If the player loses the game, the score is always 0.
 
 # Data structures and algorithms
 
-## Tower definition (base)
+## Mission definition
+- Name
+- Description
+- Map image
+- Game map definition
+- Array of rounds
+- Array of Gem definitions (random type given to player at mission start)
+
+### Game map definition
+- Grid size (width, height)
+- 2d array of terrain types (Path, Buildable, Non-buildable)
+- Array of paths (array of rows and column which represent the path, first cell is the entrance, last cell is the exit)
+
+### Mission round definition
+- Array of waves
+- Array of Gem types (which the player can get at the end of the round - only 1 picked out of 3)
+
+### Wave definition
+- Tick when first creep is generated (calculated once all creeps of the previous wave are generated)
+- Ticks between creeps
+- Array of creep definitions (identified by creep definition name) together with number of creeps per type
+
+## Mission instance
+- Mission definition
+- Current round index
+- Array of waves
+- Current HP
+- Current Gold
+- Current Score
+- Array of Gems
+- Current game map instance
+- Current tick
+
+## Game map instance
+- Game map definition
+- Array of tower instances
+- Array of creep instances
+- Array of fired bullets
+
+## Wave instance
+- Wave definition
+- Array of creeps left to be generated (once the array is empty the wave is finished)
+
+## Tower definition 
 - Name 
 - Cost (Gold amount)
 - Gem slot count (0 if not empowerable)
-- Image (icon)
+- Image (sprite)
 - Description
-- Damage amount (damage dealt to creeps)
+- Base damage amount (damage dealt to creeps)
 - Attack Cooldown (time between attacks)
 - Attack range (in Grid units)
+- Array of initial tower effects (enumeration)
+- Array of allowed Gem types (enumeration)
 
-## Tower instance (base)
+
+## Tower instance 
+- Tower definition
+- Grid row and column (position on the map)
+- Gems (array of Gems)
+- Round in which it was built (used for selling)
+- Ticks from last attack (used for attack cooldown)
+- Current damage amount
+- Current damage type (depends on Gems)
+- Array of tower effects (enumeration)
+
+## Trap instance
+- Position (x, y in Grid units)
+- Damage type
+- Damage amount
+- Tick created
+- Tick duration (lifespan)
+- Image (sprite)
+
+## Bullet instance
+- Current position (x, y in Grid units)
+- Target position (x, y in Grid units)
+- Damage type
+- Damage amount
+- Image (sprite)
+
+## Creep definition
+- Name
+- Maximum HP
+- Speed
+- Image (sprite)
+- Damage resistance (percentage for each damage type)
+- Special attributes (hardcoded attribute types)
+
+## Creep instance
+- Creep definition
+- Current position (x, y in Grid units)
+- Current HP (also represents damage dealt to player if reaches exit and damage dealt to other creeps if it is an anti-creep)
+- Current speed
+- Is anti-creep (if true then it will attack other creeps)
+- Anti-creep damage type (if anti-creep)
 
 # Future work
 - Add leaderboard functionality to [Mission screen]

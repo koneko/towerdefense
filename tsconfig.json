@@ -11,7 +11,13 @@
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
-    "noEmit": true
+    "noEmit": true,
+    "noImplicitAny": false,
+    "esModuleInterop": true,
+    "strict": false,
+    "allowJs": true,
+    "checkJs": false
   },
-  "include": ["src"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "build"]
 }

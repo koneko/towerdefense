@@ -5,6 +5,7 @@ export enum CellType {
   Path,
   NoBuild,
   Build,
+  Undefined,
 }
 
 export class Cell {
@@ -33,8 +34,11 @@ export class Grid {
       x: x,
       y: y,
     });
-    for (let index = 0; index < rows * columns; index++) {
-      // const cell = new Cell();
+    for (let y = 0; y < rows; y++) {
+      for (let x = 0; x < columns; x++) {
+        let cell = new Cell(x, y, CellType.Undefined);
+        this.cells.push(cell);
+      }
     }
   }
 
@@ -51,4 +55,6 @@ export class Grid {
   pixelsToGridUnits(pixels: number): number {
     return pixels / this.getPixelScalingFactor();
   }
+
+  render() {}
 }

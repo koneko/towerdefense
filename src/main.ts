@@ -1,6 +1,5 @@
 import * as PIXI from "pixi.js";
-import { Game } from "./classes/Game.ts";
-import { SceneType } from "./classes/Scenes.ts";
+import Game from "./base/Game";
 (async () => {
   const app = new PIXI.Application();
   await app.init({
@@ -11,5 +10,10 @@ import { SceneType } from "./classes/Scenes.ts";
   });
 
   document.body.appendChild(app.canvas);
-  globalThis.Game = new Game(SceneType.MainMenu);
+  const game = new Game(app.screen);
+  app.stage.addChild(game.container);
+  window.addEventListener("resize", () => {
+    app.renderer.resize(window.innerWidth, window.innerHeight);
+    game.setBounds(0, 0, app.screen.width, app.screen.height);
+  });
 })();

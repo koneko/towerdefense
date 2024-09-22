@@ -1,5 +1,6 @@
 import * as PIXI from "pixi.js";
 import Game from "./base/Game";
+import Assets from "./base/Assets";
 (async () => {
   const app = new PIXI.Application();
   await app.init({
@@ -10,6 +11,7 @@ import Game from "./base/Game";
   });
 
   document.body.appendChild(app.canvas);
+  await Assets.LoadAssets();
   const game = new Game(app.screen);
   app.stage.addChild(game.container);
   window.addEventListener("resize", () => {

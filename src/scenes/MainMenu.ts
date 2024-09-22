@@ -20,9 +20,9 @@ export default class MainMenu extends Scene {
     this._newGameButton = new Button(
       "New Game",
       new PIXI.Rectangle(
-        100,
+        this.bounds.width / 2 - 300 / 2,
         this.bounds.height / 2 - 80,
-        this.bounds.width - 200,
+        300,
         60
       ),
       new PIXI.Color("blue")
@@ -35,9 +35,9 @@ export default class MainMenu extends Scene {
     this._settingsButton = new Button(
       "Settings",
       new PIXI.Rectangle(
-        100,
+        this.bounds.width / 2 - 300 / 2,
         this.bounds.height / 2 + 20,
-        this.bounds.width - 200,
+        300,
         60
       ),
       new PIXI.Color("gray")

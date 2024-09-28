@@ -3,12 +3,5 @@ import GameObject from "../base/GameObject";
 export default abstract class SceneBase extends GameObject {
   constructor(bounds: PIXI.Rectangle) {
     super(bounds);
-    this.createScene();
   }
-
-  protected triggerBoundsChanged() {
-    this.createScene();
-  }
-
-  protected abstract createScene();
 }

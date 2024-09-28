@@ -48,12 +48,12 @@ export default class Game extends GameObject {
   };
 
   protected triggerBoundsChanged(): void {
-    this.drawScene();
-  }
-
-  private drawScene() {
     if (this._currentScene) {
       this._currentScene.setBounds(0, 0, this.bounds.width, this.bounds.height);
     }
+  }
+
+  protected draw() {
+    // Nothing to draw, scene is drawing itself.
   }
 }

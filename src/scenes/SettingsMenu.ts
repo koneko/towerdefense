@@ -8,9 +8,10 @@ export default class SettingsMenu extends SceneBase {
 
   constructor(bounds: PIXI.Rectangle) {
     super(bounds);
+    this.draw();
   }
 
-  protected createScene() {
+  protected draw() {
     this.container.removeChildren();
     const g = new PIXI.Graphics();
     g.rect(0, 0, this.bounds.width, this.bounds.height);

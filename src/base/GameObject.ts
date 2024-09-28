@@ -26,7 +26,11 @@ export default abstract class GameObject {
     return this._events;
   }
 
-  protected abstract triggerBoundsChanged();
+  protected triggerBoundsChanged() {
+    this.draw();
+  }
+
+  protected abstract draw(): void;
 
   constructor(bounds: PIXI.Rectangle) {
     this.bounds = bounds;

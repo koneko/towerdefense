@@ -13,6 +13,7 @@ export default class GameScene extends SceneBase {
     this._ticker.minFPS = 30;
     this._ticker.add(this.update);
     this._ticker.start();
+    this.draw();
   }
 
   public destroy() {
@@ -23,7 +24,7 @@ export default class GameScene extends SceneBase {
 
   public update() {}
 
-  protected createScene() {
+  protected draw() {
     console.log("Creating Game Scene ", this.bounds);
     this.container.removeChildren();
     this.container.x = this.bounds.x;

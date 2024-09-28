@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import GameObject from "./GameObject.ts";
+import GameObject from "../base/GameObject";
 
 export enum CellType {
   Path,
@@ -13,9 +13,30 @@ export class Cell extends GameObject {
   constructor(bounds: PIXI.Rectangle, type: CellType) {
     super(bounds);
     this.type = type;
+    this.draw();
   }
-  protected triggerBoundsChanged() {
+
+  protected draw() {
     this.container.removeChildren();
+    let g = new PIXI.Graphics();
+    g.rect(0, 0, this.bounds.width, this.bounds.height);
+    switch (this.type) {
+      case CellType.Path:
+        g.fill(0x00ff00);
+        break;
+      case CellType.NoBuild:
+        g.fill(0xff0000);
+        break;
+      case CellType.Build:
+        g.fill(0x0000ff);
+        break;
+      case CellType.Undefined:
+        g.fill(0x000000);
+        break;
+    }
+    this.container.addChild(g);
+    this.container.x = this.bounds.x;
+    this.container.y = this.bounds.y;
   }
 }
 
@@ -23,6 +44,7 @@ export class Grid extends GameObject {
   public rows: number;
   public columns: number;
   public cells: Array<Cell>;
+
   constructor(bounds: PIXI.Rectangle, rows, columns) {
     super(bounds);
     this.rows = rows;
@@ -43,9 +65,7 @@ export class Grid extends GameObject {
     }
   }
 
-  protected triggerBoundsChanged() {
-    this.container.removeChildren();
-  }
+  protected draw() {}
 
   private getPixelScalingFactor() {
     const pixelScaleX = this.container.width / this.columns;

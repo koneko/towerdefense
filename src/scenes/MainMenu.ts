@@ -8,9 +8,10 @@ export default class MainMenu extends SceneBase {
 
   constructor(bounds: PIXI.Rectangle) {
     super(bounds);
+    this.draw();
   }
 
-  protected createScene() {
+  protected draw() {
     console.log("Creating main menu scene", this.bounds);
     this.container.removeChildren();
     const g = new PIXI.Graphics();

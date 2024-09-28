@@ -7,9 +7,10 @@ export default class MissionMenuSelect extends SceneBase {
 
   constructor(bounds: PIXI.Rectangle) {
     super(bounds);
+    this.draw();
   }
 
-  protected createScene() {
+  protected draw() {
     this.container.removeChildren();
     this._buttons = [];
     const g = new PIXI.Graphics();

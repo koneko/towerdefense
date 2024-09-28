@@ -6,26 +6,33 @@ export default class Button extends GameObject {
   private caption: string;
   private color: PIXI.Color;
   private buttonTexture: PIXI.Texture;
+  private enabled: boolean = true;
 
   setCaption(caption: string) {
     this.caption = caption;
-    this.drawButton();
+    this.draw();
   }
 
-  constructor(caption: string, bounds: PIXI.Rectangle, color: PIXI.Color) {
+  setEnabled(enabled: boolean) {
+    this.enabled = enabled;
+  }
+
+  constructor(
+    caption: string,
+    bounds: PIXI.Rectangle,
+    color: PIXI.Color,
+    enabled: boolean = true
+  ) {
     super(bounds);
     this.caption = caption;
     this.color = color;
     this.container.interactive = true;
     this.buttonTexture = Assets.ButtonTexture;
-    this.drawButton();
+    this.enabled = enabled;
+    this.draw();
   }
 
-  protected triggerBoundsChanged() {
-    this.drawButton();
-  }
-
-  private drawButton() {
+  protected draw() {
     console.log(
       `Drawing button ${this.caption} at ${JSON.stringify(this.bounds)}`
     );
@@ -60,6 +67,7 @@ export default class Button extends GameObject {
     this.container.x = this.bounds.x;
     this.container.y = this.bounds.y;
     this.container.on("click", () => {
+      if (!this.enabled) return;
       this.events.emit("click");
     });
   }

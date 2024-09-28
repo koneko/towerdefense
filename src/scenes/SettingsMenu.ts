@@ -1,8 +1,8 @@
 import Button from "../base/Button";
-import Scene from "./Base";
+import SceneBase from "./SceneBase";
 import * as PIXI from "pixi.js";
 
-export default class SettingsMenu extends Scene {
+export default class SettingsMenu extends SceneBase {
   private _newGameButton: Button;
   private _settingsButton: Button;
 

@@ -6,13 +6,16 @@ export default abstract class GameObject {
 
   private _events: PIXI.EventEmitter = new PIXI.EventEmitter();
 
-  public getBounds(): PIXI.Rectangle {
-    return this.bounds;
-  }
-
   public setBounds(x: number, y: number, width: number, height: number) {
     this.bounds = new PIXI.Rectangle(x, y, width, height);
     this.triggerBoundsChanged(); // GameObject implements this.
+  }
+
+  public destroy() {
+    this._events.removeAllListeners();
+    if (this._container.parent)
+      this._container.parent.removeChild(this._container);
+    this._container.destroy();
   }
 
   public get container(): PIXI.Container {

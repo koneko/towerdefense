@@ -1,12 +1,24 @@
 import Button from "../base/Button";
-import Scene from "./Base";
+import SceneBase from "./SceneBase";
 import * as PIXI from "pixi.js";
 
-export default class GameScene extends Scene {
-  private grid;
-  // DO NOT CHANGE NAME, WILL BREAK Game.ts
+export default class GameScene extends SceneBase {
+  private _ticker: PIXI.Ticker;
+
   constructor(bounds: PIXI.Rectangle) {
     super(bounds);
+    this._ticker = new PIXI.Ticker();
+    this._ticker = new PIXI.Ticker();
+    this._ticker.maxFPS = 60;
+    this._ticker.minFPS = 30;
+    this._ticker.add(this.update);
+    this._ticker.start();
+  }
+
+  public destroy() {
+    super.destroy();
+    this._ticker.stop();
+    this._ticker.destroy();
   }
 
   public update() {}

@@ -1,8 +1,8 @@
 import Button from "../base/Button";
-import Scene from "./Base";
+import SceneBase from "./SceneBase";
 import * as PIXI from "pixi.js";
 
-export default class MissionMenuSelect extends Scene {
+export default class MissionMenuSelect extends SceneBase {
   private _buttons: Button[] = [];
 
   constructor(bounds: PIXI.Rectangle) {

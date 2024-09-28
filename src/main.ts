@@ -9,6 +9,7 @@ import Assets from "./base/Assets";
     resizeTo: document.body,
     backgroundColor: "white",
     sharedTicker: true,
+    preference: "webgl",
   });
 
   document.body.appendChild(app.canvas);

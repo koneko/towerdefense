@@ -3,11 +3,10 @@ import MissionMenuSelect from "../scenes/MissionSelectMenu";
 import GameScene from "../scenes/GameScene";
 import GameObject from "./GameObject";
 import * as PIXI from "pixi.js";
-import Scene from "../scenes/Base";
+import SceneBase from "../scenes/SceneBase";
 
 export default class Game extends GameObject {
-  private _currentScene: Scene | null = null;
-  public ticker: PIXI.Ticker | null = null;
+  private _currentScene: SceneBase | null = null;
 
   constructor(bounds: PIXI.Rectangle) {
     super(bounds);
@@ -19,6 +18,16 @@ export default class Game extends GameObject {
     mainScene.events.on("newGame", this.onNewGame);
     mainScene.events.on("settings", this.onSettings);
     this.setScene(mainScene);
+  }
+
+  private setScene(scene: SceneBase) {
+    if (this._currentScene) {
+      this.container.removeChild(this._currentScene.container);
+      this._currentScene.destroy();
+    }
+    this._currentScene = scene;
+    console.log("Setting scene", this._currentScene.constructor);
+    this.container.addChild(scene.container);
   }
 
   private onNewGame = () => {
@@ -37,33 +46,6 @@ export default class Game extends GameObject {
   private onSettings = () => {
     console.log("Settings");
   };
-
-  private setScene(scene: Scene) {
-    if (this._currentScene) {
-      this.container.removeChild(this._currentScene.container);
-    }
-    this._currentScene = scene;
-    console.log(this._currentScene.constructor);
-    this.container.addChild(scene.container);
-    if (this._currentScene.constructor.name == "GameScene") {
-      // dont change GameScene name XD
-      this.ticker = new PIXI.Ticker();
-      this.ticker.maxFPS = 60;
-      this.ticker.minFPS = 30;
-      this.ticker.add(this.update);
-      console.log(this._currentScene);
-      this.ticker.start();
-    } else {
-      if (this.ticker != null) {
-        this.ticker.stop();
-        this.ticker.destroy();
-      }
-    }
-  }
-
-  private update(time) {
-    this._currentScene.update();
-  }
 
   protected triggerBoundsChanged(): void {
     this.drawScene();

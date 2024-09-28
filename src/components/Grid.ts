@@ -6,17 +6,20 @@ export class Cell extends GameObject {
   public type: TerrainType;
   public row: number;
   public column: number;
+  public isPath: boolean = false;
 
   constructor(
     type: TerrainType,
     row: number,
     column: number,
+    isPath: boolean,
     bounds?: PIXI.Rectangle
   ) {
     super(bounds);
     this.type = type;
     this.row = row;
     this.column = column;
+    this.isPath = isPath;
     this.draw();
   }
 
@@ -45,9 +48,15 @@ export class Grid extends GameObject {
   constructor(map: GameMapDefinition, bounds?: PIXI.Rectangle) {
     super(bounds);
     this.gameMap = map;
+    console.log(this.gameMap.paths);
     for (let y = 0; y < this.gameMap.rows; y++) {
       for (let x = 0; x < this.gameMap.columns; x++) {
-        let cell = new Cell(this.gameMap.cells[x][y], x, y);
+        let type = this.gameMap.cells[x][y];
+        const isPath = this.gameMap.paths.some((path) =>
+          path.some((p) => p[0] === x && p[1] === y)
+        );
+        if (isPath) type = TerrainType.Restricted;
+        let cell = new Cell(type, x, y, isPath);
         this.cells.push(cell);
       }
     }

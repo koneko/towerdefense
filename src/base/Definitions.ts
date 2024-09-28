@@ -23,7 +23,7 @@ export type WaveDefinition = {
   creeps: CreepType[];
 };
 
-export type PathDefinition = [row: number, column: number];
+export type PathDefinition = [[row: number, column: number]];
 
 export enum CreepType {
   Basic = 0,

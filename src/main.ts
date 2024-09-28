@@ -8,6 +8,7 @@ import Assets from "./base/Assets";
     height: 360,
     resizeTo: document.body,
     backgroundColor: "white",
+    sharedTicker: true,
   });
 
   document.body.appendChild(app.canvas);

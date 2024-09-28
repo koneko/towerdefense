@@ -9,4 +9,6 @@ export default abstract class Scene extends GameObject {
     this.createScene();
   }
   protected abstract createScene();
+
+  public update() {}
 }

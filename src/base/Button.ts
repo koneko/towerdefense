@@ -19,9 +19,9 @@ export default class Button extends GameObject {
 
   constructor(
     caption: string,
-    bounds: PIXI.Rectangle,
     color: PIXI.Color,
-    enabled: boolean = true
+    enabled: boolean = true,
+    bounds?: PIXI.Rectangle
   ) {
     super(bounds);
     this.caption = caption;
@@ -33,9 +33,6 @@ export default class Button extends GameObject {
   }
 
   protected draw() {
-    console.log(
-      `Drawing button ${this.caption} at ${JSON.stringify(this.bounds)}`
-    );
     this.container.removeChildren();
     // const button = new PIXI.Graphics();
     // button.rect(0, 0, this.bounds.width, this.bounds.height);

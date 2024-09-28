@@ -35,7 +35,7 @@ export default class Game extends GameObject {
     const missionSelectScene = new MissionMenuSelect(this.bounds);
     missionSelectScene.events.on("mission", (mission) => {
       console.log("Mission selected", mission);
-      this.setScene(new GameScene(this.bounds));
+      this.setScene(new GameScene(mission, this.bounds));
     });
     missionSelectScene.events.on("back", () => {
       this.onMainMenu();

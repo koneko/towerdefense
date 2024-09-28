@@ -6,8 +6,19 @@ export default abstract class GameObject {
 
   private _events: PIXI.EventEmitter = new PIXI.EventEmitter();
 
-  public setBounds(x: number, y: number, width: number, height: number) {
-    this.bounds = new PIXI.Rectangle(x, y, width, height);
+  public setBounds(bounds: PIXI.Rectangle): void;
+  public setBounds(x: number, y: number, width: number, height: number): void;
+  public setBounds(
+    boundsOrX: PIXI.Rectangle | number,
+    y?: number,
+    width?: number,
+    height?: number
+  ) {
+    if (boundsOrX instanceof PIXI.Rectangle) {
+      this.bounds = boundsOrX;
+    } else {
+      this.bounds = new PIXI.Rectangle(boundsOrX, y, width, height);
+    }
     this.triggerBoundsChanged(); // GameObject implements this.
   }
 
@@ -32,8 +43,8 @@ export default abstract class GameObject {
 
   protected abstract draw(): void;
 
-  constructor(bounds: PIXI.Rectangle) {
-    this.bounds = bounds;
+  constructor(bounds?: PIXI.Rectangle) {
+    this.bounds = bounds ?? new PIXI.Rectangle(0, 0, 0, 0);
     this._container = new PIXI.Container();
   }
 }

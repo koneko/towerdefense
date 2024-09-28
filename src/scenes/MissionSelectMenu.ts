@@ -1,4 +1,6 @@
+import Assets from "../base/Assets";
 import Button from "../base/Button";
+import { MissionDefinition } from "../base/Definitions";
 import SceneBase from "./SceneBase";
 import * as PIXI from "pixi.js";
 
@@ -7,42 +9,40 @@ export default class MissionMenuSelect extends SceneBase {
 
   constructor(bounds: PIXI.Rectangle) {
     super(bounds);
+    for (const mission of Assets.Missions) {
+      this.addMission(mission);
+    }
+    this.addButton("Back", () => {
+      this.events.emit("back");
+    });
     this.draw();
   }
 
   protected draw() {
     this.container.removeChildren();
-    this._buttons = [];
     const g = new PIXI.Graphics();
     g.rect(0, 0, this.bounds.width, this.bounds.height);
     g.fill(0x000000);
     this.container.addChild(g);
-    this.addMission("Mission 1");
-    this.addMission("Mission 2");
-    this.addMission("Mission 3");
-    this.addMission("Mission 4");
-    this.addButton("Back", () => {
-      this.events.emit("back");
-    });
+    let y = 50;
+    for (const button of this._buttons) {
+      button.setBounds(this.bounds.width / 2 - 300 / 2, y, 300, 60);
+      y += 80;
+      this.container.addChild(button.container);
+    }
     this.container.x = this.bounds.x;
     this.container.y = this.bounds.y;
   }
 
-  private addMission(mission: string) {
-    this.addButton(mission, () => {
+  private addMission(mission: MissionDefinition) {
+    this.addButton(mission.name, () => {
       this.events.emit("mission", mission);
     });
   }
 
   private addButton(caption: string, onClick: () => void) {
-    const yOffset = this._buttons.length * 80 + 100;
-    const button = new Button(
-      caption,
-      new PIXI.Rectangle(100, yOffset, this.bounds.width - 200, 60),
-      new PIXI.Color("white")
-    );
+    const button = new Button(caption, new PIXI.Color("white"));
     button.events.on("click", onClick);
     this._buttons.push(button);
-    this.container.addChild(button.container);
   }
 }

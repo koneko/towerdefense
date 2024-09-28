@@ -1,18 +1,22 @@
 import * as PIXI from "pixi.js";
 import GameObject from "../base/GameObject";
-
-export enum CellType {
-  Path,
-  NoBuild,
-  Build,
-  Undefined,
-}
+import { GameMapDefinition, TerrainType } from "../base/Definitions";
 
 export class Cell extends GameObject {
-  public type: CellType;
-  constructor(bounds: PIXI.Rectangle, type: CellType) {
+  public type: TerrainType;
+  public row: number;
+  public column: number;
+
+  constructor(
+    type: TerrainType,
+    row: number,
+    column: number,
+    bounds?: PIXI.Rectangle
+  ) {
     super(bounds);
     this.type = type;
+    this.row = row;
+    this.column = column;
     this.draw();
   }
 
@@ -21,17 +25,11 @@ export class Cell extends GameObject {
     let g = new PIXI.Graphics();
     g.rect(0, 0, this.bounds.width, this.bounds.height);
     switch (this.type) {
-      case CellType.Path:
-        g.fill(0x00ff00);
-        break;
-      case CellType.NoBuild:
+      case TerrainType.Restricted:
         g.fill(0xff0000);
         break;
-      case CellType.Build:
-        g.fill(0x0000ff);
-        break;
-      case CellType.Undefined:
-        g.fill(0x000000);
+      case TerrainType.Buildable:
+        g.fill(0x00ff00);
         break;
     }
     this.container.addChild(g);
@@ -41,35 +39,45 @@ export class Cell extends GameObject {
 }
 
 export class Grid extends GameObject {
-  public rows: number;
-  public columns: number;
-  public cells: Array<Cell>;
+  private gameMap: GameMapDefinition;
+  private cells: Cell[] = [];
 
-  constructor(bounds: PIXI.Rectangle, rows, columns) {
+  constructor(map: GameMapDefinition, bounds?: PIXI.Rectangle) {
     super(bounds);
-    this.rows = rows;
-    this.columns = columns;
-    for (let y = 0; y < rows; y++) {
-      for (let x = 0; x < columns; x++) {
-        let cell = new Cell(
-          new PIXI.Rectangle(
-            x,
-            y,
-            this.gridUnitsToPixels(1),
-            this.gridUnitsToPixels(1)
-          ),
-          CellType.Undefined
-        );
+    this.gameMap = map;
+    for (let y = 0; y < this.gameMap.rows; y++) {
+      for (let x = 0; x < this.gameMap.columns; x++) {
+        let cell = new Cell(this.gameMap.cells[x][y], x, y);
         this.cells.push(cell);
       }
     }
+    console.log(this.cells);
+    this.draw();
   }
 
-  protected draw() {}
+  protected draw() {
+    console.log("Drawing Grid", this.bounds);
+    this.container.removeChildren();
+    let g = new PIXI.Graphics();
+    g.rect(0, 0, this.bounds.width, this.bounds.height);
+    g.fill(0x00aa00);
+    this.container.addChild(g);
+    for (let cell of this.cells) {
+      cell.setBounds(
+        this.gridUnitsToPixels(cell.column),
+        this.gridUnitsToPixels(cell.row),
+        this.gridUnitsToPixels(1),
+        this.gridUnitsToPixels(1)
+      );
+      this.container.addChild(cell.container);
+    }
+    this.container.x = this.bounds.x;
+    this.container.y = this.bounds.y;
+  }
 
   private getPixelScalingFactor() {
-    const pixelScaleX = this.container.width / this.columns;
-    const pixelScaleY = this.container.height / this.rows;
+    const pixelScaleX = this.container.width / this.gameMap.columns;
+    const pixelScaleY = this.container.height / this.gameMap.rows;
     return pixelScaleX < pixelScaleY ? pixelScaleX : pixelScaleY;
   }
 

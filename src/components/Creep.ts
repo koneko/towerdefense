@@ -1,7 +1,7 @@
 import GameObject from '../base/GameObject';
 import * as PIXI from 'pixi.js';
 
-export class Creep extends GameObject {
+export default class Creep extends GameObject {
     constructor(bounds?: PIXI.Rectangle) {
         super(bounds);
     }

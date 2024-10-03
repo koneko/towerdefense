@@ -2,6 +2,7 @@ import Button from '../base/Button';
 import { MissionDefinition } from '../base/Definitions';
 import { Grid } from '../components/Grid';
 import MissionStats from '../components/MissionStats';
+import WaveManager from '../components/WaveManger';
 import SceneBase from './SceneBase';
 import * as PIXI from 'pixi.js';
 
@@ -9,6 +10,7 @@ export default class GameScene extends SceneBase {
     private ticker: PIXI.Ticker;
     private stats: MissionStats;
     private grid: Grid;
+    private WaveManager: WaveManager;
 
     constructor(mission: MissionDefinition, bounds: PIXI.Rectangle) {
         super(bounds);
@@ -20,6 +22,7 @@ export default class GameScene extends SceneBase {
         this.ticker.start();
         this.stats = new MissionStats(100, 200);
         this.grid = new Grid(mission.gameMap);
+        this.WaveManager = new WaveManager(mission);
         this.draw();
     }
 

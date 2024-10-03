@@ -3,6 +3,7 @@ export type MissionDefinition = {
     description: string;
     mapImageUrl: string;
     gameMap: GameMapDefinition;
+    missionRounds: MissionRoundDefinition[];
 };
 
 export type GameMapDefinition = {

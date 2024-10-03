@@ -2,7 +2,7 @@ import Button from '../base/Button';
 import { MissionDefinition } from '../base/Definitions';
 import { Grid } from '../components/Grid';
 import MissionStats from '../components/MissionStats';
-import WaveManager from '../components/WaveManger';
+import WaveManager from '../components/WaveManager';
 import SceneBase from './SceneBase';
 import * as PIXI from 'pixi.js';
 
@@ -10,19 +10,21 @@ export default class GameScene extends SceneBase {
     private ticker: PIXI.Ticker;
     private stats: MissionStats;
     private grid: Grid;
-    private WaveManager: WaveManager;
+    public waveManager: WaveManager;
 
     constructor(mission: MissionDefinition, bounds: PIXI.Rectangle) {
         super(bounds);
-        this.ticker = new PIXI.Ticker();
+        this.waveManager = new WaveManager(
+            mission.rounds,
+            mission.gameMap.paths
+        );
+        this.stats = new MissionStats(100, 200);
+        this.grid = new Grid(mission.gameMap);
         this.ticker = new PIXI.Ticker();
         this.ticker.maxFPS = 60;
         this.ticker.minFPS = 30;
-        this.ticker.add(this.update);
+        this.ticker.add(() => this.update(this.ticker.FPS)); // bruh
         this.ticker.start();
-        this.stats = new MissionStats(100, 200);
-        this.grid = new Grid(mission.gameMap);
-        this.WaveManager = new WaveManager(mission);
         this.draw();
     }
 
@@ -47,7 +49,9 @@ export default class GameScene extends SceneBase {
         this.ticker.destroy();
     }
 
-    public update() {}
+    public update(fps) {
+        this.waveManager.update(fps);
+    }
 
     protected draw() {
         console.log('Drawing Game Scene ', this.bounds);

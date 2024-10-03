@@ -4,13 +4,17 @@ import GameScene from '../scenes/GameScene';
 import GameObject from './GameObject';
 import * as PIXI from 'pixi.js';
 import SceneBase from '../scenes/SceneBase';
+import Assets from './Assets';
 
 export default class Game extends GameObject {
     private _currentScene: SceneBase | null = null;
 
     constructor(bounds: PIXI.Rectangle) {
         super(bounds);
-        this.onMainMenu();
+        let params = new URLSearchParams(location.href);
+        if (params.entries().next().value[1] == 'game') {
+            this.setScene(new GameScene(Assets.Missions[0], this.bounds));
+        } else this.onMainMenu();
     }
 
     private onMainMenu() {

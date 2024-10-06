@@ -75,8 +75,8 @@ export class Grid extends GameObject {
             new PIXI.Rectangle(
                 this.gridUnitsToPixels(movedCreep.x),
                 this.gridUnitsToPixels(movedCreep.y),
-                this.gridUnitsToPixels(0.3),
-                this.gridUnitsToPixels(0.3)
+                this.gridUnitsToPixels(0.5),
+                this.gridUnitsToPixels(0.6)
             )
         );
     }
@@ -104,8 +104,8 @@ export class Grid extends GameObject {
             creep.setBounds(
                 this.gridUnitsToPixels(creep.x),
                 this.gridUnitsToPixels(creep.y),
-                this.gridUnitsToPixels(0.3),
-                this.gridUnitsToPixels(0.3)
+                this.gridUnitsToPixels(0.5),
+                this.gridUnitsToPixels(0.6)
             );
             // console.log(creep.getBounds());
             this.container.addChild(creep.container);

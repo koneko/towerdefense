@@ -49,19 +49,9 @@
         {
             "waves": [
                 {
-                    "firstCreepSpawnTick": 2000,
+                    "firstCreepSpawnTick": 500,
                     "spawnIntervalTicks": 1000,
-                    "creeps": [0, 0, 0, 0, 0, 1, 1, 1, 0]
-                },
-                {
-                    "firstCreepSpawnTick": 2000,
-                    "spawnIntervalTicks": 1000,
-                    "creeps": [0, 0, 0, 0, 0, 1, 1, 1, 0]
-                },
-                {
-                    "firstCreepSpawnTick": 2000,
-                    "spawnIntervalTicks": 1000,
-                    "creeps": [0, 0, 0, 0, 0, 1, 1, 1, 0]
+                    "creeps": [0, 0, 0, 0, 0]
                 }
             ],
             "offeredGems": [0, 1, 2, 3]

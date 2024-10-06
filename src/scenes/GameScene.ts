@@ -1,6 +1,6 @@
 import Button from '../base/Button';
 import { MissionDefinition } from '../base/Definitions';
-import Creep from '../components/Creep';
+import Creep, { CreepEvents } from '../components/Creep';
 import { Grid } from '../components/Grid';
 import MissionStats from '../components/MissionStats';
 import WaveManager, { WaveManagerEvents } from '../components/WaveManager';
@@ -26,6 +26,9 @@ export default class GameScene extends SceneBase {
         this.waveManager = new WaveManager(mission.rounds, mission.gameMap.paths);
         this.waveManager.events.on(WaveManagerEvents.CreepSpawned, (creep: Creep) => {
             this.grid.addCreep(creep);
+            creep.events.on(CreepEvents.Escaped, () => {
+                this.onCreepEscaped(creep);
+            });
         });
         this.stats = new MissionStats(100, 200);
         this.grid = new Grid(mission.gameMap);
@@ -82,6 +85,10 @@ export default class GameScene extends SceneBase {
             return true;
         }
         return false;
+    }
+
+    private onCreepEscaped(creep: Creep) {
+        this.stats.takeDamage(creep.health);
     }
 
     protected draw() {

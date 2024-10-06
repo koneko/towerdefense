@@ -14,6 +14,11 @@ export default class MissionStats extends GameObject {
         this.draw();
     }
 
+    public takeDamage(damage: number) {
+        this.hp -= damage;
+        this.draw();
+    }
+
     public setGold(gold: number) {
         this.gold = gold;
         this.draw();

@@ -5,6 +5,10 @@ export default class MissionStats extends GameObject {
     private hp: number = 100;
     private gold: number = 0;
 
+    public getHP() {
+        return this.hp;
+    }
+
     public setHP(hp: number) {
         this.hp = hp;
         this.draw();
@@ -15,11 +19,7 @@ export default class MissionStats extends GameObject {
         this.draw();
     }
 
-    constructor(
-        initialHP: number,
-        initialGold: number,
-        bounds?: PIXI.Rectangle
-    ) {
+    constructor(initialHP: number, initialGold: number, bounds?: PIXI.Rectangle) {
         super(bounds);
         this.hp = initialHP;
         this.gold = initialGold;

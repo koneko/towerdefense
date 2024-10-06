@@ -8,12 +8,7 @@ export default abstract class GameObject {
 
     public setBounds(bounds: PIXI.Rectangle): void;
     public setBounds(x: number, y: number, width: number, height: number): void;
-    public setBounds(
-        boundsOrX: PIXI.Rectangle | number,
-        y?: number,
-        width?: number,
-        height?: number
-    ) {
+    public setBounds(boundsOrX: PIXI.Rectangle | number, y?: number, width?: number, height?: number) {
         if (boundsOrX instanceof PIXI.Rectangle) {
             this.bounds = boundsOrX;
         } else {
@@ -24,8 +19,7 @@ export default abstract class GameObject {
 
     public destroy() {
         this._events.removeAllListeners();
-        if (this._container.parent)
-            this._container.parent.removeChild(this._container);
+        if (this._container.parent) this._container.parent.removeChild(this._container);
         this._container.destroy();
     }
 
@@ -35,6 +29,10 @@ export default abstract class GameObject {
 
     public get events(): PIXI.EventEmitter {
         return this._events;
+    }
+
+    public getBounds(): PIXI.Rectangle {
+        return this.bounds;
     }
 
     protected triggerBoundsChanged() {

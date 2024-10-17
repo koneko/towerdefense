@@ -1,9 +1,15 @@
 export type MissionDefinition = {
     name: string;
     description: string;
-    mapImageUrl: string;
+    mapImage: MapImageDefinition;
     gameMap: GameMapDefinition;
     rounds: MissionRoundDefinition[];
+};
+
+export type MapImageDefinition = {
+    url: string;
+    width: number;
+    height: number;
 };
 
 export type GameMapDefinition = {

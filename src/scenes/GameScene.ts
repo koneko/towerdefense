@@ -20,11 +20,12 @@ export default class GameScene extends SceneBase {
     private roundMode = RoundMode.Purchase;
     private changeRoundButton: Button;
     private currentRound: number = 0;
+    public missionIndex: number;
 
     private gridWidth: number;
     private gridHeight: number;
 
-    constructor(mission: MissionDefinition, bounds: PIXI.Rectangle) {
+    constructor(mission: MissionDefinition, missionIndex: number, bounds: PIXI.Rectangle) {
         super(bounds);
         this.waveManager = new WaveManager(mission.rounds, mission.gameMap.paths, this);
         this.waveManager.events.on(WaveManagerEvents.CreepSpawned, (creep: Creep) => {
@@ -42,6 +43,7 @@ export default class GameScene extends SceneBase {
         this.ticker.minFPS = 30;
         this.ticker.add(() => this.update(this.ticker.elapsedMS)); // bruh
         this.ticker.start();
+        this.missionIndex = missionIndex;
         this.changeRoundButton = new Button('Start', new PIXI.Color('white'), true);
         this.changeRoundButton.events.on('click', () => {
             console.log('clicked');

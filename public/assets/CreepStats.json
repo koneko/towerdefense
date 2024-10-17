@@ -1,0 +1,14 @@
+[
+    {
+        "health": 2,
+        "speed": 0.0005,
+        "special": null,
+        "resistance": {
+            "physical": 0,
+            "divine": 0,
+            "fire": 0,
+            "ice": 0,
+            "frostfire": 0
+        }
+    }
+]

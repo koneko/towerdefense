@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { MissionDefinition } from './Definitions';
+import { CreepStats, MissionDefinition } from './Definitions';
 
 export default class Assets {
     public static async LoadAssets() {
@@ -12,6 +12,13 @@ export default class Assets {
         });
         console.log('Loading Missions');
         await this.LoadMissions();
+        await this.LoadCreepStats();
+    }
+
+    public static async LoadCreepStats() {
+        const res = await fetch('/assets/CreepStats.json');
+        const stats = await res.json();
+        this.CreepStats = stats;
     }
 
     private static async LoadMissions() {
@@ -38,4 +45,5 @@ export default class Assets {
 
     public static MissionBackgrounds: PIXI.Texture[] = [];
     public static Missions: MissionDefinition[];
+    public static CreepStats: CreepStats[];
 }

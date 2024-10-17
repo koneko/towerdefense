@@ -30,11 +30,17 @@ export class Cell extends GameObject {
             case TerrainType.Restricted:
                 g.fill(0xff0000);
                 break;
+            case TerrainType.Path:
+                g.fill(0xff00ff);
+                break;
             case TerrainType.Buildable:
                 g.stroke(0x00ff00);
                 break;
         }
         this.container.addChild(g);
+        this.container.x = this.bounds.x;
+        this.container.y = this.bounds.y;
+        return; // comment to enable debugging
         const text = new PIXI.Text({
             text: `${this.row}|${this.column}`,
             style: new PIXI.TextStyle({
@@ -48,8 +54,6 @@ export class Cell extends GameObject {
         text.x = this.bounds.width / 2;
         text.y = this.bounds.height / 2;
         if (this.isPath) text.text += 'P';
-        this.container.x = this.bounds.x;
-        this.container.y = this.bounds.y;
     }
 }
 
@@ -73,7 +77,7 @@ export class Grid extends GameObject {
                     type = 1;
                 }
                 const isPath = this.gameMap.paths.some((path) => path.some((p) => p[0] === x && p[1] === y));
-                if (isPath) type = TerrainType.Restricted;
+                if (isPath) type = TerrainType.Path;
                 let cell = new Cell(type, x, y, isPath, this);
                 this.cells.push(cell);
             }

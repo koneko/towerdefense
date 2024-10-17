@@ -1,42 +1,8 @@
 import Assets from '../base/Assets';
-import { CreepType, PathDefinition } from '../base/Definitions';
+import { CreepStats, CreepType, PathDefinition } from '../base/Definitions';
 import GameObject from '../base/GameObject';
 import * as PIXI from 'pixi.js';
 import GameScene from '../scenes/GameScene';
-import { Grid } from './Grid';
-
-export function CreepStats(ctype: CreepType): object {
-    switch (ctype) {
-        case CreepType.Basic:
-            return {
-                health: 2,
-                speed: 0.45,
-                special: null,
-                resistance: {
-                    physical: 0,
-                    divine: 0,
-                    fire: 0,
-                    ice: 0,
-                    frostfire: 0,
-                },
-            };
-        case CreepType.Fast:
-            throw new Error('Fast creep not defined.');
-        default:
-            return {
-                health: null,
-                speed: null,
-                special: null,
-                resistance: {
-                    physical: null,
-                    divine: null,
-                    fire: null,
-                    ice: null,
-                    frostfire: null,
-                },
-            };
-    }
-}
 
 export enum CreepEvents {
     Died = 'died',
@@ -48,22 +14,29 @@ export enum CreepEvents {
 export default class Creep extends GameObject {
     public creepType: CreepType;
     private path: PathDefinition;
+    private stats: CreepStats;
     private pathIndex: number = 0;
-    private speed: number = 0.002;
+    private speed: number;
     private gameScene: GameScene;
-    public health: number = 2;
+    public health: number;
     public escaped: boolean = false;
     public died: boolean = false;
     public x: number; // X and Y are local to the grid, not canvas
     public y: number;
     constructor(creepType: CreepType, path: PathDefinition, gameScene: GameScene, bounds?: PIXI.Rectangle) {
         super(bounds);
-        this.creepType = creepType;
-        this.path = path;
         this.gameScene = gameScene;
+        this.creepType = creepType;
+        this.stats = Assets.CreepStats[this.creepType];
+        this.speed = this.stats.speed;
+        this.health = this.stats.health;
+        this.path = path;
         this.x = path[0][1] + 0.5; // centered
         this.y = path[0][0] + 0.5;
         this.gameScene.grid.container.addChild(this.container);
+    }
+    private gridUnitsToPixels(gridUnits) {
+        return this.gameScene.grid.gridUnitsToPixels(gridUnits);
     }
     public update(elapsedMS: number) {
         if (this.pathIndex + 1 == this.path.length) {
@@ -108,10 +81,10 @@ export default class Creep extends GameObject {
         if (increaseIndex) this.pathIndex++;
         this.setBounds(
             new PIXI.Rectangle(
-                this.gameScene.grid.gridUnitsToPixels(this.x),
-                this.gameScene.grid.gridUnitsToPixels(this.y),
-                this.gameScene.grid.gridUnitsToPixels(0.5),
-                this.gameScene.grid.gridUnitsToPixels(0.6)
+                this.gridUnitsToPixels(this.x),
+                this.gridUnitsToPixels(this.y),
+                this.gridUnitsToPixels(0.5),
+                this.gridUnitsToPixels(0.6)
             )
         );
     }

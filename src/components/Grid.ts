@@ -101,10 +101,6 @@ export class Grid extends GameObject {
     protected draw() {
         console.log('Drawing Grid', this.bounds);
         this.container.removeChildren();
-        // let g = new PIXI.Graphics();
-        // g.rect(0, 0, this.bounds.width, this.bounds.height + 100);
-        // g.fill(0xffffff);
-        // this.container.addChild(g);
         let background = new PIXI.Sprite(Assets.MissionBackgrounds[this.gameScene.missionIndex]);
         background.x = 0;
         background.y = 0;
@@ -113,8 +109,8 @@ export class Grid extends GameObject {
         this.container.addChild(background);
         for (let cell of this.cells) {
             cell.setBounds(
-                this.gridUnitsToPixels(cell.column),
-                this.gridUnitsToPixels(cell.row),
+                parseFloat(this.gridUnitsToPixels(cell.column).toFixed(2)),
+                parseFloat(this.gridUnitsToPixels(cell.row).toFixed(2)),
                 this.gridUnitsToPixels(1),
                 this.gridUnitsToPixels(1)
             );

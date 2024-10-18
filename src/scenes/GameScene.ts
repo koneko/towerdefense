@@ -3,6 +3,7 @@ import { MissionDefinition } from '../base/Definitions';
 import Creep, { CreepEvents } from '../components/Creep';
 import { Grid } from '../components/Grid';
 import MissionStats from '../components/MissionStats';
+import Sidebar from '../components/Sidebar';
 import WaveManager, { WaveManagerEvents } from '../components/WaveManager';
 import SceneBase from './SceneBase';
 import * as PIXI from 'pixi.js';
@@ -17,6 +18,7 @@ export default class GameScene extends SceneBase {
     private ticker: PIXI.Ticker;
     private stats: MissionStats;
     private waveManager: WaveManager;
+    private sidebar: Sidebar;
     private roundMode = RoundMode.Purchase;
     private changeRoundButton: Button;
     private currentRound: number = 0;
@@ -36,6 +38,7 @@ export default class GameScene extends SceneBase {
         });
         this.stats = new MissionStats(100, 200);
         this.grid = new Grid(mission.gameMap, this);
+        this.sidebar = new Sidebar(this);
         this.gridWidth = mission.mapImage.width;
         this.gridHeight = mission.mapImage.height;
         this.ticker = new PIXI.Ticker();
@@ -108,7 +111,9 @@ export default class GameScene extends SceneBase {
         this.container.addChild(g);
         this.stats.setBounds(this.getStatusBounds());
         this.grid.setBounds(this.getGridBounds());
+        this.sidebar.setBounds(this.getSidebarBounds());
         this.changeRoundButton.setBounds(this.getChangeRoundButtonBounds());
+        this.container.addChild(this.sidebar.container);
         this.container.addChild(this.stats.container);
         this.container.addChild(this.grid.container);
         this.container.addChild(this.changeRoundButton.container);
@@ -116,6 +121,9 @@ export default class GameScene extends SceneBase {
         this.container.y = this.bounds.y;
     }
 
+    private getSidebarBounds(): PIXI.Rectangle {
+        return new PIXI.Rectangle(this.bounds.width - 350, 0, 350, this.bounds.height);
+    }
     private getStatusBounds(): PIXI.Rectangle {
         // Top / Center
         return new PIXI.Rectangle(this.bounds.width / 2 - 200 / 2, 0, 200, 100);
@@ -123,8 +131,6 @@ export default class GameScene extends SceneBase {
 
     private getGridBounds(): PIXI.Rectangle {
         // Center / Center
-        let width = 600;
-        let height = 600;
         return new PIXI.Rectangle(
             this.bounds.width / 2 - this.gridWidth / 2,
             this.bounds.height / 2 - this.gridHeight / 2,
@@ -134,7 +140,7 @@ export default class GameScene extends SceneBase {
     }
     private getChangeRoundButtonBounds(): PIXI.Rectangle {
         // Center / Center
-        let width = 300;
+        let width = 350;
         let height = 150;
         return new PIXI.Rectangle(this.bounds.width - width, this.bounds.height - height, width, height);
     }

@@ -7,10 +7,12 @@ export default class Assets {
         Assets.ButtonTexture = await PIXI.Assets.load({
             src: '/assets/gui/button_02.png',
         });
+        Assets.SidebarTexture = await PIXI.Assets.load({
+            src: '/assets/gui/frame.png',
+        });
         Assets.BasicCreepTexture = await PIXI.Assets.load({
             src: '/assets/creeps/basic.jpg',
         });
-        console.log('Loading Missions');
         await this.LoadMissions();
         await this.LoadCreepStats();
     }
@@ -40,8 +42,10 @@ export default class Assets {
         });
     }
 
-    public static ButtonTexture: PIXI.Texture;
     public static BasicCreepTexture: PIXI.Texture;
+
+    public static ButtonTexture: PIXI.Texture;
+    public static SidebarTexture: PIXI.Texture;
 
     public static MissionBackgrounds: PIXI.Texture[] = [];
     public static Missions: MissionDefinition[];

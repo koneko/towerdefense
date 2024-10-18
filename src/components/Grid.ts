@@ -40,7 +40,7 @@ export class Cell extends GameObject {
         this.container.addChild(g);
         this.container.x = this.bounds.x;
         this.container.y = this.bounds.y;
-        return; // comment to enable debugging
+        if (!Assets.DebuggingEnabled) return;
         const text = new PIXI.Text({
             text: `${this.row}|${this.column}`,
             style: new PIXI.TextStyle({

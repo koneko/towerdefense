@@ -46,4 +46,5 @@ export default class Assets {
     public static MissionBackgrounds: PIXI.Texture[] = [];
     public static Missions: MissionDefinition[];
     public static CreepStats: CreepStats[];
+    public static DebuggingEnabled: boolean = true;
 }

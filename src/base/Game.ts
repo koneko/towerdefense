@@ -13,7 +13,7 @@ export default class Game extends GameObject {
         super(bounds);
         let params = new URLSearchParams(location.href);
         if (params.entries().next().value[1] == 'game') {
-            this.setScene(new GameScene(Assets.Missions[0], this.bounds));
+            this.setScene(new GameScene(Assets.Missions[0], 0, this.bounds));
         } else this.onMainMenu();
     }
 
@@ -39,7 +39,7 @@ export default class Game extends GameObject {
         const missionSelectScene = new MissionMenuSelect(this.bounds);
         missionSelectScene.events.on('mission', (mission) => {
             console.log('Mission selected', mission);
-            this.setScene(new GameScene(mission, this.bounds));
+            this.setScene(new GameScene(mission, Assets.Missions.indexOf(mission), this.bounds));
         });
         missionSelectScene.events.on('back', () => {
             this.onMainMenu();
@@ -53,12 +53,7 @@ export default class Game extends GameObject {
 
     protected triggerBoundsChanged(): void {
         if (this._currentScene) {
-            this._currentScene.setBounds(
-                0,
-                0,
-                this.bounds.width,
-                this.bounds.height
-            );
+            this._currentScene.setBounds(0, 0, this.bounds.width, this.bounds.height);
         }
     }
 

@@ -1,6 +1,7 @@
 import { CreepType, MissionRoundDefinition, PathDefinition } from '../base/Definitions';
 import * as PIXI from 'pixi.js';
 import Creep, { CreepEvents } from './Creep';
+import GameScene from '../scenes/GameScene';
 
 export enum WaveManagerEvents {
     CreepSpawned = 'creepSpawned',
@@ -21,11 +22,13 @@ export default class WaveManager {
     private paths: PathDefinition[];
     private ticks: number = 0;
     private started: boolean = false;
+    private gameScene: GameScene;
     public finished: boolean = false;
     public events = new PIXI.EventEmitter();
-    constructor(rounds: MissionRoundDefinition[], paths: PathDefinition[]) {
+    constructor(rounds: MissionRoundDefinition[], paths: PathDefinition[], gameScene) {
         this.rounds = rounds;
         this.paths = paths;
+        this.gameScene = gameScene;
     }
     public start(roundIndex) {
         this.started = true;
@@ -36,7 +39,7 @@ export default class WaveManager {
         this.rounds[roundIndex].waves.forEach((wave) => {
             tickToSpawnAt += wave.firstCreepSpawnTick;
             wave.creeps.forEach((creep) => {
-                const creepObj = new Creep(creep, this.paths[0]);
+                const creepObj = new Creep(creep, this.paths[0], this.gameScene);
                 const creepInstance = {
                     creep: creepObj,
                     tickToSpawnAt,

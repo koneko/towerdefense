@@ -13,17 +13,21 @@ enum RoundMode {
 }
 
 export default class GameScene extends SceneBase {
+    public grid: Grid;
     private ticker: PIXI.Ticker;
     private stats: MissionStats;
-    private grid: Grid;
     private waveManager: WaveManager;
     private roundMode = RoundMode.Purchase;
     private changeRoundButton: Button;
     private currentRound: number = 0;
+    public missionIndex: number;
 
-    constructor(mission: MissionDefinition, bounds: PIXI.Rectangle) {
+    private gridWidth: number;
+    private gridHeight: number;
+
+    constructor(mission: MissionDefinition, missionIndex: number, bounds: PIXI.Rectangle) {
         super(bounds);
-        this.waveManager = new WaveManager(mission.rounds, mission.gameMap.paths);
+        this.waveManager = new WaveManager(mission.rounds, mission.gameMap.paths, this);
         this.waveManager.events.on(WaveManagerEvents.CreepSpawned, (creep: Creep) => {
             this.grid.addCreep(creep);
             creep.events.on(CreepEvents.Escaped, () => {
@@ -31,12 +35,15 @@ export default class GameScene extends SceneBase {
             });
         });
         this.stats = new MissionStats(100, 200);
-        this.grid = new Grid(mission.gameMap);
+        this.grid = new Grid(mission.gameMap, this);
+        this.gridWidth = mission.mapImage.width;
+        this.gridHeight = mission.mapImage.height;
         this.ticker = new PIXI.Ticker();
         this.ticker.maxFPS = 60;
         this.ticker.minFPS = 30;
         this.ticker.add(() => this.update(this.ticker.elapsedMS)); // bruh
         this.ticker.start();
+        this.missionIndex = missionIndex;
         this.changeRoundButton = new Button('Start', new PIXI.Color('white'), true);
         this.changeRoundButton.events.on('click', () => {
             console.log('clicked');
@@ -56,6 +63,7 @@ export default class GameScene extends SceneBase {
     public update(elapsedMS: number) {
         if (this.checkGameOver()) return;
         this.waveManager.update(elapsedMS);
+        this.grid.creeps.forEach((creep) => creep.update(elapsedMS));
         this.checkToEndCombat();
     }
 
@@ -115,10 +123,19 @@ export default class GameScene extends SceneBase {
 
     private getGridBounds(): PIXI.Rectangle {
         // Center / Center
-        return new PIXI.Rectangle(this.bounds.width / 2 - 600 / 2, this.bounds.height / 2 - 600 / 2, 600, 600);
+        let width = 600;
+        let height = 600;
+        return new PIXI.Rectangle(
+            this.bounds.width / 2 - this.gridWidth / 2,
+            this.bounds.height / 2 - this.gridHeight / 2,
+            this.gridWidth,
+            this.gridHeight
+        );
     }
     private getChangeRoundButtonBounds(): PIXI.Rectangle {
         // Center / Center
-        return new PIXI.Rectangle(this.bounds.width - 300, this.bounds.height - 150, 300, 150);
+        let width = 300;
+        let height = 150;
+        return new PIXI.Rectangle(this.bounds.width - width, this.bounds.height - height, width, height);
     }
 }

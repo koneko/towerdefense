@@ -3,6 +3,7 @@
 _The Watchers Lament_
 
 [latest demo](https://youtu.be/x9l2zzIlhNE)
+[latest branch](https://github.com/koneko/towerdefense/tree/egocentric)
 
 # Game description and functionality
 

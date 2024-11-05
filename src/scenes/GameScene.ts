@@ -126,7 +126,7 @@ export default class GameScene extends SceneBase {
     }
     private getStatusBounds(): PIXI.Rectangle {
         // Top / Center
-        return new PIXI.Rectangle(this.bounds.width / 2 - 200 / 2, 0, 200, 100);
+        return new PIXI.Rectangle(0, 0, this.bounds.width, 100);
     }
 
     private getGridBounds(): PIXI.Rectangle {

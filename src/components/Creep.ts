@@ -1,5 +1,5 @@
 import Assets from '../base/Assets';
-import { CreepStats, CreepType, PathDefinition } from '../base/Definitions';
+import { CreepStatsDefinition, CreepType, PathDefinition } from '../base/Definitions';
 import GameObject from '../base/GameObject';
 import * as PIXI from 'pixi.js';
 import GameScene from '../scenes/GameScene';
@@ -14,7 +14,7 @@ export enum CreepEvents {
 export default class Creep extends GameObject {
     public creepType: CreepType;
     private path: PathDefinition;
-    private stats: CreepStats;
+    private stats: CreepStatsDefinition;
     private pathIndex: number = 0;
     private speed: number;
     private gameScene: GameScene;

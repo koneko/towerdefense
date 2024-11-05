@@ -1,0 +1,12 @@
+[
+    {
+        "name": "Basic Tower",
+        "stats": {
+            "damage": 2,
+            "cooldown": 2,
+            "gemSlotsAmount": 2,
+            "cost": 100,
+            "range": 7
+        }
+    }
+]

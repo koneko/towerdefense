@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { CreepStats, MissionDefinition } from './Definitions';
+import { CreepStatsDefinition, MissionDefinition, TowerDefinition } from './Definitions';
 
 export default class Assets {
     public static async LoadAssets() {
@@ -7,11 +7,20 @@ export default class Assets {
         Assets.ButtonTexture = await PIXI.Assets.load({
             src: '/assets/gui/button_02.png',
         });
+        Assets.SidebarTexture = await PIXI.Assets.load({
+            src: '/assets/gui/frame.png',
+        });
+        Assets.HealthTexture = await PIXI.Assets.load({
+            src: '/assets/gui/heart.png',
+        });
+        Assets.GoldTexture = await PIXI.Assets.load({
+            src: '/assets/gui/star.png',
+        });
         Assets.BasicCreepTexture = await PIXI.Assets.load({
             src: '/assets/creeps/basic.jpg',
         });
-        console.log('Loading Missions');
         await this.LoadMissions();
+        await this.LoadTowers();
         await this.LoadCreepStats();
     }
 
@@ -23,6 +32,12 @@ export default class Assets {
 
     private static async LoadMissions() {
         Assets.Missions = [await this.LoadMission('/assets/missions/mission_01.json')];
+    }
+
+    private static async LoadTowers() {
+        const res = await fetch('/assets/Towers.json');
+        const towers = await res.json();
+        Assets.Towers = towers;
     }
 
     private static async LoadMission(missionUrl: string) {
@@ -40,10 +55,16 @@ export default class Assets {
         });
     }
 
-    public static ButtonTexture: PIXI.Texture;
     public static BasicCreepTexture: PIXI.Texture;
+
+    public static ButtonTexture: PIXI.Texture;
+    public static SidebarTexture: PIXI.Texture;
+    public static HealthTexture: PIXI.Texture;
+    public static GoldTexture: PIXI.Texture;
 
     public static MissionBackgrounds: PIXI.Texture[] = [];
     public static Missions: MissionDefinition[];
-    public static CreepStats: CreepStats[];
+    public static Towers: TowerDefinition[];
+    public static CreepStats: CreepStatsDefinition[];
+    public static DebuggingEnabled: boolean = true;
 }

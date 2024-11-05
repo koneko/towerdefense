@@ -30,19 +30,32 @@ export type WaveDefinition = {
     creeps: CreepType[];
 };
 
-export type CreepStats = {
+export type CreepStatsDefinition = {
     health: number;
     speed: number;
     special: Function;
-    resistance: CreepResistances;
+    resistance: CreepResistancesDefinition;
 };
 
-export type CreepResistances = {
+export type CreepResistancesDefinition = {
     physical: number;
     divine: number;
     fire: number;
     ice: number;
     frostfire: number;
+};
+
+export type TowerDefinition = {
+    name: string;
+    stats: TowerStatsDefinition;
+};
+
+export type TowerStatsDefinition = {
+    damage: number;
+    cooldown: number;
+    gemSlotsAmount: number;
+    cost: number;
+    range: number;
 };
 
 export type PathDefinition = [[row: number, column: number]];
@@ -63,4 +76,9 @@ export enum GemType {
     Yeti = 1,
     Titalium = 2,
     Soulforge = 3,
+}
+
+export enum TowerType {
+    Shooting = 0,
+    Circle = 1,
 }

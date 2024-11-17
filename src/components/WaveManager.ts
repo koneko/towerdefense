@@ -22,13 +22,11 @@ export default class WaveManager {
     private paths: PathDefinition[];
     private ticks: number = 0;
     private started: boolean = false;
-    private gameScene: GameScene;
     public finished: boolean = false;
     public events = new PIXI.EventEmitter();
-    constructor(rounds: MissionRoundDefinition[], paths: PathDefinition[], gameScene) {
+    constructor(rounds: MissionRoundDefinition[], paths: PathDefinition[]) {
         this.rounds = rounds;
         this.paths = paths;
-        this.gameScene = gameScene;
     }
     public start(roundIndex) {
         this.started = true;
@@ -39,7 +37,7 @@ export default class WaveManager {
         this.rounds[roundIndex].waves.forEach((wave) => {
             tickToSpawnAt += wave.firstCreepSpawnTick;
             wave.creeps.forEach((creep) => {
-                const creepObj = new Creep(creep, this.paths[0], this.gameScene);
+                const creepObj = new Creep(creep, this.paths[0]);
                 const creepInstance = {
                     creep: creepObj,
                     tickToSpawnAt,

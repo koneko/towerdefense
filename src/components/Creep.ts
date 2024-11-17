@@ -1,8 +1,6 @@
 import Assets from '../base/Assets';
 import { CreepStatsDefinition, CreepType, PathDefinition } from '../base/Definitions';
-import GameObject from '../base/GameObject';
 import * as PIXI from 'pixi.js';
-import GameScene from '../scenes/GameScene';
 import { GridBaseObject } from '../base/GridBaseObject';
 
 export enum CreepEvents {
@@ -18,15 +16,13 @@ export default class Creep extends GridBaseObject {
     private stats: CreepStatsDefinition;
     private pathIndex: number = 0;
     private speed: number;
-    private gameScene: GameScene;
     public health: number;
     public escaped: boolean = false;
     public died: boolean = false;
     public x: number; // X and Y are local to the grid, not canvas
     public y: number;
-    constructor(creepType: CreepType, path: PathDefinition, gameScene: GameScene, bounds?: PIXI.Rectangle) {
+    constructor(creepType: CreepType, path: PathDefinition, bounds?: PIXI.Rectangle) {
         super(bounds);
-        this.gameScene = gameScene;
         this.creepType = creepType;
         this.stats = Assets.CreepStats[this.creepType];
         this.speed = this.stats.speed;

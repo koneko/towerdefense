@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { CreepStatsDefinition, MissionDefinition, TowerDefinition } from './Definitions';
+import { CreepStatsDefinition, MissionDefinition, TowerDefinition, TowerType } from './Definitions';
 
 export default class Assets {
     public static async LoadAssets() {
@@ -22,6 +22,9 @@ export default class Assets {
         Assets.BasicCreepTexture = await PIXI.Assets.load({
             src: '/assets/creeps/basic.jpg',
         });
+        Assets.SwordTexture = await PIXI.Assets.load({
+            src: '/assets/gui/sword_01.png',
+        });
         await this.LoadMissions();
         await this.LoadTowers();
         await this.LoadCreepStats();
@@ -40,6 +43,11 @@ export default class Assets {
     private static async LoadTowers() {
         const res = await fetch('/assets/Towers.json');
         const towers = await res.json();
+        // Map the tower type from string to enum
+        for (const tower of towers) {
+            const typeName = tower.type as string;
+            tower.type = TowerType[typeName];
+        }
         Assets.Towers = towers;
     }
 
@@ -65,6 +73,7 @@ export default class Assets {
     public static Frame2Texture: PIXI.Texture;
     public static HealthTexture: PIXI.Texture;
     public static GoldTexture: PIXI.Texture;
+    public static SwordTexture: PIXI.Texture;
 
     public static MissionBackgrounds: PIXI.Texture[] = [];
     public static Missions: MissionDefinition[];

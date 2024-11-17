@@ -36,7 +36,7 @@ export default class GameScene extends SceneBase {
 
     constructor(mission: MissionDefinition, missionIndex: number, bounds: PIXI.Rectangle) {
         super(bounds);
-        this.waveManager = new WaveManager(mission.rounds, mission.gameMap.paths, this);
+        this.waveManager = new WaveManager(mission.rounds, mission.gameMap.paths);
         this.waveManager.events.on(WaveManagerEvents.CreepSpawned, (creep: Creep) => {
             this.grid.addCreep(creep);
             creep.events.on(CreepEvents.Escaped, () => {
@@ -45,8 +45,8 @@ export default class GameScene extends SceneBase {
         });
         this.stats = new MissionStats(100, 200);
         this.grid = new Grid(mission.gameMap, this);
-        this.sidebar = new Sidebar(this);
-        this.towerPicker = new TowerPicker(this);
+        this.sidebar = new Sidebar();
+        this.towerPicker = new TowerPicker();
         this.aspectRatio = mission.mapImage.width / mission.mapImage.height;
         this.ticker = new PIXI.Ticker();
         this.ticker.maxFPS = 60;
@@ -111,7 +111,7 @@ export default class GameScene extends SceneBase {
     }
 
     protected draw() {
-        console.log('Drawing Game Scene ', this.bounds);
+        //console.log('Drawing Game Scene ', this.bounds);
         this.container.removeChildren();
         const g = new PIXI.Graphics();
         g.rect(0, 0, this.bounds.width, this.bounds.height);

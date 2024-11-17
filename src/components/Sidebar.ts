@@ -4,10 +4,8 @@ import GameScene from '../scenes/GameScene';
 import Assets from '../base/Assets';
 
 export default class Sidebar extends GameObject {
-    private gameScene: GameScene;
-    constructor(gameScene: GameScene, bounds?: PIXI.Rectangle) {
+    constructor(bounds?: PIXI.Rectangle) {
         super(bounds);
-        this.gameScene = gameScene;
     }
     protected draw() {
         this.container.removeChildren();

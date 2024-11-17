@@ -26,8 +26,13 @@ export default class GameScene extends SceneBase {
     private currentRound: number = 0;
     public missionIndex: number;
 
-    private gridWidth: number;
-    private gridHeight: number;
+    private aspectRatio: number;
+
+    private static current?: GameScene;
+
+    public static getCurrent(): GameScene {
+        return this.current;
+    }
 
     constructor(mission: MissionDefinition, missionIndex: number, bounds: PIXI.Rectangle) {
         super(bounds);
@@ -42,8 +47,7 @@ export default class GameScene extends SceneBase {
         this.grid = new Grid(mission.gameMap, this);
         this.sidebar = new Sidebar(this);
         this.towerPicker = new TowerPicker(this);
-        this.gridWidth = mission.mapImage.width;
-        this.gridHeight = mission.mapImage.height;
+        this.aspectRatio = mission.mapImage.width / mission.mapImage.height;
         this.ticker = new PIXI.Ticker();
         this.ticker.maxFPS = 60;
         this.ticker.minFPS = 30;
@@ -57,6 +61,7 @@ export default class GameScene extends SceneBase {
             this.changeRoundButton.setCaption('[X]');
             this.setRoundMode(RoundMode.Combat);
         });
+        GameScene.current = this;
         this.draw();
     }
 
@@ -138,14 +143,21 @@ export default class GameScene extends SceneBase {
     }
 
     private getGridBounds(): PIXI.Rectangle {
-        // Center / Center
-        return new PIXI.Rectangle(
-            this.bounds.width / 2 - this.gridWidth / 2,
-            this.bounds.height / 2 - this.gridHeight / 2,
-            this.gridWidth,
-            this.gridHeight
-        );
+        const availableWidth = this.bounds.width - this.getSidebarBounds().width;
+        const availableHeight = this.bounds.height - this.getStatusBounds().height;
+        let width = availableWidth;
+        let height = width / this.aspectRatio;
+        if (height > availableHeight) {
+            height = availableHeight;
+            width = height * this.aspectRatio;
+        }
+        // Center horizontally and vertically
+        const y = this.getStatusBounds().height + (availableHeight - height) / 2;
+        const x = (availableWidth - width) / 2;
+
+        return new PIXI.Rectangle(x, y, width, height);
     }
+
     private getChangeRoundButtonBounds(): PIXI.Rectangle {
         // Center / Center
         let width = 350;

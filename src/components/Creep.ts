@@ -3,6 +3,7 @@ import { CreepStatsDefinition, CreepType, PathDefinition } from '../base/Definit
 import GameObject from '../base/GameObject';
 import * as PIXI from 'pixi.js';
 import GameScene from '../scenes/GameScene';
+import { GridBaseObject } from '../base/GridBaseObject';
 
 export enum CreepEvents {
     Died = 'died',
@@ -11,7 +12,7 @@ export enum CreepEvents {
     Moved = 'moved',
 }
 
-export default class Creep extends GameObject {
+export default class Creep extends GridBaseObject {
     public creepType: CreepType;
     private path: PathDefinition;
     private stats: CreepStatsDefinition;
@@ -33,11 +34,8 @@ export default class Creep extends GameObject {
         this.path = path;
         this.x = path[0][1] + 0.5; // centered
         this.y = path[0][0] + 0.5;
-        this.gameScene.grid.container.addChild(this.container);
     }
-    private gridUnitsToPixels(gridUnits) {
-        return this.gameScene.grid.gridUnitsToPixels(gridUnits);
-    }
+
     public update(elapsedMS: number) {
         if (this.pathIndex + 1 == this.path.length) {
             if (this.escaped) return;
@@ -79,14 +77,7 @@ export default class Creep extends GameObject {
         this.x += deltaX;
         this.y += deltaY;
         if (increaseIndex) this.pathIndex++;
-        this.setBounds(
-            new PIXI.Rectangle(
-                this.gridUnitsToPixels(this.x),
-                this.gridUnitsToPixels(this.y),
-                this.gridUnitsToPixels(0.5),
-                this.gridUnitsToPixels(0.6)
-            )
-        );
+        this.setBounds(new PIXI.Rectangle(this.x, this.y, 0.5, 0.6));
     }
 
     public takeDamage(amount: number) {

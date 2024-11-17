@@ -10,6 +10,9 @@ export default class Assets {
         Assets.SidebarTexture = await PIXI.Assets.load({
             src: '/assets/gui/frame.png',
         });
+        Assets.Frame2Texture = await PIXI.Assets.load({
+            src: '/assets/gui/frame_02.png',
+        });
         Assets.HealthTexture = await PIXI.Assets.load({
             src: '/assets/gui/heart.png',
         });
@@ -59,6 +62,7 @@ export default class Assets {
 
     public static ButtonTexture: PIXI.Texture;
     public static SidebarTexture: PIXI.Texture;
+    public static Frame2Texture: PIXI.Texture;
     public static HealthTexture: PIXI.Texture;
     public static GoldTexture: PIXI.Texture;
 

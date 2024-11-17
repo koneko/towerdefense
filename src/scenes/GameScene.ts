@@ -4,6 +4,7 @@ import Creep, { CreepEvents } from '../components/Creep';
 import { Grid } from '../components/Grid';
 import MissionStats from '../components/MissionStats';
 import Sidebar from '../components/Sidebar';
+import TowerPicker from '../components/TowerPicker';
 import WaveManager, { WaveManagerEvents } from '../components/WaveManager';
 import SceneBase from './SceneBase';
 import * as PIXI from 'pixi.js';
@@ -19,6 +20,7 @@ export default class GameScene extends SceneBase {
     private stats: MissionStats;
     private waveManager: WaveManager;
     private sidebar: Sidebar;
+    private towerPicker: TowerPicker;
     private roundMode = RoundMode.Purchase;
     private changeRoundButton: Button;
     private currentRound: number = 0;
@@ -39,6 +41,7 @@ export default class GameScene extends SceneBase {
         this.stats = new MissionStats(100, 200);
         this.grid = new Grid(mission.gameMap, this);
         this.sidebar = new Sidebar(this);
+        this.towerPicker = new TowerPicker(this);
         this.gridWidth = mission.mapImage.width;
         this.gridHeight = mission.mapImage.height;
         this.ticker = new PIXI.Ticker();
@@ -112,9 +115,11 @@ export default class GameScene extends SceneBase {
         this.stats.setBounds(this.getStatusBounds());
         this.grid.setBounds(this.getGridBounds());
         this.sidebar.setBounds(this.getSidebarBounds());
+        this.towerPicker.setBounds(this.getTowerPickerBounds());
         this.changeRoundButton.setBounds(this.getChangeRoundButtonBounds());
         this.container.addChild(this.sidebar.container);
         this.container.addChild(this.stats.container);
+        this.container.addChild(this.towerPicker.container);
         this.container.addChild(this.grid.container);
         this.container.addChild(this.changeRoundButton.container);
         this.container.x = this.bounds.x;
@@ -123,6 +128,9 @@ export default class GameScene extends SceneBase {
 
     private getSidebarBounds(): PIXI.Rectangle {
         return new PIXI.Rectangle(this.bounds.width - 350, 0, 350, this.bounds.height);
+    }
+    private getTowerPickerBounds(): PIXI.Rectangle {
+        return new PIXI.Rectangle(this.bounds.width - 350, 100, 350, this.bounds.height - 250);
     }
     private getStatusBounds(): PIXI.Rectangle {
         // Top / Center

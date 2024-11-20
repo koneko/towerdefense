@@ -2,27 +2,30 @@ import * as PIXI from 'pixi.js';
 import { Foundation } from './Bastion';
 
 export default abstract class DynamicObject {
-    protected _container: PIXI.Container;
+    public readonly name: string = this.constructor.name;
 
-    protected bounds: PIXI.Rectangle;
+    protected _container: PIXI.Container = new PIXI.Container();
 
-    private _events: PIXI.EventEmitter = new PIXI.EventEmitter();
-
-    public abstract events: Enumerator;
+    protected _events: PIXI.EventEmitter = new PIXI.EventEmitter();
 
     public destroy() {
         this._events.removeAllListeners();
         if (this._container.parent) this._container.parent.removeChild(this._container);
         this._container.destroy();
+        Foundation.Master._RemoveDynamicObject(this);
     }
 
     public get container(): PIXI.Container {
         return this._container;
     }
 
-    constructor(bounds?: PIXI.Rectangle) {
-        this.bounds = bounds ?? new PIXI.Rectangle(0, 0, 0, 0);
-        this._container = new PIXI.Container();
-        Foundation.Master.DynamicObjects.push(this);
+    public get events(): PIXI.EventEmitter {
+        return this._events;
+    }
+
+    public update(elapsedMS) {}
+
+    constructor() {
+        Foundation.Master._CreateDynamicObject(this);
     }
 }

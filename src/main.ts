@@ -1,16 +1,17 @@
 import * as PIXI from 'pixi.js';
-import Master, { Foundation } from './classes/Bastion';
+import GameMaster, { environment } from './classes/Bastion';
+import Assets from './classes/Assets';
 
 (async () => {
     const app = new PIXI.Application();
-    const aspectRatio = Foundation.AspectRatio;
+    const aspectRatio = environment.AspectRatio;
     const maxWidth = window.innerWidth;
     const maxHeight = window.innerHeight;
     const width = Math.min(maxWidth * 0.75, maxHeight * aspectRatio);
     const height = width / aspectRatio;
-    Foundation.WindowWidth = width;
-    Foundation.WindowHeight = height;
-    Foundation._PIXIApp = app;
+    environment.WindowWidth = width;
+    environment.WindowHeight = height;
+    environment.app = app;
 
     await app.init({
         width: width,
@@ -19,16 +20,14 @@ import Master, { Foundation } from './classes/Bastion';
         sharedTicker: true,
         preference: 'webgl',
     });
-
     document.body.appendChild(app.canvas);
-    let master = new Master();
-    master.RefreshStage();
+    await Assets.LoadAssets();
+    new GameMaster();
     window.addEventListener('resize', () => {
         const newWidth = Math.min(window.innerWidth * 0.75, window.innerHeight * aspectRatio);
         const newHeight = newWidth / aspectRatio;
-        Foundation.WindowWidth = newWidth;
-        Foundation.WindowHeight = newHeight;
+        environment.WindowWidth = newWidth;
+        environment.WindowHeight = newHeight;
         app.renderer.resize(newWidth, newHeight);
-        master.RefreshStage();
     });
 })();

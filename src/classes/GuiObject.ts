@@ -1,11 +1,14 @@
 import * as PIXI from 'pixi.js';
+import { environment } from './Bastion';
 
 export default abstract class GuiObject {
     public readonly name: string = this.constructor.name;
 
-    protected _container: PIXI.Container;
+    protected _container: PIXI.Container = new PIXI.Container();
 
     protected _events: PIXI.EventEmitter = new PIXI.EventEmitter();
+
+    protected enabled: boolean;
 
     public destroy() {
         this._events.removeAllListeners();
@@ -24,18 +27,24 @@ export default abstract class GuiObject {
     public onClick(e: PIXI.FederatedPointerEvent) {
         console.warn(`[${this.name} does not implement GuiObject.onClick()]`);
     }
+
     public onWheel(e: PIXI.FederatedWheelEvent) {
         console.warn(`[${this.name} does not implement GuiObject.onWheel()]`);
     }
 
-    constructor() {
-        this._container = new PIXI.Container();
+    public setEnabled(enabled: boolean) {
+        this.enabled = enabled;
+    }
+
+    constructor(interactive?: boolean) {
+        environment.GameMaster._CreateGuiObject(this);
+        if (!interactive) return;
         this._container.interactive = true;
         this._container.onwheel = (e) => {
-            this.onWheel(e);
+            if (this.enabled) this.onWheel(e);
         };
         this._container.onclick = (e) => {
-            this.onClick(e);
+            if (this.enabled) this.onClick(e);
         };
     }
 }

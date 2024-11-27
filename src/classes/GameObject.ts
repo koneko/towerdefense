@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
-import { Foundation } from './Bastion';
+import { environment } from './Bastion';
 
-export default abstract class DynamicObject {
+export default abstract class GameObject {
     public readonly name: string = this.constructor.name;
 
     protected _container: PIXI.Container = new PIXI.Container();
@@ -9,10 +9,10 @@ export default abstract class DynamicObject {
     protected _events: PIXI.EventEmitter = new PIXI.EventEmitter();
 
     public destroy() {
+        environment.GameMaster._RemoveGameObject(this);
         this._events.removeAllListeners();
         if (this._container.parent) this._container.parent.removeChild(this._container);
         this._container.destroy();
-        Foundation.Master._RemoveDynamicObject(this);
     }
 
     public get container(): PIXI.Container {
@@ -23,9 +23,10 @@ export default abstract class DynamicObject {
         return this._events;
     }
 
-    public update(elapsedMS) {}
+    public abstract update(elapsedMS): void;
 
     constructor() {
-        Foundation.Master._CreateDynamicObject(this);
+        // Define stuff that goes into this.container (visual elements), then call super().
+        environment.GameMaster._CreateGameObject(this);
     }
 }

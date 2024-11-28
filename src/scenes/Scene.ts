@@ -1,7 +1,7 @@
 import GuiObject from '../classes/GuiObject';
 
 export default class Scene {
-    public gui: GuiObject[];
+    public gui: GuiObject[] = [];
     public destroy() {
         this.gui.forEach((element) => {
             element.destroy();

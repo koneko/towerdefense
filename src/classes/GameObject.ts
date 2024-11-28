@@ -26,7 +26,6 @@ export default abstract class GameObject {
     public abstract update(elapsedMS): void;
 
     constructor() {
-        // Define stuff that goes into this.container (visual elements), then call super().
         environment.GameMaster._CreateGameObject(this);
     }
 }

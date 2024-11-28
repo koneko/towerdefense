@@ -13,7 +13,7 @@ export class environment {
 
 export default class GameMaster {
     public currentScene: Scene;
-    private GameObjects: GameObject[];
+    private GameObjects: GameObject[] = [];
     private ticker: PIXI.Ticker;
 
     constructor() {

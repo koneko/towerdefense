@@ -8,7 +8,7 @@ export default abstract class GuiObject {
 
     protected _events: PIXI.EventEmitter = new PIXI.EventEmitter();
 
-    protected enabled: boolean;
+    protected enabled: boolean = true;
 
     public destroy() {
         this._events.removeAllListeners();

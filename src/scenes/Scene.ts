@@ -10,6 +10,9 @@ export default class Scene {
     public GetGuiObject(object: GuiObject) {
         return this.gui.find((obj) => obj == object);
     }
+    public GetGuiObjectByName(name: string) {
+        return this.gui.filter((obj) => obj.name == name);
+    }
     public init() {
         // Definitions for scene elements.
     }

@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import GuiObject from '../GuiObject';
-import Assets from '../Assets';
+import GameAssets from '../Assets';
 
 export default class Sidebar extends GuiObject {
     private bounds: PIXI.Rectangle;
@@ -11,10 +11,8 @@ export default class Sidebar extends GuiObject {
         this.bounds = bounds;
         this.container.x = this.bounds.x;
         this.container.y = this.bounds.y;
-        this.container.width = this.bounds.width;
-        this.container.height = this.bounds.height;
         this.sidebarSprite = new PIXI.NineSliceSprite({
-            texture: Assets.Frame01Texture,
+            texture: GameAssets.Frame01Texture,
             leftWidth: 100,
             topHeight: 100,
             rightWidth: 100,

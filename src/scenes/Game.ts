@@ -1,24 +1,27 @@
-import Assets from '../classes/Assets';
-import { environment } from '../classes/Bastion';
+import GameAssets from '../classes/Assets';
+import { Globals } from '../classes/Bastion';
 import { MissionDefinition } from '../classes/Definitions';
+import { Grid } from '../classes/game/Grid';
 import Sidebar from '../classes/gui/Sidebar';
-import Topbar from '../classes/gui/Topbar';
 import Scene from './Scene';
 import * as PIXI from 'pixi.js';
 
 export class GameScene extends Scene {
     public mission: MissionDefinition;
+    public missionIndex: number;
     constructor(name: string) {
         super();
-        Assets.Missions.forEach((mission) => {
-            if (mission.name == name) this.mission = mission;
+        GameAssets.Missions.forEach((mission, index) => {
+            if (mission.name == name) {
+                this.mission = mission;
+                this.missionIndex = index;
+            }
         });
     }
     public init() {
-        const SidebarRect = new PIXI.Rectangle(environment.WindowWidth - 400, 0, 400, environment.WindowHeight);
-        const TopbarRect = new PIXI.Rectangle(0, 0, environment.WindowWidth, 150);
+        const SidebarRect = new PIXI.Rectangle(Globals.WindowWidth - 400, 0, 400, Globals.WindowHeight);
 
-        new Topbar(TopbarRect);
         new Sidebar(SidebarRect);
+        new Grid(this.mission.gameMap, this.missionIndex);
     }
 }

@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { environment } from './Bastion';
+import { Globals } from './Bastion';
 
 export default abstract class GuiObject {
     public readonly name: string = this.constructor.name;
@@ -37,7 +37,7 @@ export default abstract class GuiObject {
     }
 
     constructor(interactive?: boolean) {
-        environment.GameMaster._CreateGuiObject(this);
+        Globals.GameMaster._CreateGuiObject(this);
         if (!interactive) return;
         this._container.interactive = true;
         this._container.onwheel = (e) => {

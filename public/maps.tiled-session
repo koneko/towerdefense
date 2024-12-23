@@ -1,0 +1,43 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "": {
+            "scaleInDock": 0.33
+        },
+        "#TiledTDThree128": {
+            "scaleInDock": 0.33,
+            "scaleInEditor": 1
+        },
+        "/home/koneko/dumping/tiles/TiledTDThree64.tmx": {
+            "scale": 0.187625,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 3197.8680879413732,
+                "y": 3197.8680879413732
+            }
+        },
+        "Tileset.tsx": {
+            "scaleInDock": 1
+        }
+    },
+    "last.externalTilesetPath": "/home/koneko/Programing/js/towerdefense/public",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 64,
+    "map.tileWidth": 64,
+    "map.width": 20,
+    "openFiles": [
+    ],
+    "project": "maps.tiled-project",
+    "recentFiles": [
+        "/home/koneko/dumping/tiles/TiledTDThree64.tmx"
+    ],
+    "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)"
+}

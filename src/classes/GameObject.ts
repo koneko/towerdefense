@@ -1,15 +1,18 @@
 import * as PIXI from 'pixi.js';
-import { environment } from './Bastion';
+import { Globals } from './Bastion';
 
 export default abstract class GameObject {
     public readonly name: string = this.constructor.name;
 
     protected _container: PIXI.Container = new PIXI.Container();
 
+    // bb = bounding box
+    protected bb: PIXI.Rectangle = new PIXI.Rectangle();
+
     protected _events: PIXI.EventEmitter = new PIXI.EventEmitter();
 
     public destroy() {
-        environment.GameMaster._RemoveGameObject(this);
+        Globals.GameMaster._RemoveGameObject(this);
         this._events.removeAllListeners();
         if (this._container.parent) this._container.parent.removeChild(this._container);
         this._container.destroy();
@@ -24,8 +27,4 @@ export default abstract class GameObject {
     }
 
     public abstract update(elapsedMS): void;
-
-    constructor() {
-        environment.GameMaster._CreateGameObject(this);
-    }
 }

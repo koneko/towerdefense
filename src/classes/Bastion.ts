@@ -2,13 +2,15 @@ import * as PIXI from 'pixi.js';
 import GameObject from './GameObject';
 import GuiObject from './GuiObject';
 import Scene from '../scenes/Scene';
+import { Grid } from './game/Grid';
 
-export class environment {
+export class Globals {
     public static app: PIXI.Application;
     public static GameMaster: GameMaster;
     public static WindowHeight: number;
     public static WindowWidth: number;
-    public static AspectRatio: number = 4 / 3;
+    public static AspectRatio: number = 16 / 9;
+    public static Grid: Grid;
 }
 
 export default class GameMaster {
@@ -17,7 +19,7 @@ export default class GameMaster {
     private ticker: PIXI.Ticker;
 
     constructor() {
-        environment.GameMaster = this;
+        Globals.GameMaster = this;
         this.ticker = new PIXI.Ticker();
         this.ticker.maxFPS = 60;
         this.ticker.minFPS = 30;
@@ -26,22 +28,24 @@ export default class GameMaster {
 
     public _CreateGameObject(object: GameObject) {
         this.GameObjects.push(object);
-        environment.app.stage.addChild(object.container);
     }
 
     public _RemoveGameObject(object: GameObject) {
         this.GameObjects.splice(this.GameObjects.indexOf(object), 1);
-        environment.app.stage.removeChild(object.container);
+    }
+
+    public GetGameObjectByName(name: string) {
+        return this.GameObjects.filter((obj) => obj.name == name);
     }
 
     public _CreateGuiObject(object: GuiObject) {
         this.currentScene.gui.push(object);
-        environment.app.stage.addChild(object.container);
+        Globals.app.stage.addChild(object.container);
     }
 
     public _RemoveGuiObject(object: GuiObject) {
         this.currentScene.gui.splice(this.currentScene.gui.indexOf(object), 1);
-        environment.app.stage.removeChild(object.container);
+        Globals.app.stage.removeChild(object.container);
     }
 
     public changeScene(newScene: Scene) {

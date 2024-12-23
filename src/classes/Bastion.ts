@@ -3,6 +3,7 @@ import GameObject from './GameObject';
 import GuiObject from './GuiObject';
 import Scene from '../scenes/Scene';
 import { Grid } from './game/Grid';
+import WaveManager from './game/WaveManager';
 
 export class Globals {
     public static app: PIXI.Application;
@@ -11,6 +12,7 @@ export class Globals {
     public static WindowWidth: number;
     public static AspectRatio: number = 16 / 9;
     public static Grid: Grid;
+    public static WaveManager: WaveManager;
 }
 
 export default class GameMaster {
@@ -24,18 +26,6 @@ export default class GameMaster {
         this.ticker.maxFPS = 60;
         this.ticker.minFPS = 30;
         this.ticker.add(() => this.update(this.ticker.elapsedMS));
-    }
-
-    public _CreateGameObject(object: GameObject) {
-        this.GameObjects.push(object);
-    }
-
-    public _RemoveGameObject(object: GameObject) {
-        this.GameObjects.splice(this.GameObjects.indexOf(object), 1);
-    }
-
-    public GetGameObjectByName(name: string) {
-        return this.GameObjects.filter((obj) => obj.name == name);
     }
 
     public _CreateGuiObject(object: GuiObject) {

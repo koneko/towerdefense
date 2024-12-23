@@ -6,28 +6,48 @@ import { GameScene } from './scenes/Game';
 
 (async () => {
     const app = new PIXI.Application();
-    const aspectRatio = Globals.AspectRatio;
-    const maxWidth = window.innerWidth;
-    const maxHeight = window.innerHeight;
-    const width = Math.min(maxWidth * 0.75, maxHeight * aspectRatio);
-    const height = width / aspectRatio;
     Globals.app = app;
-
     await app.init({
-        width: maxWidth,
-        height: maxHeight,
-        backgroundColor: 'black',
+        width: 1920, // Base width
+        height: 1080, // Base height
+        resolution: window.devicePixelRatio || 1,
+        autoDensity: true,
+        backgroundColor: 0xffffff,
         sharedTicker: true,
-        preference: 'webgl',
     });
-    const screenRatio = maxWidth / maxHeight;
-    const scale = screenRatio < aspectRatio ? maxWidth / width : maxHeight / height;
-
-    app.stage.scale.x = scale;
-    app.stage.scale.y = scale;
-    Globals.WindowWidth = maxWidth / scale;
-    Globals.WindowHeight = maxHeight / scale;
     document.body.appendChild(app.canvas);
+
+    function resize() {
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+        Globals.WindowHeight = windowHeight;
+        Globals.WindowWidth = windowWidth;
+
+        // Calculate scale factor to maintain aspect ratio
+        const scaleX = windowWidth / app.screen.width;
+        const scaleY = windowHeight / app.screen.height;
+        const scale = Math.min(scaleX, scaleY); // Use the smaller scale to fit
+
+        // Calculate new canvas size
+        const gameWidth = Math.round(app.screen.width * scale);
+        const gameHeight = Math.round(app.screen.height * scale);
+
+        // Center the canvas
+        const marginHorizontal = (windowWidth - gameWidth) / 2;
+        const marginVertical = (windowHeight - gameHeight) / 2;
+
+        // Apply styles to canvas
+        app.canvas.style.width = `${gameWidth}px`;
+        app.canvas.style.height = `${gameHeight}px`;
+        app.canvas.style.marginLeft = `${marginHorizontal}px`;
+        app.canvas.style.marginTop = `${marginVertical}px`;
+        app.canvas.style.marginRight = `0`; // Prevent unnecessary margin
+        app.canvas.style.marginBottom = `0`; // Prevent unnecessary margin
+        app.canvas.style.display = 'block'; // Prevent inline-block spacing issues
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
     await Assets.LoadAssets();
     new GameMaster();
     Globals.GameMaster.changeScene(new MainScene());

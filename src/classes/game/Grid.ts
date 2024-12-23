@@ -1,10 +1,9 @@
 import * as PIXI from 'pixi.js';
 import GameObject from '../GameObject';
 import { GameMapDefinition, TerrainType } from '../Definitions';
-// import Creep, { CreepEvents } from './Creep';
 import GameAssets from '../Assets';
-import { Viewport } from 'pixi-viewport';
 import { Globals } from '../Bastion';
+import Creep, { CreepEvents } from './Creep';
 
 export class Cell extends GameObject {
     public type: TerrainType;
@@ -18,15 +17,11 @@ export class Cell extends GameObject {
         this.row = row;
         this.column = column;
         this.isPath = isPath;
-        // this.bb.x = parseFloat(environment.Grid.gridUnitsToPixels(this.column).toFixed(2));
-        // this.bb.y = parseFloat(environment.Grid.gridUnitsToPixels(this.row).toFixed(2));
-        if (column == 24 || column == 23) console.log(`col ${column} ` + Globals.Grid.gridUnitsToPixels(this.column));
-        this.bb.x = Globals.Grid.gridUnitsToPixels(this.column);
-        this.bb.y = Globals.Grid.gridUnitsToPixels(this.row);
-        this.bb.width = Globals.Grid.gridUnitsToPixels(1);
-        this.bb.height = Globals.Grid.gridUnitsToPixels(1);
+        this.bb.x = this.column * 64;
+        this.bb.y = this.row * 64;
+        this.bb.width = 64;
+        this.bb.height = 64;
         Globals.Grid.container.addChild(this.container);
-        Globals.GameMaster._CreateGameObject(this);
         let g = new PIXI.Graphics();
         g.rect(0, 0, this.bb.width, this.bb.height);
         switch (this.type) {
@@ -64,42 +59,54 @@ export class Cell extends GameObject {
 export class Grid extends GameObject {
     private gameMap: GameMapDefinition;
     private cells: Cell[] = [];
-    // public creeps: Creep[] = [];
+    public creeps: Creep[] = [];
 
     constructor(map: GameMapDefinition, missionIndex) {
         super();
         this.gameMap = map;
         Globals.Grid = this;
-        this.container.isRenderGroup = true;
         this.bb.x = 0;
-        this.bb.y = 110;
-        this.bb.width = Globals.WindowWidth - 360;
-        this.bb.height = Globals.WindowHeight - 110;
+        this.bb.y = 0;
+        this.bb.width = 64 * 30;
+        this.bb.height = 64 * 17;
         Globals.app.stage.addChild(this.container);
-        Globals.GameMaster._CreateGameObject(this);
 
         let background = new PIXI.Sprite(GameAssets.MissionBackgrounds[missionIndex]);
         background.x = 0;
         background.y = 0;
-        this.bb.width = this.gridUnitsToPixels(1) * this.gameMap.columns;
-        this.bb.height = this.gridUnitsToPixels(1) * this.gameMap.rows;
         background.width = this.bb.width;
         background.height = this.bb.height;
 
         this.container.addChild(background);
-    }
-    public update() {}
-    private getPixelScalingFactor() {
-        const pixelScaleX = this.bb.width / this.gameMap.columns;
-        const pixelScaleY = this.bb.height / this.gameMap.rows;
-        return pixelScaleX < pixelScaleY ? pixelScaleX : pixelScaleY;
-    }
 
-    public gridUnitsToPixels(amount: number): number {
-        return amount * this.getPixelScalingFactor();
+        for (let y = 0; y < this.gameMap.columns; y++) {
+            for (let x = 0; x < this.gameMap.rows; x++) {
+                let type = this.gameMap.cells[x][y];
+                if (!type) type = 1;
+                const isPath = this.gameMap.paths.some((path) => path.some((p) => p[0] === x && p[1] === y));
+                if (isPath) type = TerrainType.Path;
+                let cell = new Cell(type, x, y, isPath);
+                this.cells.push(cell);
+            }
+        }
     }
-
-    public pixelsToGridUnits(pixels: number): number {
-        return pixels / this.getPixelScalingFactor();
+    public addCreep(creep: Creep) {
+        console.log('ADD CREEP');
+        this.creeps.push(creep);
+        creep.events.on(CreepEvents.Died, (diedCreep) => {
+            this.onCreepDiedOrEscaped(diedCreep);
+        });
+        creep.events.on(CreepEvents.Escaped, (escapedCreep) => {
+            this.onCreepDiedOrEscaped(escapedCreep);
+        });
+    }
+    private onCreepDiedOrEscaped(creep: Creep) {
+        this.creeps.splice(this.creeps.indexOf(creep), 1);
+        creep.destroy();
+    }
+    public update(elapsedMS) {
+        this.creeps.forEach((creep) => {
+            creep.update(elapsedMS);
+        });
     }
 }

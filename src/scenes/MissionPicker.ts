@@ -9,7 +9,12 @@ export class MissionPickerScene extends Scene {
     public init() {
         Assets.Missions.forEach((mission, index) => {
             const button = new Button(
-                new PIXI.Rectangle(Globals.WindowWidth / 2 - 300 / 2, Globals.WindowHeight / 5 + index * 80, 300, 60),
+                new PIXI.Rectangle(
+                    Globals.app.canvas.width / 2 - 300 / 2,
+                    Globals.app.canvas.height / 5 + index * 80,
+                    300,
+                    60
+                ),
                 mission.name,
                 ButtonTexture.Button01
             );

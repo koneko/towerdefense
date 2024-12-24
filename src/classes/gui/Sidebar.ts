@@ -21,7 +21,7 @@ export default class Sidebar extends GuiObject {
         this.sidebarSprite.x = 40;
         this.sidebarSprite.y = -40;
         this.sidebarSprite.width = this.bounds.width + 40;
-        this.sidebarSprite.height = this.bounds.height + 80;
+        this.sidebarSprite.height = this.bounds.height + 41;
         this.container.addChild(this.sidebarSprite);
     }
 }

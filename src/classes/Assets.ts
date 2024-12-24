@@ -41,7 +41,7 @@ export default class GameAssets {
             src: '/assets/gui/heart.png',
         });
         GameAssets.GoldTexture = await PIXI.Assets.load({
-            src: '/assets/gui/star.png',
+            src: '/assets/gui/money.png',
         });
         GameAssets.BasicCreepTexture = await PIXI.Assets.load({
             src: '/assets/creeps/basic.jpg',

@@ -38,7 +38,7 @@ export class Cell extends GameObject {
         this.container.addChild(g);
         this.container.x = this.bb.x;
         this.container.y = this.bb.y;
-        if (!GameAssets.DebuggingEnabled) return;
+        // if (!GameAssets.DebuggingEnabled) return;
         const text = new PIXI.Text({
             text: `${this.row}|${this.column}`,
             style: new PIXI.TextStyle({

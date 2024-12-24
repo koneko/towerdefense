@@ -19,6 +19,7 @@ export default class Creep extends GameObject {
     private pathIndex: number = 0;
     private speed: number;
     public health: number;
+    public maxHealth: number;
     public escaped: boolean = false;
     public died: boolean = false;
     public x: number; // X and Y are local to the grid, not canvas
@@ -37,6 +38,7 @@ export default class Creep extends GameObject {
         this.sprite.height = 64;
         this.speed = this.stats.speed;
         this.health = this.stats.health;
+        this.maxHealth = this.stats.health;
         this.path = path;
         this.x = path[0][1] * 64 + 32; // centered
         this.y = path[0][0] * 64 + 32;

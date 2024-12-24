@@ -18,9 +18,13 @@ enum RoundMode {
 export class GameScene extends Scene {
     public mission: MissionDefinition;
     public missionIndex: number;
+    public MissionStats: MissionStats;
     public roundMode: RoundMode;
     public ticker: PIXI.Ticker;
     public changeRoundButton: Button;
+    public sidebar: Sidebar;
+    public hideSidebarButton: Button;
+    public sidebarHidden: boolean = false;
     private currentRound: number = 0;
 
     constructor(name: string) {
@@ -39,8 +43,7 @@ export class GameScene extends Scene {
         this.ticker.add(() => this.update(this.ticker.elapsedMS)); // bruh
         this.ticker.start();
         const SidebarRect = new PIXI.Rectangle(64 * 30 - 350, 0, 350, Globals.app.canvas.height);
-        const changeRoundButtonRect = new PIXI.Rectangle(64 * 30 - 200, Globals.app.canvas.height - 100, 200, 100);
-
+        const changeRoundButtonRect = new PIXI.Rectangle(50, Globals.app.canvas.height - 100, 300, 100);
         new Grid(this.mission.gameMap, this.missionIndex);
         new WaveManager(this.mission.rounds, this.mission.gameMap.paths);
         Globals.WaveManager.events.on(WaveManagerEvents.CreepSpawned, (creep: Creep) => {
@@ -49,8 +52,10 @@ export class GameScene extends Scene {
                 this.onCreepEscaped(creep);
             });
         });
-        new Sidebar(SidebarRect);
+        this.sidebar = new Sidebar(SidebarRect);
         this.changeRoundButton = new Button(changeRoundButtonRect, 'Start', ButtonTexture.Button01, true);
+        this.changeRoundButton.container.removeFromParent();
+        this.sidebar.container.addChild(this.changeRoundButton.container);
         this.changeRoundButton.onClick = () => {
             console.log('clicked');
             this.changeRoundButton.setEnabled(false);
@@ -58,13 +63,15 @@ export class GameScene extends Scene {
             this.setRoundMode(RoundMode.Combat);
         };
 
-        new MissionStats(100, 200);
+        this.MissionStats = new MissionStats(100, 200);
     }
     public update(elapsedMS) {
         Globals.WaveManager.update(elapsedMS);
         Globals.Grid.update(elapsedMS);
     }
-    public onCreepEscaped(creep: Creep) {}
+    public onCreepEscaped(creep: Creep) {
+        this.MissionStats.takeDamage(creep.health);
+    }
 
     private setRoundMode(roundMode: RoundMode) {
         this.roundMode = roundMode;

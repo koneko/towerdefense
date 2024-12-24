@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "Mission011.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -32,8 +32,17 @@
                 "y": 639.5548342221192
             }
         },
+        "Mission011.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1070,
+                "y": 448
+            }
+        },
         "Tileset.tsx": {
-            "scaleInDock": 1
+            "scaleInDock": 0.5,
+            "scaleInEditor": 1
         }
     },
     "last.externalTilesetPath": "/home/koneko/Programing/js/towerdefense/public",
@@ -43,9 +52,13 @@
     "map.tileWidth": 64,
     "map.width": 30,
     "openFiles": [
+        "Tileset.tsx",
+        "Mission011.tmx"
     ],
     "project": "maps.tiled-project",
     "recentFiles": [
+        "Tileset.tsx",
+        "Mission011.tmx",
         "Mission01.tmx",
         "/home/koneko/dumping/tiles/TiledTDThree64.tmx"
     ],

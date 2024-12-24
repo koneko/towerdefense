@@ -1,7 +1,7 @@
 [
     {
         "health": 2,
-        "speed": 0.25,
+        "speed": 0.04,
         "special": null,
         "resistance": {
             "physical": 0,

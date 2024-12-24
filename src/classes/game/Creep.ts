@@ -59,7 +59,6 @@ export default class Creep extends GameObject {
         const directionY = targetCell[0] - currentCell[0];
         let deltaX = this.speed * elapsedMS * directionX;
         let deltaY = this.speed * elapsedMS * directionY;
-        console.log(deltaX + ' DELTA X UPDATE\n' + deltaY + 'DELTA Y UPDATE ');
         let increaseIndex = false;
 
         if (deltaX > 0 && this.x + deltaX > targetX) {
@@ -84,7 +83,6 @@ export default class Creep extends GameObject {
         }
         this.x += deltaX;
         this.y += deltaY;
-        console.log(this.x + ' CREEP X UPDATE\n' + this.y + 'CREEP Y UPDATE ');
         if (increaseIndex) this.pathIndex++;
         this.draw();
     }

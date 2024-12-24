@@ -8,6 +8,7 @@ import Sidebar from '../classes/gui/Sidebar';
 import Button, { ButtonTexture } from '../classes/gui/Button';
 import Scene from './Scene';
 import * as PIXI from 'pixi.js';
+import MissionStats from '../classes/game/MissionStats';
 
 enum RoundMode {
     Purchase = 0,
@@ -19,6 +20,7 @@ export class GameScene extends Scene {
     public missionIndex: number;
     public roundMode: RoundMode;
     public ticker: PIXI.Ticker;
+    public changeRoundButton: Button;
     private currentRound: number = 0;
 
     constructor(name: string) {
@@ -36,8 +38,8 @@ export class GameScene extends Scene {
         this.ticker.minFPS = 30;
         this.ticker.add(() => this.update(this.ticker.elapsedMS)); // bruh
         this.ticker.start();
-        const SidebarRect = new PIXI.Rectangle(Globals.WindowWidth - 350, 0, 350, Globals.app.canvas.height);
-        const StartButtonRect = new PIXI.Rectangle(Globals.WindowWidth - 200, Globals.WindowHeight, 200, 100);
+        const SidebarRect = new PIXI.Rectangle(64 * 30 - 350, 0, 350, Globals.app.canvas.height);
+        const changeRoundButtonRect = new PIXI.Rectangle(64 * 30 - 200, Globals.app.canvas.height - 100, 200, 100);
 
         new Grid(this.mission.gameMap, this.missionIndex);
         new WaveManager(this.mission.rounds, this.mission.gameMap.paths);
@@ -48,14 +50,15 @@ export class GameScene extends Scene {
             });
         });
         new Sidebar(SidebarRect);
-        // const changeRoundButton = new Button('Start', new PIXI.Color('white'), true);
-        const changeRoundButton = new Button(StartButtonRect, 'Start', ButtonTexture.Button01, true);
-        changeRoundButton.onClick = () => {
+        this.changeRoundButton = new Button(changeRoundButtonRect, 'Start', ButtonTexture.Button01, true);
+        this.changeRoundButton.onClick = () => {
             console.log('clicked');
-            changeRoundButton.setEnabled(false);
-            changeRoundButton.setCaption('[X]');
+            this.changeRoundButton.setEnabled(false);
+            this.changeRoundButton.setCaption('[X]');
             this.setRoundMode(RoundMode.Combat);
         };
+
+        new MissionStats(100, 200);
     }
     public update(elapsedMS) {
         Globals.WaveManager.update(elapsedMS);

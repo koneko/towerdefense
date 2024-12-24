@@ -99,5 +99,5 @@ export default class GameAssets {
     public static Missions: MissionDefinition[];
     public static Towers: TowerDefinition[];
     public static CreepStats: CreepStatsDefinition[];
-    public static DebuggingEnabled: boolean = true;
+    public static DebuggingEnabled: boolean = false;
 }

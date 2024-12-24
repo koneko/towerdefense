@@ -42,8 +42,8 @@ export class GameScene extends Scene {
         this.ticker.minFPS = 30;
         this.ticker.add(() => this.update(this.ticker.elapsedMS)); // bruh
         this.ticker.start();
-        const SidebarRect = new PIXI.Rectangle(64 * 30 - 350, 0, 350, Globals.app.canvas.height);
-        const changeRoundButtonRect = new PIXI.Rectangle(50, Globals.app.canvas.height - 100, 300, 100);
+        const SidebarRect = new PIXI.Rectangle(64 * 30 - 360, 0, 360, Globals.app.canvas.height);
+        const changeRoundButtonRect = new PIXI.Rectangle(50, Globals.app.canvas.height - 100, 310, 100);
         new Grid(this.mission.gameMap, this.missionIndex);
         new WaveManager(this.mission.rounds, this.mission.gameMap.paths);
         Globals.WaveManager.events.on(WaveManagerEvents.CreepSpawned, (creep: Creep) => {

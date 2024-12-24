@@ -1,10 +1,14 @@
 import * as PIXI from 'pixi.js';
 import GuiObject from '../GuiObject';
 import GameAssets from '../Assets';
+import TowerTab from './TowerTab';
+import GemTab from './GemTab';
 
 export default class Sidebar extends GuiObject {
     private bounds: PIXI.Rectangle;
     private sidebarSprite: PIXI.NineSliceSprite;
+    private towerTab: TowerTab;
+    private gemTab: GemTab;
 
     constructor(bounds: PIXI.Rectangle) {
         super(false);
@@ -21,7 +25,16 @@ export default class Sidebar extends GuiObject {
         this.sidebarSprite.x = 40;
         this.sidebarSprite.y = -40;
         this.sidebarSprite.width = this.bounds.width + 40;
-        this.sidebarSprite.height = this.bounds.height + 41;
+        this.sidebarSprite.height = this.bounds.height + 80;
+
         this.container.addChild(this.sidebarSprite);
+
+        const towerTabRect = new PIXI.Rectangle(60, 20, this.bounds.width - 65, 150);
+        this.towerTab = new TowerTab(towerTabRect);
+        this.container.addChild(this.towerTab.container);
+
+        const gemTabRect = new PIXI.Rectangle(60, 180, this.bounds.width - 65, this.bounds.height - 280);
+        this.gemTab = new GemTab(gemTabRect);
+        this.container.addChild(this.gemTab.container);
     }
 }

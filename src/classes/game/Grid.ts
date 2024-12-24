@@ -10,6 +10,7 @@ export class Cell extends GameObject {
     public row: number;
     public column: number;
     public isPath: boolean = false;
+    private g: PIXI.Graphics;
 
     constructor(type: TerrainType, row: number, column: number, isPath: boolean) {
         super();
@@ -22,23 +23,9 @@ export class Cell extends GameObject {
         this.bb.width = 64;
         this.bb.height = 64;
         Globals.Grid.container.addChild(this.container);
-        let g = new PIXI.Graphics();
-        g.rect(0, 0, this.bb.width, this.bb.height);
-        switch (this.type) {
-            case TerrainType.Restricted:
-                g.fill(0xff0000);
-                break;
-            case TerrainType.Path:
-                g.fill(0xff00ff);
-                break;
-            case TerrainType.Buildable:
-                g.stroke(0x00ff00);
-                break;
-        }
-        this.container.addChild(g);
         this.container.x = this.bb.x;
         this.container.y = this.bb.y;
-        // if (!GameAssets.DebuggingEnabled) return;
+        if (!GameAssets.DebuggingEnabled) return;
         const text = new PIXI.Text({
             text: `${this.row}|${this.column}`,
             style: new PIXI.TextStyle({
@@ -53,6 +40,28 @@ export class Cell extends GameObject {
         text.y = this.bb.height / 2;
         if (this.isPath) text.text += 'P';
     }
+    public gDraw() {
+        this.g = new PIXI.Graphics();
+        this.g.rect(0, 0, this.bb.width, this.bb.height);
+        switch (this.type) {
+            case TerrainType.Restricted:
+                this.g.fill({ color: 0x222222, alpha: 0.5 });
+                break;
+            case TerrainType.Path:
+                this.g.fill({ color: 0x222222, alpha: 0.5 });
+                break;
+            case TerrainType.Buildable:
+                this.g.stroke({ color: 0x00ff00, alpha: 0.1 });
+                break;
+        }
+        this.container.addChild(this.g);
+    }
+    public gClear() {
+        if (this.g != null) {
+            this.container.removeChild(this.g);
+            this.g.destroy();
+        }
+    }
     public update() {}
 }
 
@@ -60,6 +69,7 @@ export class Grid extends GameObject {
     private gameMap: GameMapDefinition;
     private cells: Cell[] = [];
     public creeps: Creep[] = [];
+    public gridShown: boolean = false;
 
     constructor(map: GameMapDefinition, missionIndex) {
         super();
@@ -89,6 +99,17 @@ export class Grid extends GameObject {
                 this.cells.push(cell);
             }
         }
+    }
+    public toggleGrid() {
+        this.cells.forEach((cell) => {
+            if (this.gridShown) {
+                cell.gClear();
+            } else {
+                cell.gDraw();
+            }
+            // smort
+            this.gridShown = !this.gridShown;
+        });
     }
     public addCreep(creep: Creep) {
         console.log('ADD CREEP');

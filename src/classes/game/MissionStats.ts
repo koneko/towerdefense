@@ -15,17 +15,17 @@ export default class MissionStats extends GameObject {
 
     public setHP(hp: number) {
         this.hp = hp;
-        this.healthText.text = 'HP: ' + this.hp;
+        this.healthText.text = this.hp;
     }
 
     public takeDamage(damage: number) {
         this.hp -= damage;
-        this.healthText.text = 'HP: ' + this.hp;
+        this.healthText.text = this.hp;
     }
 
     public setGold(gold: number) {
         this.gold = gold;
-        this.goldText.text = 'Gold: ' + this.gold;
+        this.goldText.text = this.gold;
     }
 
     constructor(initialHP: number, initialGold: number) {
@@ -36,38 +36,40 @@ export default class MissionStats extends GameObject {
         this.container.y = 20;
         Globals.app.stage.addChild(this.container);
         this.healthText = new PIXI.Text({
-            text: `HP: ${this.hp}`,
+            text: `${this.hp}`,
             style: new PIXI.TextStyle({
-                fill: 'white',
-                fontSize: 24,
+                fill: 'red',
+                fontSize: 36,
                 fontWeight: 'bold',
                 dropShadow: true,
             }),
         });
-        this.healthText.x = 200;
         this.goldText = new PIXI.Text({
-            text: `Gold: ${this.gold}`,
+            text: `${this.gold}`,
             style: new PIXI.TextStyle({
-                fill: 'white',
-                fontSize: 24,
+                fill: 'gold',
+                fontSize: 36,
                 fontWeight: 'bold',
                 dropShadow: true,
             }),
         });
-        this.goldText.x = 200;
-        this.goldText.y = 30;
-
         const healthSprite = new PIXI.Sprite(Assets.HealthTexture);
-        healthSprite.x = 165;
-        healthSprite.width = 30;
-        healthSprite.height = 26;
-        healthSprite.y = 1;
-
         const goldSprite = new PIXI.Sprite(Assets.GoldTexture);
-        goldSprite.x = 165;
-        goldSprite.width = 30;
-        goldSprite.height = 26;
-        goldSprite.y = 30;
+
+        this.healthText.x = 200;
+        this.healthText.y = -15;
+        healthSprite.x = 160;
+        healthSprite.width = 36;
+        healthSprite.height = 32;
+        healthSprite.y = -10;
+
+        this.goldText.x = 200;
+        this.goldText.y = 20;
+        goldSprite.x = 150;
+        goldSprite.width = 56;
+        goldSprite.height = 56;
+        goldSprite.y = 15;
+
         this.container.addChild(this.healthText);
         this.container.addChild(this.goldText);
         this.container.addChild(healthSprite);

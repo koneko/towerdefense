@@ -28,11 +28,11 @@ export default class GameAssets {
         GameAssets.Frame02Texture = await PIXI.Assets.load({
             src: '/assets/gui/frame_02.png',
         });
-        GameAssets.FrameGreenTexture = await PIXI.Assets.load({
-            src: '/assets/gui/frame_green.png',
+        GameAssets.FrameBackground = await PIXI.Assets.load({
+            src: '/assets/gui/background_01.png',
         });
-        GameAssets.FrameRedTexture = await PIXI.Assets.load({
-            src: '/assets/gui/frame_red.png',
+        GameAssets.FrameTowerTab = await PIXI.Assets.load({
+            src: '/assets/gui/background_02.png',
         });
         GameAssets.FrameVioletTexture = await PIXI.Assets.load({
             src: '/assets/gui/frame_violet.png',
@@ -87,8 +87,8 @@ export default class GameAssets {
 
     public static Frame01Texture: PIXI.Texture;
     public static Frame02Texture: PIXI.Texture;
-    public static FrameGreenTexture: PIXI.Texture;
-    public static FrameRedTexture: PIXI.Texture;
+    public static FrameBackground: PIXI.Texture;
+    public static FrameTowerTab: PIXI.Texture;
     public static FrameVioletTexture: PIXI.Texture;
     public static Button01Texture: PIXI.Texture;
     public static Button02Texture: PIXI.Texture;

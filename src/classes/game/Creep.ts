@@ -22,7 +22,7 @@ export default class Creep extends GameObject {
     public maxHealth: number;
     public escaped: boolean = false;
     public died: boolean = false;
-    public x: number; // X and Y are local to the grid, not canvas
+    public x: number;
     public y: number;
     constructor(creepType: CreepType, path: PathDefinition) {
         super();

@@ -1,11 +1,12 @@
 [
     {
         "name": "Basic Tower",
+        "behaviour": "BasicTowerBehaviour",
         "sprite": "basic_tower",
         "description": "The building block of society, nothing more basic exists.",
         "stats": {
             "damage": 2,
-            "cooldown": 2,
+            "cooldown": 120,
             "gemSlotsAmount": 2,
             "cost": 100,
             "range": 3

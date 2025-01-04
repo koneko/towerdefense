@@ -3,6 +3,10 @@ import * as PIXI from 'pixi.js';
 import GameObject from '../GameObject';
 import { TowerDefinition } from '../Definitions';
 import { Cell } from './Grid';
+import { TowerBehaviours } from './TowerManager';
+import Projectile, { calculateAngleToPoint } from './Projectile';
+import GameAssets from '../Assets';
+import Creep from './Creep';
 
 function distance(x1, y1, x2, y2) {
     return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
@@ -30,15 +34,16 @@ export enum TowerEvents {
 export class Tower extends GameObject {
     public row: number;
     public column: number;
+    private projectiles: Projectile[] = [];
+    private behaviour: string;
     private definition: TowerDefinition;
     private sprite: PIXI.Sprite;
-    private antiLag = 0;
-    private debugGraphics: PIXI.Graphics = new PIXI.Graphics();
-    private dbgtxt: any;
-    constructor(row, column, texture, definition) {
+    private graphics: PIXI.Graphics = new PIXI.Graphics();
+    constructor(row, column, texture, definition, behaviour) {
         super();
         this.row = row;
         this.column = column;
+        this.behaviour = behaviour;
         this.definition = definition;
         let parent: Cell = Globals.Grid.getCellByRowAndCol(row, column);
         this.sprite = new PIXI.Sprite({
@@ -47,25 +52,16 @@ export class Tower extends GameObject {
             width: 64,
             zIndex: 10,
         });
-        this.dbgtxt = new PIXI.Text({
-            text: 'instantiating',
-            x: 0,
-            y: -20,
-            style: {
-                fill: 0x0ff00f,
-            },
-        });
         this.container.addChild(this.sprite);
-        this.container.addChild(this.dbgtxt);
         parent.container.addChild(this.container);
         parent.clickDetector.onmouseenter = (e) => {
-            this.debugGraphics.circle(this.column * 64 + 32, this.row * 64 + 32, this.definition.stats.range * 64);
-            this.debugGraphics.fill({ color: 0xff0000, alpha: 0.5 });
+            this.graphics.circle(this.column * 64 + 32, this.row * 64 + 32, this.definition.stats.range * 64);
+            this.graphics.fill({ color: 0xff0000, alpha: 0.5 });
         };
         parent.clickDetector.onmouseleave = (e) => {
-            this.debugGraphics.clear();
+            this.graphics.clear();
         };
-        Globals.app.stage.addChild(this.debugGraphics);
+        Globals.app.stage.addChild(this.graphics);
     }
     public GetCreepsInRange() {
         let creeps = Globals.Grid.creeps;
@@ -79,12 +75,22 @@ export class Tower extends GameObject {
             return d < radius;
         });
     }
+    public Shoot(creep: Creep) {
+        let x = this.column * 64 + 32;
+        let y = this.row * 64 + 32;
+        let angle = calculateAngleToPoint(x, y, creep.x, creep.y);
+        this.projectiles.push(new Projectile(x, y, GameAssets.BasicProjectileTexture, angle));
+    }
     public update(elapsedMS: any): void {
-        if (this.antiLag >= 10) {
-            this.antiLag = 0;
-            let inrange = this.GetCreepsInRange().length;
-            this.dbgtxt.text = inrange;
+        this.projectiles.forEach((proj) => {
+            proj.update(elapsedMS);
+        });
+        if (this.behaviour == TowerBehaviours.BasicTowerBehaviour) {
+            let creepsInRange = this.GetCreepsInRange();
+            if (creepsInRange.length > 0) {
+                let focus = creepsInRange[0];
+                this.Shoot(focus);
+            }
         }
-        this.antiLag++;
     }
 }

@@ -45,6 +45,7 @@ export type CreepResistancesDefinition = {
 
 export type TowerDefinition = {
     name: string;
+    behaviour: string;
     sprite: string;
     description: string;
     stats: TowerStatsDefinition;

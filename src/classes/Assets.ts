@@ -58,6 +58,10 @@ export default class GameAssets {
             src: '/assets/towers/basic_tower.png',
         });
 
+        GameAssets.BasicProjectileTexture = await PIXI.Assets.load({
+            src: '/assets/projectiles/basic_tower.png',
+        });
+
         await this.LoadMissions();
         await this.LoadTowers();
         await this.LoadCreepStats();
@@ -105,6 +109,8 @@ export default class GameAssets {
     public static BasicCreepTexture: PIXI.Texture;
 
     public static BasicTowerTexture: PIXI.Texture;
+
+    public static BasicProjectileTexture: PIXI.Texture;
 
     public static Frame01Texture: PIXI.Texture;
     public static Frame02Texture: PIXI.Texture;

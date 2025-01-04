@@ -1,9 +1,13 @@
 import * as PIXI from 'pixi.js';
 import { Globals } from '../Bastion';
-import { TowerDefinition } from '../Definitions';
+import { TerrainType, TowerDefinition } from '../Definitions';
 import GameAssets from '../Assets';
 import GameObject from '../GameObject';
 import { Tower, TowerEvents } from './Tower';
+
+export enum TowerBehaviours {
+    BasicTowerBehaviour = 'BasicTowerBehaviour',
+}
 
 export default class TowerManager {
     public isPlacingTower: boolean = false;
@@ -32,7 +36,7 @@ export default class TowerManager {
         if (this.isPlacingTower) {
             if (!this.selectedTower)
                 throw console.warn('TowerManager.selectedTower is null when trying to place tower.');
-            this.PlaceTower(this.selectedTower, row, column);
+            this.PlaceTower(this.selectedTower, row, column, this.selectedTower.behaviour);
         }
     }
     public GetTowerByRowAndCol(row, col) {
@@ -44,7 +48,7 @@ export default class TowerManager {
         });
         return returnTower;
     }
-    public PlaceTower(definition: TowerDefinition, row, column, ignoreCost?) {
+    public PlaceTower(definition: TowerDefinition, row, column, behaviour: string, ignoreCost?) {
         let idx = 0;
         GameAssets.Towers.forEach((item, index) => {
             if (item.sprite == definition.sprite) idx = index;
@@ -52,9 +56,13 @@ export default class TowerManager {
         const sprite = GameAssets.TowerSprites[idx];
         if (!Globals.GameScene.MissionStats.hasEnoughGold(definition.stats.cost) && !ignoreCost)
             return console.warn('Does not have enough gold.');
-        if (!this.GetTowerByRowAndCol(row, column) && !Globals.Grid.getCellByRowAndCol(row, column).isPath) {
+        if (
+            !this.GetTowerByRowAndCol(row, column) &&
+            Globals.Grid.getCellByRowAndCol(row, column).type != TerrainType.Path &&
+            Globals.Grid.getCellByRowAndCol(row, column).type != TerrainType.Restricted
+        ) {
             Globals.GameScene.MissionStats.spendGold(definition.stats.cost);
-            let tower = new Tower(row, column, sprite, definition);
+            let tower = new Tower(row, column, sprite, definition, behaviour);
             this.towers.push(tower);
             this.ToggleChoosingTowerLocation('RESET');
             console.log('SHOULDVE PLACED TOWER');

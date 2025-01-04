@@ -9,6 +9,7 @@ import Button, { ButtonTexture } from '../classes/gui/Button';
 import Scene from './Scene';
 import * as PIXI from 'pixi.js';
 import MissionStats from '../classes/game/MissionStats';
+import TowerManager, { TowerEvents } from '../classes/game/TowerManager';
 
 enum RoundMode {
     Purchase = 0,
@@ -23,12 +24,11 @@ export class GameScene extends Scene {
     public ticker: PIXI.Ticker;
     public changeRoundButton: Button;
     public sidebar: Sidebar;
-    public hideSidebarButton: Button;
-    public sidebarHidden: boolean = false;
     private currentRound: number = 0;
 
     constructor(name: string) {
         super();
+        Globals.GameScene = this;
         GameAssets.Missions.forEach((mission, index) => {
             if (mission.name == name) {
                 this.mission = mission;
@@ -45,7 +45,13 @@ export class GameScene extends Scene {
         const SidebarRect = new PIXI.Rectangle(64 * 30 - 360, 0, 360, Globals.app.canvas.height);
         const changeRoundButtonRect = new PIXI.Rectangle(50, Globals.app.canvas.height - 100, 310, 100);
         new Grid(this.mission.gameMap, this.missionIndex);
+        new TowerManager();
         new WaveManager(this.mission.rounds, this.mission.gameMap.paths);
+        Globals.Grid.onGridCellClicked = (row, column) => {
+            if (Globals.TowerManager.isPlacingTower) {
+                Globals.TowerManager.PlayerClickOnGrid(row, column);
+            }
+        };
         Globals.WaveManager.events.on(WaveManagerEvents.CreepSpawned, (creep: Creep) => {
             Globals.Grid.addCreep(creep);
             creep.events.on(CreepEvents.Escaped, () => {
@@ -69,6 +75,7 @@ export class GameScene extends Scene {
         Globals.WaveManager.update(elapsedMS);
         Globals.Grid.update(elapsedMS);
     }
+
     public onCreepEscaped(creep: Creep) {
         this.MissionStats.takeDamage(creep.health);
     }
@@ -81,4 +88,6 @@ export class GameScene extends Scene {
             Globals.WaveManager.end();
         }
     }
+
+    public onTowerPlaced() {}
 }

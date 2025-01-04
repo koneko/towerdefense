@@ -11,6 +11,7 @@ export class Cell extends GameObject {
     public column: number;
     public isPath: boolean = false;
     private g: PIXI.Graphics;
+    private clickDetector: PIXI.Graphics;
 
     constructor(type: TerrainType, row: number, column: number, isPath: boolean) {
         super();
@@ -25,6 +26,18 @@ export class Cell extends GameObject {
         Globals.Grid.container.addChild(this.container);
         this.container.x = this.bb.x;
         this.container.y = this.bb.y;
+
+        this.clickDetector = new PIXI.Graphics({
+            zIndex: 99,
+            interactive: true,
+        });
+        this.clickDetector.rect(0, 0, this.bb.width, this.bb.height);
+        this.clickDetector.fill({ color: 0xff0000, alpha: 0 });
+        this.container.addChild(this.clickDetector);
+        this.clickDetector.onclick = (e) => {
+            Globals.Grid._gridCellClicked(row, column);
+        };
+
         if (!GameAssets.DebuggingEnabled) return;
         const text = new PIXI.Text({
             text: `${this.row}|${this.column}`,
@@ -38,10 +51,12 @@ export class Cell extends GameObject {
         text.anchor.set(0.5, 0.5);
         text.x = this.bb.width / 2;
         text.y = this.bb.height / 2;
-        if (this.isPath) text.text += 'P';
+        if (isPath) text.text += 'p';
     }
     public gDraw() {
-        this.g = new PIXI.Graphics();
+        this.g = new PIXI.Graphics({
+            zIndex: 5,
+        });
         this.g.rect(0, 0, this.bb.width, this.bb.height);
         switch (this.type) {
             case TerrainType.Restricted:
@@ -51,7 +66,7 @@ export class Cell extends GameObject {
                 this.g.fill({ color: 0x222222, alpha: 0.5 });
                 break;
             case TerrainType.Buildable:
-                this.g.stroke({ color: 0x00ff00, alpha: 0.1 });
+                this.g.stroke({ color: 0x00ff00, alpha: 0.9 });
                 break;
         }
         this.container.addChild(this.g);
@@ -107,9 +122,8 @@ export class Grid extends GameObject {
             } else {
                 cell.gDraw();
             }
-            // smort
-            this.gridShown = !this.gridShown;
         });
+        this.gridShown = !this.gridShown;
     }
     public addCreep(creep: Creep) {
         console.log('ADD CREEP');
@@ -130,4 +144,12 @@ export class Grid extends GameObject {
             creep.update(elapsedMS);
         });
     }
+    public getCellByRowAndCol(row, column) {
+        return this.cells.filter((item) => item.row == row && item.column == column)[0];
+    }
+    public _gridCellClicked(row, column) {
+        // function will be assigned by GameScene, but must be predefined here.
+        this.onGridCellClicked(row, column);
+    }
+    public onGridCellClicked(row, column) {}
 }

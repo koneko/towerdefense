@@ -50,6 +50,7 @@ import { GameScene } from './scenes/Game';
     resize();
     await Assets.LoadAssets();
     new GameMaster();
+    globalThis.Globals = Globals;
     Globals.GameMaster.changeScene(new MainScene());
     let params = new URLSearchParams(location.href);
     if (params.entries().next().value[1] == 'game') Globals.GameMaster.changeScene(new GameScene('Mission 1'));

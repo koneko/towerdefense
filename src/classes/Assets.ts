@@ -8,12 +8,12 @@ export default class GameAssets {
         const text = new PIXI.Text({
             text: 'Loading textures. This might take a while.',
             style: new PIXI.TextStyle({
-                fill: 0xffffff,
+                fill: 0x333333,
                 fontSize: 50,
             }),
         });
-        text.x = Globals.WindowWidth / 2;
-        text.y = Globals.WindowHeight / 2;
+        text.x = Globals.app.canvas.width / 2;
+        text.y = Globals.app.canvas.height / 2;
         text.anchor.set(0.5, 0.5);
         Globals.app.stage.addChild(text);
         GameAssets.Button01Texture = await PIXI.Assets.load({
@@ -34,8 +34,14 @@ export default class GameAssets {
         GameAssets.FrameTowerTab = await PIXI.Assets.load({
             src: '/assets/gui/background_02.png',
         });
-        GameAssets.FrameVioletTexture = await PIXI.Assets.load({
+        GameAssets.VioletBackground = await PIXI.Assets.load({
             src: '/assets/gui/frame_violet.png',
+        });
+        GameAssets.RedBackground = await PIXI.Assets.load({
+            src: '/assets/gui/frame_red.png',
+        });
+        GameAssets.GreenBackground = await PIXI.Assets.load({
+            src: '/assets/gui/frame_green.png',
         });
         GameAssets.HealthTexture = await PIXI.Assets.load({
             src: '/assets/gui/heart.png',
@@ -43,9 +49,15 @@ export default class GameAssets {
         GameAssets.GoldTexture = await PIXI.Assets.load({
             src: '/assets/gui/money.png',
         });
+
         GameAssets.BasicCreepTexture = await PIXI.Assets.load({
             src: '/assets/creeps/basic.jpg',
         });
+
+        GameAssets.BasicTowerTexture = await PIXI.Assets.load({
+            src: '/assets/towers/basic_tower.png',
+        });
+
         await this.LoadMissions();
         await this.LoadTowers();
         await this.LoadCreepStats();
@@ -66,6 +78,13 @@ export default class GameAssets {
         const res = await fetch('/assets/Towers.json');
         const towers = await res.json();
         GameAssets.Towers = towers;
+        towers.forEach(async (tower) => {
+            let index = this.TowerSprites.length - 1;
+            if (index == -1) index = 0;
+            this.TowerSprites[index] = await PIXI.Assets.load({
+                src: `/assets/towers/${tower.sprite}.png`,
+            });
+        });
     }
 
     private static async LoadMission(missionUrl: string) {
@@ -85,17 +104,22 @@ export default class GameAssets {
 
     public static BasicCreepTexture: PIXI.Texture;
 
+    public static BasicTowerTexture: PIXI.Texture;
+
     public static Frame01Texture: PIXI.Texture;
     public static Frame02Texture: PIXI.Texture;
     public static FrameBackground: PIXI.Texture;
     public static FrameTowerTab: PIXI.Texture;
-    public static FrameVioletTexture: PIXI.Texture;
+    public static VioletBackground: PIXI.Texture;
+    public static RedBackground: PIXI.Texture;
+    public static GreenBackground: PIXI.Texture;
     public static Button01Texture: PIXI.Texture;
     public static Button02Texture: PIXI.Texture;
     public static HealthTexture: PIXI.Texture;
     public static GoldTexture: PIXI.Texture;
 
     public static MissionBackgrounds: PIXI.Texture[] = [];
+    public static TowerSprites: PIXI.Texture[] = [];
     public static Missions: MissionDefinition[];
     public static Towers: TowerDefinition[];
     public static CreepStats: CreepStatsDefinition[];

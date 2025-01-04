@@ -8,8 +8,6 @@ export type MissionDefinition = {
 
 export type MapImageDefinition = {
     url: string;
-    width: number;
-    height: number;
 };
 
 export type GameMapDefinition = {
@@ -47,6 +45,8 @@ export type CreepResistancesDefinition = {
 
 export type TowerDefinition = {
     name: string;
+    sprite: string;
+    description: string;
     stats: TowerStatsDefinition;
 };
 

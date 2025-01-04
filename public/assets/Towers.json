@@ -1,6 +1,8 @@
 [
     {
         "name": "Basic Tower",
+        "sprite": "basic_tower",
+        "description": "The building block of society, nothing more basic exists.",
         "stats": {
             "damage": 2,
             "cooldown": 2,

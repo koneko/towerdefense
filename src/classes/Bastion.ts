@@ -4,6 +4,8 @@ import GuiObject from './GuiObject';
 import Scene from '../scenes/Scene';
 import { Grid } from './game/Grid';
 import WaveManager from './game/WaveManager';
+import TowerManager from './game/TowerManager';
+import { GameScene } from '../scenes/Game';
 
 export class Globals {
     public static app: PIXI.Application;
@@ -13,19 +15,17 @@ export class Globals {
     public static AspectRatio: number = 16 / 9;
     public static Grid: Grid;
     public static WaveManager: WaveManager;
+    public static TowerManager: TowerManager;
+    public static GameScene: GameScene;
 }
 
 export default class GameMaster {
     public currentScene: Scene;
+    private gameScene: GameScene;
     private GameObjects: GameObject[] = [];
-    private ticker: PIXI.Ticker;
 
     constructor() {
         Globals.GameMaster = this;
-        this.ticker = new PIXI.Ticker();
-        this.ticker.maxFPS = 60;
-        this.ticker.minFPS = 30;
-        this.ticker.add(() => this.update(this.ticker.elapsedMS));
     }
 
     public _CreateGuiObject(object: GuiObject) {
@@ -47,11 +47,5 @@ export default class GameMaster {
         });
         this.currentScene = newScene;
         this.currentScene.init();
-    }
-
-    public update(elapsedMS) {
-        this.GameObjects.forEach((element) => {
-            element.update(elapsedMS);
-        });
     }
 }

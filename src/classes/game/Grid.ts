@@ -11,7 +11,7 @@ export class Cell extends GameObject {
     public column: number;
     public isPath: boolean = false;
     private g: PIXI.Graphics;
-    private clickDetector: PIXI.Graphics;
+    public clickDetector: PIXI.Graphics;
 
     constructor(type: TerrainType, row: number, column: number, isPath: boolean) {
         super();

@@ -13,6 +13,10 @@ export default class MissionStats extends GameObject {
         return this.hp;
     }
 
+    public hasEnoughGold(amount) {
+        return amount <= this.gold;
+    }
+
     public setHP(hp: number) {
         this.hp = hp;
         this.healthText.text = this.hp;
@@ -25,6 +29,16 @@ export default class MissionStats extends GameObject {
 
     public setGold(gold: number) {
         this.gold = gold;
+        this.goldText.text = this.gold;
+    }
+
+    public earnGold(gold: number) {
+        this.gold += gold;
+        this.goldText.text = this.gold;
+    }
+
+    public spendGold(amount: number) {
+        this.gold -= amount;
         this.goldText.text = this.gold;
     }
 

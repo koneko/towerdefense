@@ -3,50 +3,7 @@ import { Globals } from '../Bastion';
 import { TowerDefinition } from '../Definitions';
 import GameAssets from '../Assets';
 import GameObject from '../GameObject';
-
-export type TowerInstance = {
-    row: number;
-    column: number;
-    sprite: PIXI.Sprite;
-    projectiles: Array<any>;
-    baseDamage: number;
-    damage: number;
-    cooldown: number;
-    ticksToFireAt: number;
-    slottedGems: Array<any>;
-    cost: number;
-    baseRange: number;
-    range: number;
-};
-
-export enum TowerEvents {
-    TowerPlacedEvent = 'towerPlacedEvent',
-}
-
-enum TowerSprite {
-    basic_tower = 'GameAssets.BasicTowerTexture',
-}
-
-class Tower extends GameObject {
-    public row: number;
-    public column: number;
-    private sprite: PIXI.Sprite;
-    constructor(row, column, texture, definition) {
-        super();
-        this.row = row;
-        this.column = column;
-        let parent = Globals.Grid.getCellByRowAndCol(row, column);
-        this.sprite = new PIXI.Sprite({
-            texture: texture,
-            height: 64,
-            width: 64,
-            zIndex: 10,
-        });
-        this.container.addChild(this.sprite);
-        parent.container.addChild(this.container);
-    }
-    public update(elapsedMS: any): void {}
-}
+import { Tower, TowerEvents } from './Tower';
 
 export default class TowerManager {
     public isPlacingTower: boolean = false;
@@ -73,7 +30,8 @@ export default class TowerManager {
     public PlayerClickOnGrid(row, column) {
         if (!this.canPlaceTowers) return;
         if (this.isPlacingTower) {
-            if (!this.selectedTower) throw console.warn('TowerManager.selectedTower is null.');
+            if (!this.selectedTower)
+                throw console.warn('TowerManager.selectedTower is null when trying to place tower.');
             this.PlaceTower(this.selectedTower, row, column);
         }
     }
@@ -86,13 +44,16 @@ export default class TowerManager {
         });
         return returnTower;
     }
-    public PlaceTower(definition: TowerDefinition, row, column) {
+    public PlaceTower(definition: TowerDefinition, row, column, ignoreCost?) {
         let idx = 0;
         GameAssets.Towers.forEach((item, index) => {
             if (item.sprite == definition.sprite) idx = index;
         });
         const sprite = GameAssets.TowerSprites[idx];
+        if (!Globals.GameScene.MissionStats.hasEnoughGold(definition.stats.cost) && !ignoreCost)
+            return console.warn('Does not have enough gold.');
         if (!this.GetTowerByRowAndCol(row, column) && !Globals.Grid.getCellByRowAndCol(row, column).isPath) {
+            Globals.GameScene.MissionStats.spendGold(definition.stats.cost);
             let tower = new Tower(row, column, sprite, definition);
             this.towers.push(tower);
             this.ToggleChoosingTowerLocation('RESET');
@@ -103,5 +64,10 @@ export default class TowerManager {
         } else {
             console.warn('Can not place tower on occupied spot or path. Try again.');
         }
+    }
+    public update(elapsedMS) {
+        this.towers.forEach((twr) => {
+            twr.update(elapsedMS);
+        });
     }
 }

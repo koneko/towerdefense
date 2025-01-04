@@ -9,7 +9,7 @@ import Button, { ButtonTexture } from '../classes/gui/Button';
 import Scene from './Scene';
 import * as PIXI from 'pixi.js';
 import MissionStats from '../classes/game/MissionStats';
-import TowerManager, { TowerEvents } from '../classes/game/TowerManager';
+import TowerManager from '../classes/game/TowerManager';
 
 enum RoundMode {
     Purchase = 0,
@@ -74,6 +74,7 @@ export class GameScene extends Scene {
     public update(elapsedMS) {
         Globals.WaveManager.update(elapsedMS);
         Globals.Grid.update(elapsedMS);
+        Globals.TowerManager.update(elapsedMS);
     }
 
     public onCreepEscaped(creep: Creep) {

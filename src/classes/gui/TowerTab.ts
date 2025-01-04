@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js';
 import GuiObject from '../GuiObject';
 import GameAssets from '../Assets';
 import { Globals } from '../Bastion';
-import { TowerEvents } from '../game/TowerManager';
+import { TowerEvents } from '../game/Tower';
 
 class TowerButton extends GuiObject {
     private frameSprite: PIXI.NineSliceSprite;

@@ -1,3 +1,4 @@
+import GameAssets from '../Assets';
 import Assets from '../Assets';
 import { Globals } from '../Bastion';
 import { CreepStatsDefinition, CreepType, PathDefinition } from '../Definitions';
@@ -27,8 +28,11 @@ export default class Creep extends GameObject {
     constructor(creepType: CreepType, path: PathDefinition) {
         super();
         this.creepType = creepType;
-        this.stats = Assets.CreepStats[this.creepType];
-        this.sprite = new PIXI.Sprite(Assets.BasicCreepTexture);
+        this.stats = structuredClone(Assets.CreepStats[this.creepType]);
+        this.sprite = new PIXI.Sprite({
+            texture: GameAssets.BasicCreepTexture,
+        });
+        this.container.label = 'creep-' + creepType.toString();
         // because wave manager spawns all instantly and i dont want
         // it to look like a shit game (they all spawn in top left corner)
         // i want to hide minion - mario

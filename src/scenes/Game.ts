@@ -58,6 +58,9 @@ export class GameScene extends Scene {
                 this.onCreepEscaped(creep);
             });
         });
+        this.events.on(CreepEvents.Died, (playerAward, creepThatDied) => {
+            this.MissionStats.earnGold(playerAward);
+        });
         this.sidebar = new Sidebar(SidebarRect);
         this.changeRoundButton = new Button(changeRoundButtonRect, 'Start', ButtonTexture.Button01, true);
         this.changeRoundButton.container.removeFromParent();

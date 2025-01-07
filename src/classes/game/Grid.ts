@@ -141,7 +141,10 @@ export class Grid extends GameObject {
     }
     public update(elapsedMS) {
         this.creeps.forEach((creep) => {
-            creep.update(elapsedMS);
+            if (creep.dead) {
+                this.creeps.splice(this.creeps.indexOf(creep), 1);
+                creep = null;
+            } else creep.update(elapsedMS);
         });
     }
     public getCellByRowAndCol(row, column) {

@@ -38,6 +38,7 @@ export class Tower extends GameObject {
     private behaviour: string;
     private definition: TowerDefinition;
     private sprite: PIXI.Sprite;
+    private ticksUntilNextShot: number;
     private graphics: PIXI.Graphics = new PIXI.Graphics();
     constructor(row, column, texture, definition, behaviour) {
         super();
@@ -45,6 +46,7 @@ export class Tower extends GameObject {
         this.column = column;
         this.behaviour = behaviour;
         this.definition = definition;
+        this.ticksUntilNextShot = 0;
         let parent: Cell = Globals.Grid.getCellByRowAndCol(row, column);
         this.sprite = new PIXI.Sprite({
             texture: texture,
@@ -79,17 +81,26 @@ export class Tower extends GameObject {
         let x = this.column * 64 + 32;
         let y = this.row * 64 + 32;
         let angle = calculateAngleToPoint(x, y, creep.x, creep.y);
-        this.projectiles.push(new Projectile(x, y, GameAssets.BasicProjectileTexture, angle));
+        this.projectiles.push(
+            new Projectile(x, y, GameAssets.BasicProjectileTexture, angle, this.definition.stats.damage)
+        );
     }
     public update(elapsedMS: any): void {
         this.projectiles.forEach((proj) => {
-            proj.update(elapsedMS);
+            if (proj.deleteMe) {
+                this.projectiles.splice(this.projectiles.indexOf(proj), 1);
+                proj = null;
+            } else proj.update(elapsedMS);
         });
         if (this.behaviour == TowerBehaviours.BasicTowerBehaviour) {
+            if (this.ticksUntilNextShot > 0) this.ticksUntilNextShot--;
             let creepsInRange = this.GetCreepsInRange();
             if (creepsInRange.length > 0) {
                 let focus = creepsInRange[0];
-                this.Shoot(focus);
+                if (this.ticksUntilNextShot == 0) {
+                    this.ticksUntilNextShot = this.definition.stats.cooldown;
+                    this.Shoot(focus);
+                }
             }
         }
     }

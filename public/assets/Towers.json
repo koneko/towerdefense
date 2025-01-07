@@ -6,7 +6,7 @@
         "description": "The building block of society, nothing more basic exists.",
         "stats": {
             "damage": 2,
-            "cooldown": 120,
+            "cooldown": 60,
             "gemSlotsAmount": 2,
             "cost": 100,
             "range": 3

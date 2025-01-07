@@ -13,6 +13,7 @@ export enum CreepEvents {
 }
 
 export default class Creep extends GameObject {
+    public id: number;
     public creepType: CreepType;
     private sprite: PIXI.Sprite;
     private path: PathDefinition;
@@ -25,14 +26,15 @@ export default class Creep extends GameObject {
     public died: boolean = false;
     public x: number;
     public y: number;
-    constructor(creepType: CreepType, path: PathDefinition) {
+    public dead: boolean = false;
+    constructor(creepType: CreepType, path: PathDefinition, id) {
         super();
         this.creepType = creepType;
         this.stats = structuredClone(Assets.CreepStats[this.creepType]);
         this.sprite = new PIXI.Sprite({
             texture: GameAssets.BasicCreepTexture,
         });
-        this.container.label = 'creep-' + creepType.toString();
+        this.id = id;
         // because wave manager spawns all instantly and i dont want
         // it to look like a shit game (they all spawn in top left corner)
         // i want to hide minion - mario
@@ -46,10 +48,21 @@ export default class Creep extends GameObject {
         this.path = path;
         this.x = path[0][1] * 64 + 32; // centered
         this.y = path[0][0] * 64 + 32;
+        Globals.GameScene.events.on(CreepEvents.TakenDamage, (creepID, damage) => {
+            if (creepID != this.id) return;
+            this.health -= damage;
+        });
         Globals.Grid.container.addChild(this.container);
         this.container.addChild(this.sprite);
     }
     public update(elapsedMS: number) {
+        if (this.dead) return;
+        if (this.health <= 0) {
+            Globals.GameScene.events.emit(CreepEvents.Died, this.maxHealth, this);
+            this.destroy();
+            this.dead = true;
+            return;
+        }
         if (this.pathIndex + 1 == this.path.length) {
             if (this.escaped) return;
             this.events.emit(CreepEvents.Escaped, this);

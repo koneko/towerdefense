@@ -23,5 +23,13 @@ export default abstract class GameObject {
         return this._events;
     }
 
+    public copyContainerToBB() {
+        this.bb.x = this.container.x;
+        this.bb.y = this.container.y;
+        this.bb.width = this.container.width;
+        this.bb.height = this.container.height;
+        return this.bb;
+    }
+
     public abstract update(elapsedMS): void;
 }

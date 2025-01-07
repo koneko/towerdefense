@@ -23,6 +23,7 @@ export default class WaveManager {
     private started: boolean = false;
     public finished: boolean = false;
     public events = new PIXI.EventEmitter();
+    private internalCreepId: number = 0;
     constructor(rounds: MissionRoundDefinition[], paths: PathDefinition[]) {
         Globals.WaveManager = this;
         this.rounds = rounds;
@@ -37,7 +38,8 @@ export default class WaveManager {
         this.rounds[roundIndex].waves.forEach((wave) => {
             tickToSpawnAt += wave.firstCreepSpawnTick;
             wave.creeps.forEach((creep) => {
-                const creepObj = new Creep(creep, this.paths[0]);
+                const creepObj = new Creep(creep, this.paths[0], this.internalCreepId);
+                this.internalCreepId++;
                 const creepInstance = {
                     creep: creepObj,
                     tickToSpawnAt,

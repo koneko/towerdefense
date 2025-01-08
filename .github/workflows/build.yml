@@ -25,7 +25,7 @@ jobs:
                   npm run build  # Adjust to your build command
 
             - name: Save commit id to file
-              run: echo "$(git rev-parse --short HEAD)" >> dist/latest_commit
+              run: echo "$(git rev-parse --short HEAD)" > dist/latest_commit
 
             # Step 4: Deploy to GitHub Pages
             - name: Deploy to GitHub Pages

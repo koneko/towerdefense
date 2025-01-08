@@ -34,7 +34,7 @@ export class Cell extends GameObject {
         this.clickDetector.rect(0, 0, this.bb.width, this.bb.height);
         this.clickDetector.fill({ color: 0xff0000, alpha: 0 });
         this.container.addChild(this.clickDetector);
-        this.clickDetector.onclick = (e) => {
+        this.clickDetector.onpointerdown = (e) => {
             Globals.Grid._gridCellClicked(row, column);
         };
 

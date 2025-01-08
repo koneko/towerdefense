@@ -59,4 +59,9 @@ import { log } from './utils';
     Globals.GameMaster.changeScene(new MainScene());
     let params = new URLSearchParams(location.href);
     if (params.entries().next().value[1] == 'game') Globals.GameMaster.changeScene(new GameScene('Mission 1'));
+
+    if (Globals.latestCommit != 'DEVELOPMENT')
+        window.onbeforeunload = () => {
+            return 'You are about to leave.';
+        };
 })();

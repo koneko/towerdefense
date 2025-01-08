@@ -17,6 +17,7 @@ enum RoundMode {
 }
 
 export class GameScene extends Scene {
+    public isGameOver: boolean = false;
     public mission: MissionDefinition;
     public missionIndex: number;
     public MissionStats: MissionStats;
@@ -25,6 +26,8 @@ export class GameScene extends Scene {
     public changeRoundButton: Button;
     public sidebar: Sidebar;
     private currentRound: number = 0;
+    private isWaveManagerFinished: boolean = false;
+    private playerWon: boolean = false;
 
     constructor(name: string) {
         super();
@@ -58,6 +61,9 @@ export class GameScene extends Scene {
                 this.onCreepEscaped(creep);
             });
         });
+        Globals.WaveManager.events.on(WaveManagerEvents.Finished, () => {
+            this.isWaveManagerFinished = true;
+        });
         this.events.on(CreepEvents.Died, (playerAward, creepThatDied) => {
             this.MissionStats.earnGold(playerAward);
         });
@@ -66,7 +72,6 @@ export class GameScene extends Scene {
         this.changeRoundButton.container.removeFromParent();
         this.sidebar.container.addChild(this.changeRoundButton.container);
         this.changeRoundButton.onClick = () => {
-            console.log('clicked');
             this.changeRoundButton.setEnabled(false);
             this.changeRoundButton.setCaption('[X]');
             this.setRoundMode(RoundMode.Combat);
@@ -78,6 +83,37 @@ export class GameScene extends Scene {
         Globals.WaveManager.update(elapsedMS);
         Globals.Grid.update(elapsedMS);
         Globals.TowerManager.update(elapsedMS);
+        if (this.isWaveManagerFinished && Globals.Grid.creeps.length == 0) {
+            this.changeRoundButton.setEnabled(true);
+            this.changeRoundButton.setCaption('Start');
+            this.setRoundMode(RoundMode.Purchase);
+            this.NotifyPlayer(`Round ${this.currentRound + 1}/${this.mission.rounds.length} completed.`, 'info');
+            if (this.currentRound + 1 == this.mission.rounds.length) {
+                this.changeRoundButton.setCaption('WINNER!');
+                this.NotifyPlayer(`Mission win!`, 'info');
+                this.playerWon = true;
+            }
+        }
+
+        if (this.MissionStats.getHP() <= 0) {
+            this.isGameOver = true;
+            this.ShowScoreScreen(true);
+            this.ticker.stop();
+        } else if (this.playerWon) {
+            this.isGameOver = true;
+            this.ShowScoreScreen(false);
+            this.ticker.stop();
+        }
+    }
+
+    private ShowScoreScreen(lost) {
+        this.ticker.stop();
+        // TODO: show to player for real
+        if (lost) {
+            console.log('LOSE!');
+        } else {
+            console.log('WIN!');
+        }
     }
 
     public onCreepEscaped(creep: Creep) {
@@ -92,6 +128,10 @@ export class GameScene extends Scene {
             Globals.WaveManager.end();
         }
     }
-
+    public NotifyPlayer(notification, notifytype) {
+        // TODO: show to player for real
+        console.log('NOTIFY PLAYER! type: ' + notifytype);
+        console.log(notification);
+    }
     public onTowerPlaced() {}
 }

@@ -3,18 +3,22 @@ import GameMaster, { Globals } from './classes/Bastion';
 import Assets from './classes/Assets';
 import { MainScene } from './scenes/Main';
 import { GameScene } from './scenes/Game';
+import { log } from './utils';
 
 (async () => {
     const app = new PIXI.Application();
     Globals.app = app;
+    log('main - init()');
     await app.init({
         width: 1920, // Base width
         height: 1080, // Base height
-        resolution: window.devicePixelRatio || 1,
+        resolution: 1,
         autoDensity: true,
         backgroundColor: 0xffffff,
         sharedTicker: true,
     });
+    log('main - init() complete');
+
     document.body.appendChild(app.canvas);
 
     function resize() {
@@ -31,6 +35,7 @@ import { GameScene } from './scenes/Game';
         // Calculate new canvas size
         const gameWidth = Math.round(app.screen.width * scale);
         const gameHeight = Math.round(app.screen.height * scale);
+        log(`main - resize(); window: ${window.innerWidth}x${window.innerHeight}}; game ${gameWidth}x${gameHeight}`);
 
         // Center the canvas
         const marginHorizontal = (windowWidth - gameWidth) / 2;

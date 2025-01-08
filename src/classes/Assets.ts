@@ -61,6 +61,9 @@ export default class GameAssets {
         GameAssets.BasicProjectileTexture = await PIXI.Assets.load({
             src: '/assets/projectiles/basic_tower.png',
         });
+        await PIXI.Assets.load({
+            src: 'https://fonts.googleapis.com/css?family=Aclonica',
+        });
 
         await this.LoadMissions();
         await this.LoadTowers();

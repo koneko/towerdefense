@@ -17,6 +17,7 @@ export class Globals {
     public static WaveManager: WaveManager;
     public static TowerManager: TowerManager;
     public static GameScene: GameScene;
+    public static latestCommit: string;
 }
 
 export default class GameMaster {

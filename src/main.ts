@@ -50,7 +50,7 @@ import { log } from './utils';
         app.canvas.style.marginBottom = `0`; // Prevent unnecessary margin
         app.canvas.style.display = 'block'; // Prevent inline-block spacing issues
     }
-
+    Globals.latestCommit = await fetch('/latest_commit').then((res) => res.text());
     window.addEventListener('resize', resize);
     resize();
     await Assets.LoadAssets();

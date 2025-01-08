@@ -43,7 +43,7 @@ export default abstract class GuiObject {
         this._container.onwheel = (e) => {
             if (this.enabled) this.onWheel(e);
         };
-        this._container.onclick = (e) => {
+        this._container.pointerdown = (e) => {
             if (this.enabled) this.onClick(e);
         };
     }

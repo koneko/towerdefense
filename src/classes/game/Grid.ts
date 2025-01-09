@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js';
 import GameObject from '../GameObject';
 import { GameMapDefinition, TerrainType } from '../Definitions';
 import GameAssets from '../Assets';
-import { Globals } from '../Bastion';
+import { Engine } from '../Bastion';
 import Creep, { CreepEvents } from './Creep';
 
 export class Cell extends GameObject {
@@ -23,7 +23,7 @@ export class Cell extends GameObject {
         this.bb.y = this.row * 64;
         this.bb.width = 64;
         this.bb.height = 64;
-        Globals.Grid.container.addChild(this.container);
+        Engine.Grid.container.addChild(this.container);
         this.container.x = this.bb.x;
         this.container.y = this.bb.y;
 
@@ -35,7 +35,7 @@ export class Cell extends GameObject {
         this.clickDetector.fill({ color: 0xff0000, alpha: 0 });
         this.container.addChild(this.clickDetector);
         this.clickDetector.onpointerdown = (e) => {
-            Globals.Grid._gridCellClicked(row, column);
+            Engine.Grid._gridCellClicked(row, column);
         };
 
         if (!GameAssets.DebuggingEnabled) return;
@@ -89,12 +89,12 @@ export class Grid extends GameObject {
     constructor(map: GameMapDefinition, missionIndex) {
         super();
         this.gameMap = map;
-        Globals.Grid = this;
+        Engine.Grid = this;
         this.bb.x = 0;
         this.bb.y = 0;
         this.bb.width = 64 * 30;
         this.bb.height = 64 * 17;
-        Globals.app.stage.addChild(this.container);
+        Engine.app.stage.addChild(this.container);
 
         let background = new PIXI.Sprite(GameAssets.MissionBackgrounds[missionIndex]);
         background.x = 0;

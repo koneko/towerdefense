@@ -1,5 +1,5 @@
 import GameAssets from '../classes/Assets';
-import { Globals } from '../classes/Bastion';
+import { Engine } from '../classes/Bastion';
 import { MissionDefinition } from '../classes/Definitions';
 import Creep, { CreepEvents } from '../classes/game/Creep';
 import { Grid } from '../classes/game/Grid';
@@ -31,7 +31,7 @@ export class GameScene extends Scene {
 
     constructor(name: string) {
         super();
-        Globals.GameScene = this;
+        Engine.GameScene = this;
         GameAssets.Missions.forEach((mission, index) => {
             if (mission.name == name) {
                 this.mission = mission;
@@ -45,23 +45,23 @@ export class GameScene extends Scene {
         this.ticker.minFPS = 30;
         this.ticker.add(() => this.update(this.ticker.elapsedMS)); // bruh
         this.ticker.start();
-        const SidebarRect = new PIXI.Rectangle(64 * 30 - 360, 0, 360, Globals.app.canvas.height);
-        const changeRoundButtonRect = new PIXI.Rectangle(50, Globals.app.canvas.height - 100, 310, 100);
+        const SidebarRect = new PIXI.Rectangle(64 * 30 - 360, 0, 360, Engine.app.canvas.height);
+        const changeRoundButtonRect = new PIXI.Rectangle(50, Engine.app.canvas.height - 100, 310, 100);
         new Grid(this.mission.gameMap, this.missionIndex);
         new TowerManager();
         new WaveManager(this.mission.rounds, this.mission.gameMap.paths);
-        Globals.Grid.onGridCellClicked = (row, column) => {
-            if (Globals.TowerManager.isPlacingTower) {
-                Globals.TowerManager.PlayerClickOnGrid(row, column);
+        Engine.Grid.onGridCellClicked = (row, column) => {
+            if (Engine.TowerManager.isPlacingTower) {
+                Engine.TowerManager.PlayerClickOnGrid(row, column);
             }
         };
-        Globals.WaveManager.events.on(WaveManagerEvents.CreepSpawned, (creep: Creep) => {
-            Globals.Grid.addCreep(creep);
+        Engine.WaveManager.events.on(WaveManagerEvents.CreepSpawned, (creep: Creep) => {
+            Engine.Grid.addCreep(creep);
             creep.events.on(CreepEvents.Escaped, () => {
                 this.onCreepEscaped(creep);
             });
         });
-        Globals.WaveManager.events.on(WaveManagerEvents.Finished, () => {
+        Engine.WaveManager.events.on(WaveManagerEvents.Finished, () => {
             this.isWaveManagerFinished = true;
         });
         this.events.on(CreepEvents.Died, (playerAward, creepThatDied) => {
@@ -80,10 +80,10 @@ export class GameScene extends Scene {
         this.MissionStats = new MissionStats(100, 200);
     }
     public update(elapsedMS) {
-        Globals.WaveManager.update(elapsedMS);
-        Globals.Grid.update(elapsedMS);
-        Globals.TowerManager.update(elapsedMS);
-        if (this.isWaveManagerFinished && Globals.Grid.creeps.length == 0) {
+        Engine.WaveManager.update(elapsedMS);
+        Engine.Grid.update(elapsedMS);
+        Engine.TowerManager.update(elapsedMS);
+        if (this.isWaveManagerFinished && Engine.Grid.creeps.length == 0) {
             this.changeRoundButton.setEnabled(true);
             this.changeRoundButton.setCaption('Start');
             this.setRoundMode(RoundMode.Purchase);
@@ -123,9 +123,9 @@ export class GameScene extends Scene {
     private setRoundMode(roundMode: RoundMode) {
         this.roundMode = roundMode;
         if (this.roundMode == RoundMode.Combat) {
-            Globals.WaveManager.start(this.currentRound);
+            Engine.WaveManager.start(this.currentRound);
         } else {
-            Globals.WaveManager.end();
+            Engine.WaveManager.end();
         }
     }
     public NotifyPlayer(notification, notifytype) {

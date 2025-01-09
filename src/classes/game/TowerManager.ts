@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { Globals } from '../Bastion';
+import { Engine } from '../Bastion';
 import { TerrainType, TowerDefinition } from '../Definitions';
 import GameAssets from '../Assets';
 import GameObject from '../GameObject';
@@ -15,11 +15,11 @@ export default class TowerManager {
     private selectedTower: TowerDefinition | null = null;
     private towers: Tower[] = [];
     constructor() {
-        Globals.TowerManager = this;
+        Engine.TowerManager = this;
     }
     public ToggleChoosingTowerLocation(towerName: string) {
         if (!this.canPlaceTowers) return;
-        Globals.Grid.toggleGrid();
+        Engine.Grid.toggleGrid();
         if (!this.isPlacingTower) {
             GameAssets.Towers.forEach((item) => {
                 if (item.name == towerName) {
@@ -54,21 +54,21 @@ export default class TowerManager {
             if (item.sprite == definition.sprite) idx = index;
         });
         const sprite = GameAssets.TowerSprites[idx];
-        if (!Globals.GameScene.MissionStats.hasEnoughGold(definition.stats.cost) && !ignoreCost)
+        if (!Engine.GameScene.MissionStats.hasEnoughGold(definition.stats.cost) && !ignoreCost)
             return console.warn('Does not have enough gold.');
         if (
             !this.GetTowerByRowAndCol(row, column) &&
-            Globals.Grid.getCellByRowAndCol(row, column).type != TerrainType.Path &&
-            Globals.Grid.getCellByRowAndCol(row, column).type != TerrainType.Restricted
+            Engine.Grid.getCellByRowAndCol(row, column).type != TerrainType.Path &&
+            Engine.Grid.getCellByRowAndCol(row, column).type != TerrainType.Restricted
         ) {
-            Globals.GameScene.MissionStats.spendGold(definition.stats.cost);
+            Engine.GameScene.MissionStats.spendGold(definition.stats.cost);
             let tower = new Tower(row, column, sprite, definition, behaviour);
             this.towers.push(tower);
             this.ToggleChoosingTowerLocation('RESET');
             console.log('SHOULDVE PLACED TOWER');
             console.log(this.selectedTower);
             this.selectedTower = null;
-            Globals.GameScene.events.emit(TowerEvents.TowerPlacedEvent, definition.name);
+            Engine.GameScene.events.emit(TowerEvents.TowerPlacedEvent, definition.name);
         } else {
             console.warn('Can not place tower on occupied spot or path. Try again.');
         }

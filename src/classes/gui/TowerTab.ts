@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
 import GuiObject from '../GuiObject';
 import GameAssets from '../Assets';
-import { Globals } from '../Bastion';
+import { Engine } from '../Bastion';
 import { TowerEvents } from '../game/Tower';
 
 class TowerButton extends GuiObject {
@@ -33,7 +33,7 @@ class TowerButton extends GuiObject {
         });
         this.container.addChild(this.frameSprite);
         parent.addChild(this.container);
-        Globals.GameScene.events.on(TowerEvents.TowerPlacedEvent, (name) => {
+        Engine.GameScene.events.on(TowerEvents.TowerPlacedEvent, (name) => {
             this.frameSprite.tint = 0xffffff; // reset the tint after a tower has been placed
         });
         this.container.onmouseenter = (e) => {
@@ -45,7 +45,7 @@ class TowerButton extends GuiObject {
     public onClick(e: PIXI.FederatedPointerEvent): void {
         if (this.frameSprite.tint == 0x00ff00) this.frameSprite.tint = 0xffffff;
         else this.frameSprite.tint = 0x00ff00;
-        Globals.TowerManager.ToggleChoosingTowerLocation(this.towerName);
+        Engine.TowerManager.ToggleChoosingTowerLocation(this.towerName);
     }
 }
 

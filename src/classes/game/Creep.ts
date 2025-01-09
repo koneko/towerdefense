@@ -1,6 +1,6 @@
 import GameAssets from '../Assets';
 import Assets from '../Assets';
-import { Globals } from '../Bastion';
+import { Engine } from '../Bastion';
 import { CreepStatsDefinition, CreepType, PathDefinition } from '../Definitions';
 import GameObject from '../GameObject';
 import * as PIXI from 'pixi.js';
@@ -48,17 +48,17 @@ export default class Creep extends GameObject {
         this.path = path;
         this.x = path[0][1] * 64 + 32; // centered
         this.y = path[0][0] * 64 + 32;
-        Globals.GameScene.events.on(CreepEvents.TakenDamage, (creepID, damage) => {
+        Engine.GameScene.events.on(CreepEvents.TakenDamage, (creepID, damage) => {
             if (creepID != this.id) return;
             this.health -= damage;
         });
-        Globals.Grid.container.addChild(this.container);
+        Engine.Grid.container.addChild(this.container);
         this.container.addChild(this.sprite);
     }
     public update(elapsedMS: number) {
         if (this.dead) return;
         if (this.health <= 0) {
-            Globals.GameScene.events.emit(CreepEvents.Died, this.maxHealth, this);
+            Engine.GameScene.events.emit(CreepEvents.Died, this.maxHealth, this);
             this.destroy();
             this.dead = true;
             return;

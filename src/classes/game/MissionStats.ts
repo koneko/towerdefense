@@ -1,5 +1,5 @@
 import Assets from '../Assets';
-import { Globals } from '../Bastion';
+import { Engine } from '../Bastion';
 import GameObject from '../GameObject';
 import * as PIXI from 'pixi.js';
 
@@ -48,7 +48,7 @@ export default class MissionStats extends GameObject {
         this.gold = initialGold;
         this.container.x = 0;
         this.container.y = 20;
-        Globals.app.stage.addChild(this.container);
+        Engine.app.stage.addChild(this.container);
         this.healthText = new PIXI.Text({
             text: `${this.hp}`,
             style: new PIXI.TextStyle({

@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import GameObject from '../GameObject';
-import { Globals } from '../Bastion';
+import { Engine } from '../Bastion';
 import Creep, { CreepEvents } from './Creep';
 
 export function calculateAngleToPoint(x, y, targetX, targetY) {
@@ -30,7 +30,7 @@ export default class Projectile extends GameObject {
         this.container.x = this.x;
         this.container.y = this.y;
         this.container.addChild(this.sprite);
-        Globals.app.stage.addChild(this.container);
+        Engine.app.stage.addChild(this.container);
 
         this.angle = angle;
         this.speed = 0.9;
@@ -43,7 +43,7 @@ export default class Projectile extends GameObject {
     public update(elapsedMS) {
         if (this.deleteMe) return;
         if (this.x > 2000 || this.x < 0 || this.y > 2000 || this.y < 0 || this.timeToLive <= 0) return this.destroy();
-        Globals.Grid.creeps.forEach((creep) => {
+        Engine.Grid.creeps.forEach((creep) => {
             if (this.timeToLive <= 0) return;
             if (creep.container && this.checkCollision(creep)) {
                 this.timeToLive--;
@@ -60,7 +60,7 @@ export default class Projectile extends GameObject {
 
     public onCollide(creep) {
         console.log('COLLIDED WITH' + creep);
-        Globals.GameScene.events.emit(CreepEvents.TakenDamage, creep.id, this.damage);
+        Engine.GameScene.events.emit(CreepEvents.TakenDamage, creep.id, this.damage);
     }
 
     public checkCollision(creep: Creep) {

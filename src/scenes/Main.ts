@@ -1,4 +1,5 @@
-import { Globals } from '../classes/Bastion';
+import { Engine } from '../classes/Bastion';
+import { FadeInOut } from '../classes/game/AnimationManager';
 import Button, { ButtonTexture } from '../classes/gui/Button';
 import { MissionPickerScene } from './MissionPicker';
 import Scene from './Scene';
@@ -9,8 +10,8 @@ export class MainScene extends Scene {
         const NewGameButton = {
             caption: 'New Game',
             rect: new PIXI.Rectangle(
-                Globals.app.canvas.width / 2 - 300 / 2,
-                Globals.app.canvas.height / 5 + 3 * 80,
+                Engine.app.canvas.width / 2 - 300 / 2,
+                Engine.app.canvas.height / 5 + 3 * 80,
                 300,
                 60
             ),
@@ -20,16 +21,16 @@ export class MainScene extends Scene {
         const SettingsButton = {
             caption: 'Settings',
             rect: new PIXI.Rectangle(
-                Globals.app.canvas.width / 2 - 300 / 2,
-                Globals.app.canvas.height / 5 + 4 * 80,
+                Engine.app.canvas.width / 2 - 300 / 2,
+                Engine.app.canvas.height / 5 + 4 * 80,
                 300,
                 60
             ),
             texture: ButtonTexture.Button02,
         };
         let text = new PIXI.Text({
-            x: Globals.app.canvas.width / 2 - 300 / 2,
-            y: Globals.app.canvas.height / 5 + 1 * 80,
+            x: Engine.app.canvas.width / 2 - 300 / 2,
+            y: Engine.app.canvas.height / 5 + 1 * 80,
             text: 'BASTION',
             style: {
                 fill: 0xffaa00,
@@ -38,28 +39,29 @@ export class MainScene extends Scene {
             },
         });
         text.x = text.x - text.width / 5;
-        Globals.app.stage.addChild(text);
+        Engine.app.stage.addChild(text);
         let text2 = new PIXI.Text({
             x: 0,
             y: 0,
-            text: 'Latest commit: ' + Globals.latestCommit,
+            text: 'Latest commit: ' + Engine.latestCommit,
             style: {
                 fill: 0x000000,
                 fontSize: 10,
                 fontWeight: 'bold',
             },
         });
-        Globals.app.stage.addChild(text2);
+        Engine.app.stage.addChild(text2);
         const button01 = new Button(NewGameButton.rect, NewGameButton.caption, NewGameButton.texture, true);
         button01.onClick = (e) => {
-            Globals.app.stage.removeChild(text);
-            Globals.app.stage.removeChild(text2);
-            Globals.GameMaster.changeScene(new MissionPickerScene());
+            Engine.app.stage.removeChild(text);
+            Engine.app.stage.removeChild(text2);
+            Engine.GameMaster.changeScene(new MissionPickerScene());
         };
 
         let b2 = new Button(SettingsButton.rect, SettingsButton.caption, SettingsButton.texture, true);
         b2.onClick = (e) => {
             alert('Does nothing for now, just placeholder.');
         };
+        Engine.AnimationManager.Animate(new FadeInOut('out', 120, b2.container, () => console.log(b2.container.alpha)));
     }
 }

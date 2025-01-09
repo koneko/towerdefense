@@ -1,7 +1,7 @@
 import { CreepType, MissionRoundDefinition, PathDefinition } from '../Definitions';
 import * as PIXI from 'pixi.js';
 import Creep, { CreepEvents } from './Creep';
-import { Globals } from '../Bastion';
+import { Engine } from '../Bastion';
 
 export enum WaveManagerEvents {
     CreepSpawned = 'creepSpawned',
@@ -25,7 +25,7 @@ export default class WaveManager {
     public events = new PIXI.EventEmitter();
     private internalCreepId: number = 0;
     constructor(rounds: MissionRoundDefinition[], paths: PathDefinition[]) {
-        Globals.WaveManager = this;
+        Engine.WaveManager = this;
         this.rounds = rounds;
         this.paths = paths;
     }

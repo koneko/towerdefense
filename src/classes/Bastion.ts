@@ -6,8 +6,9 @@ import { Grid } from './game/Grid';
 import WaveManager from './game/WaveManager';
 import TowerManager from './game/TowerManager';
 import { GameScene } from '../scenes/Game';
+import AnimationManager from './game/AnimationManager';
 
-export class Globals {
+export class Engine {
     public static app: PIXI.Application;
     public static GameMaster: GameMaster;
     public static WindowHeight: number;
@@ -16,6 +17,7 @@ export class Globals {
     public static Grid: Grid;
     public static WaveManager: WaveManager;
     public static TowerManager: TowerManager;
+    public static AnimationManager: AnimationManager;
     public static GameScene: GameScene;
     public static latestCommit: string;
 }
@@ -26,17 +28,17 @@ export default class GameMaster {
     private GameObjects: GameObject[] = [];
 
     constructor() {
-        Globals.GameMaster = this;
+        Engine.GameMaster = this;
     }
 
     public _CreateGuiObject(object: GuiObject) {
         this.currentScene.gui.push(object);
-        Globals.app.stage.addChild(object.container);
+        Engine.app.stage.addChild(object.container);
     }
 
     public _RemoveGuiObject(object: GuiObject) {
         this.currentScene.gui.splice(this.currentScene.gui.indexOf(object), 1);
-        Globals.app.stage.removeChild(object.container);
+        Engine.app.stage.removeChild(object.container);
     }
 
     public changeScene(newScene: Scene) {

@@ -1,4 +1,4 @@
-import { Globals } from '../Bastion';
+import { Engine } from '../Bastion';
 import * as PIXI from 'pixi.js';
 import GameObject from '../GameObject';
 import { TowerDefinition } from '../Definitions';
@@ -47,7 +47,7 @@ export class Tower extends GameObject {
         this.behaviour = behaviour;
         this.definition = definition;
         this.ticksUntilNextShot = 0;
-        let parent: Cell = Globals.Grid.getCellByRowAndCol(row, column);
+        let parent: Cell = Engine.Grid.getCellByRowAndCol(row, column);
         this.sprite = new PIXI.Sprite({
             texture: texture,
             height: 64,
@@ -63,10 +63,10 @@ export class Tower extends GameObject {
         parent.clickDetector.onmouseleave = (e) => {
             this.graphics.clear();
         };
-        Globals.app.stage.addChild(this.graphics);
+        Engine.app.stage.addChild(this.graphics);
     }
     public GetCreepsInRange() {
-        let creeps = Globals.Grid.creeps;
+        let creeps = Engine.Grid.creeps;
         return creeps.filter((creep) => {
             const x = creep.x;
             const y = creep.y;

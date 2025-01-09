@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { CreepStatsDefinition, MissionDefinition, TowerDefinition } from './Definitions';
-import { Globals } from './Bastion';
+import { Engine } from './Bastion';
 
 export default class GameAssets {
     public static async LoadAssets() {
@@ -12,10 +12,10 @@ export default class GameAssets {
                 fontSize: 50,
             }),
         });
-        text.x = Globals.app.canvas.width / 2;
-        text.y = Globals.app.canvas.height / 2;
+        text.x = Engine.app.canvas.width / 2;
+        text.y = Engine.app.canvas.height / 2;
         text.anchor.set(0.5, 0.5);
-        Globals.app.stage.addChild(text);
+        Engine.app.stage.addChild(text);
         GameAssets.Button01Texture = await PIXI.Assets.load({
             src: '/assets/gui/button_01.png',
         });

@@ -6,7 +6,7 @@ import { Grid } from './game/Grid';
 import WaveManager from './game/WaveManager';
 import TowerManager from './game/TowerManager';
 import { GameScene } from '../scenes/Game';
-import AnimationManager from './game/AnimationManager';
+import { AnimationManager } from './game/AnimationManager';
 
 export class Engine {
     public static app: PIXI.Application;

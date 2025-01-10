@@ -4,7 +4,7 @@ import Assets from './classes/Assets';
 import { MainScene } from './scenes/Main';
 import { GameScene } from './scenes/Game';
 import { log } from './utils';
-import AnimationManager from './classes/game/AnimationManager';
+import { AnimationManager } from './classes/game/AnimationManager';
 
 (async () => {
     const app = new PIXI.Application();

@@ -2,12 +2,14 @@ import Assets from '../Assets';
 import { Engine } from '../Bastion';
 import GameObject from '../GameObject';
 import * as PIXI from 'pixi.js';
+import { WaveManagerEvents } from './WaveManager';
 
 export default class MissionStats extends GameObject {
     private hp: number = 100;
     private gold: number = 0;
     private goldText: PIXI.Text;
     private healthText: PIXI.Text;
+    private waveText: PIXI.Text;
 
     public getHP() {
         return this.hp;
@@ -67,8 +69,18 @@ export default class MissionStats extends GameObject {
                 dropShadow: true,
             }),
         });
+        this.waveText = new PIXI.Text({
+            text: `0/${Engine.GameScene.mission.rounds.length}`,
+            style: new PIXI.TextStyle({
+                fill: 'dodgerblue',
+                fontSize: 36,
+                fontWeight: 'bold',
+                dropShadow: true,
+            }),
+        });
         const healthSprite = new PIXI.Sprite(Assets.HealthTexture);
         const goldSprite = new PIXI.Sprite(Assets.GoldTexture);
+        const waveSprite = new PIXI.Sprite(Assets.WaveTexture);
 
         this.healthText.x = 200;
         this.healthText.y = -15;
@@ -84,10 +96,23 @@ export default class MissionStats extends GameObject {
         goldSprite.height = 56;
         goldSprite.y = 15;
 
+        this.waveText.x = 200;
+        this.waveText.y = 55;
+        waveSprite.x = 155;
+        waveSprite.width = 46;
+        waveSprite.height = 32;
+        waveSprite.y = 65;
+
         this.container.addChild(this.healthText);
         this.container.addChild(this.goldText);
+        this.container.addChild(this.waveText);
         this.container.addChild(healthSprite);
         this.container.addChild(goldSprite);
+        this.container.addChild(waveSprite);
+
+        Engine.GameScene.events.on(WaveManagerEvents.NewWave, (wave) => {
+            this.waveText.text = `${wave}/${Engine.GameScene.mission.rounds.length}`;
+        });
     }
 
     public update() {}

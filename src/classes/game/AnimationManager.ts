@@ -2,14 +2,17 @@ import * as PIXI from 'pixi.js';
 
 class Animateable {
     public finished: boolean = false;
-    protected callbackFn: Function;
+    protected calledBack: boolean = false;
+    public callbackFn: Function;
 
     public Finish() {
         this.finished = true;
     }
 
     public update(ms) {
-        if (this.finished) return this.callbackFn();
+        if (this.finished) {
+            return;
+        }
     }
 }
 
@@ -34,14 +37,14 @@ export class FadeInOut extends Animateable {
 
     public update(ms) {
         super.update(ms);
+        if (this.pixiObject == null) return this.Finish();
         this.ticks++;
         if (this.fadeType == 'in') {
             this.pixiObject.alpha = this.ticks / this.fadeTime;
         } else {
             this.pixiObject.alpha -= 1 / this.fadeTime;
         }
-        console.log(this.pixiObject.alpha);
-        if (this.ticks >= this.fadeTime) this.Finish();
+        if (this.ticks >= this.fadeTime || this.pixiObject.alpha <= 0) this.Finish();
     }
 }
 
@@ -52,32 +55,31 @@ export class Tween extends Animateable {
     private goalY: number;
     private ticks: number = 0;
 
-    constructor(timeInFrames: number, object: PIXI.Container, fromX, fromY, goalX, goalY, callbackFn: Function) {
+    constructor(timeInFrames: number, object: PIXI.Container, goalX, goalY, callbackFn: Function) {
         super();
         this.tweenTime = timeInFrames;
         this.pixiObject = object;
         this.callbackFn = callbackFn;
         this.goalX = goalX;
         this.goalY = goalY;
-        this.pixiObject.x = fromX;
-        this.pixiObject.y = fromY;
     }
 
-    public update(ms) {
-        super.update(ms);
-        this.ticks++;
-        const objX = this.pixiObject.x;
-        const objY = this.pixiObject.y;
-        // TODO: fix this by the time you get to using it, it moves the obj too fast and wrong
-        if (objX != this.goalX) {
-            let diff = this.goalX - objX;
-            this.pixiObject.x += ms * diff * (this.ticks / this.tweenTime);
+    public update(deltaMS) {
+        super.update(deltaMS);
+        this.ticks += deltaMS;
+        // Calculate the fraction of time elapsed
+        const progress = this.ticks / (this.tweenTime * 16.67); // Assuming 60 FPS, 1 frame = 16.67ms
+
+        // Update the position based on the progress
+        this.pixiObject.x = (this.goalX - this.pixiObject.x) * progress + this.pixiObject.x;
+        this.pixiObject.y = (this.goalY - this.pixiObject.y) * progress + this.pixiObject.y;
+
+        // Finish the animation if the time is up
+        if (this.ticks >= this.tweenTime * 16.67) {
+            this.pixiObject.x = this.goalX;
+            this.pixiObject.y = this.goalY;
+            this.Finish();
         }
-        if (objY != this.goalY) {
-            let diff = this.goalY - objY;
-            this.pixiObject.y += ms * diff * (this.ticks / this.tweenTime);
-        }
-        if (this.ticks >= this.tweenTime) this.Finish();
     }
 }
 
@@ -87,9 +89,12 @@ export class AnimationManager {
         this.AnimationQueue.push(animatable);
     }
     public update(ms) {
-        this.AnimationQueue.forEach((anim) => {
-            if (anim.finished) this.AnimationQueue.splice(this.AnimationQueue.indexOf(anim), 1);
-            anim.update(ms);
-        });
+        for (let i = this.AnimationQueue.length - 1; i >= 0; i--) {
+            const anim = this.AnimationQueue[i];
+            if (anim.finished) {
+                anim.callbackFn();
+                this.AnimationQueue.splice(i, 1);
+            } else anim.update(ms);
+        }
     }
 }

@@ -8,6 +8,7 @@ class TowerButton extends GuiObject {
     private frameSprite: PIXI.NineSliceSprite;
     private background: PIXI.Sprite;
     private towerName: string;
+    private i: number = 0;
     constructor(index: number, row, width, height, parent: PIXI.Container, backgroundTexture, towerName) {
         if (index > 3 || row > 2 || index < 0 || row < 0) throw 'Index/row out of bounds for TowerButton.';
         super(true);

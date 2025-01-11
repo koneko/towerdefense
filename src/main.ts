@@ -5,6 +5,7 @@ import { MainScene } from './scenes/Main';
 import { GameScene } from './scenes/Game';
 import { log } from './utils';
 import { AnimationManager } from './classes/game/AnimationManager';
+import NotificationManager from './classes/game/NotificationManager';
 
 (async () => {
     const app = new PIXI.Application();
@@ -49,8 +50,12 @@ import { AnimationManager } from './classes/game/AnimationManager';
     await Assets.LoadAssets();
     new GameMaster();
     Engine.AnimationManager = new AnimationManager();
+    Engine.NotificationManager = new NotificationManager();
     globalThis.Engine = Engine;
-    PIXI.Ticker.shared.add((ticker) => Engine.AnimationManager.update(ticker.elapsedMS));
+    PIXI.Ticker.shared.add((ticker) => {
+        Engine.NotificationManager.update(ticker.elapsedMS);
+        Engine.AnimationManager.update(ticker.elapsedMS);
+    });
     Engine.GameMaster.changeScene(new MainScene());
     let params = new URLSearchParams(location.href);
     if (params.entries().next().value[1] == 'game') Engine.GameMaster.changeScene(new GameScene('Mission 1'));

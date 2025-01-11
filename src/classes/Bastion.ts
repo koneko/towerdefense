@@ -7,6 +7,7 @@ import WaveManager from './game/WaveManager';
 import TowerManager from './game/TowerManager';
 import { GameScene } from '../scenes/Game';
 import { AnimationManager } from './game/AnimationManager';
+import NotificationManager from './game/NotificationManager';
 
 export class Engine {
     public static app: PIXI.Application;
@@ -18,6 +19,7 @@ export class Engine {
     public static WaveManager: WaveManager;
     public static TowerManager: TowerManager;
     public static AnimationManager: AnimationManager;
+    public static NotificationManager: NotificationManager;
     public static GameScene: GameScene;
     public static latestCommit: string;
 }

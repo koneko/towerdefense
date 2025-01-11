@@ -49,6 +49,9 @@ export default class GameAssets {
         GameAssets.GoldTexture = await PIXI.Assets.load({
             src: '/assets/gui/money.png',
         });
+        GameAssets.WaveTexture = await PIXI.Assets.load({
+            src: '/assets/gui/wave.png',
+        });
 
         GameAssets.BasicCreepTexture = await PIXI.Assets.load({
             src: '/assets/creeps/basic.jpg',
@@ -126,6 +129,7 @@ export default class GameAssets {
     public static Button02Texture: PIXI.Texture;
     public static HealthTexture: PIXI.Texture;
     public static GoldTexture: PIXI.Texture;
+    public static WaveTexture: PIXI.Texture;
 
     public static MissionBackgrounds: PIXI.Texture[] = [];
     public static TowerSprites: PIXI.Texture[] = [];

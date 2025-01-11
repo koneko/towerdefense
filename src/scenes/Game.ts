@@ -10,6 +10,8 @@ import Scene from './Scene';
 import * as PIXI from 'pixi.js';
 import MissionStats from '../classes/game/MissionStats';
 import TowerManager from '../classes/game/TowerManager';
+import NotificationManager from '../classes/game/NotificationManager';
+import { MissionPickerScene } from './MissionPicker';
 
 enum RoundMode {
     Purchase = 0,
@@ -72,9 +74,12 @@ export class GameScene extends Scene {
         this.changeRoundButton.container.removeFromParent();
         this.sidebar.container.addChild(this.changeRoundButton.container);
         this.changeRoundButton.onClick = () => {
+            if (this.playerWon) return this.ReturnToMain();
+            if (this.isGameOver) return Engine.NotificationManager.Notify('No more waves.', 'warn');
             this.changeRoundButton.setEnabled(false);
-            this.changeRoundButton.setCaption('[X]');
+            this.changeRoundButton.setCaption('WAVE IN PROGRESS');
             this.setRoundMode(RoundMode.Combat);
+            this.events.emit(WaveManagerEvents.NewWave, `${this.currentRound + 1}`);
         };
 
         this.MissionStats = new MissionStats(100, 200);
@@ -84,15 +89,25 @@ export class GameScene extends Scene {
         Engine.Grid.update(elapsedMS);
         Engine.TowerManager.update(elapsedMS);
         if (this.isWaveManagerFinished && Engine.Grid.creeps.length == 0) {
+            this.isWaveManagerFinished = false;
             this.changeRoundButton.setEnabled(true);
             this.changeRoundButton.setCaption('Start');
             this.setRoundMode(RoundMode.Purchase);
-            this.NotifyPlayer(`Round ${this.currentRound + 1}/${this.mission.rounds.length} completed.`, 'info');
+            Engine.NotificationManager.Notify(
+                `Round ${this.currentRound + 1}/${this.mission.rounds.length} completed.`,
+                'info'
+            );
+            if (this.currentRound == this.mission.rounds.length) {
+                Engine.NotificationManager.Notify(`Final round.`, 'danger');
+            }
             if (this.currentRound + 1 == this.mission.rounds.length) {
                 this.changeRoundButton.setCaption('WINNER!');
-                this.NotifyPlayer(`Mission win!`, 'info');
+                Engine.NotificationManager.Notify(`Mission victory!!`, 'reward');
+                this.changeRoundButton.setCaption('Return to menu');
                 this.playerWon = true;
+                return;
             }
+            this.currentRound++;
         }
 
         if (this.MissionStats.getHP() <= 0) {
@@ -128,10 +143,11 @@ export class GameScene extends Scene {
             Engine.WaveManager.end();
         }
     }
-    public NotifyPlayer(notification, notifytype) {
-        // TODO: show to player for real
-        console.log('NOTIFY PLAYER! type: ' + notifytype);
-        console.log(notification);
+
+    private ReturnToMain() {
+        this.destroy();
+        Engine.app.stage.removeChildren();
+        Engine.GameMaster.changeScene(new MissionPickerScene());
     }
     public onTowerPlaced() {}
 }

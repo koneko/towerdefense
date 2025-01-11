@@ -31,5 +31,21 @@ export default abstract class GameObject {
         return this.bb;
     }
 
+    public copyBBToContainer() {
+        this.container.x = this.bb.x;
+        this.container.y = this.bb.y;
+        this.container.width = this.bb.width;
+        this.container.height = this.bb.height;
+        return this.container;
+    }
+
+    public copyPropertiesToObj(obj: PIXI.Container) {
+        obj.x = this.bb.x;
+        obj.y = this.bb.y;
+        obj.width = this.bb.width;
+        obj.height = this.bb.height;
+        return obj;
+    }
+
     public abstract update(elapsedMS): void;
 }

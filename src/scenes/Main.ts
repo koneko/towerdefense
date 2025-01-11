@@ -62,6 +62,5 @@ export class MainScene extends Scene {
         b2.onClick = (e) => {
             alert('Does nothing for now, just placeholder.');
         };
-        Engine.AnimationManager.Animate(new Tween(300, b2.container, 100, 600, 620, 600, () => {}));
     }
 }

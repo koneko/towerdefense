@@ -2,10 +2,12 @@ import { CreepType, MissionRoundDefinition, PathDefinition } from '../Definition
 import * as PIXI from 'pixi.js';
 import Creep, { CreepEvents } from './Creep';
 import { Engine } from '../Bastion';
+import GameObject from '../GameObject';
 
 export enum WaveManagerEvents {
     CreepSpawned = 'creepSpawned',
     Finished = 'finished',
+    NewWave = 'newwave',
 }
 
 type CreepInstance = {
@@ -14,7 +16,7 @@ type CreepInstance = {
     spawned: boolean;
 };
 
-export default class WaveManager {
+export default class WaveManager extends GameObject {
     // Doesn't need to extend GameObject since it does not render
     private creeps: CreepInstance[] = [];
     private rounds: MissionRoundDefinition[];
@@ -22,9 +24,9 @@ export default class WaveManager {
     private ticks: number = 0;
     private started: boolean = false;
     public finished: boolean = false;
-    public events = new PIXI.EventEmitter();
     private internalCreepId: number = 0;
     constructor(rounds: MissionRoundDefinition[], paths: PathDefinition[]) {
+        super();
         Engine.WaveManager = this;
         this.rounds = rounds;
         this.paths = paths;

@@ -101,13 +101,10 @@ export class GameScene extends Scene {
                 Engine.NotificationManager.Notify(`Final round.`, 'danger');
             }
             if (this.currentRound + 1 == this.mission.rounds.length) {
-                this.changeRoundButton.setCaption('WINNER!');
                 Engine.NotificationManager.Notify(`Mission victory!!`, 'reward');
                 this.changeRoundButton.setCaption('Return to menu');
                 this.playerWon = true;
-                return;
-            }
-            this.currentRound++;
+            } else this.currentRound++;
         }
 
         if (this.MissionStats.getHP() <= 0) {

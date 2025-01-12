@@ -49,7 +49,12 @@ export class GameScene extends Scene {
             if (this.update) this.update(this.ticker.elapsedMS);
         });
         this.ticker.start();
-        const SidebarRect = new PIXI.Rectangle(Engine.GridCellSize * 30 - 360, 0, 360, Engine.app.canvas.height);
+        const SidebarRect = new PIXI.Rectangle(
+            Engine.GridCellSize * Engine.GridColumns - 360,
+            0,
+            360,
+            Engine.app.canvas.height
+        );
         const changeRoundButtonRect = new PIXI.Rectangle(50, Engine.app.canvas.height - 100, 310, 100);
         new Grid(this.mission.gameMap, this.missionIndex);
         new TowerManager();

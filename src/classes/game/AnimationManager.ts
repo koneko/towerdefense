@@ -44,7 +44,7 @@ export class FadeInOut extends Animateable {
         } else {
             this.pixiObject.alpha -= 1 / this.fadeTime;
         }
-        if (this.ticks >= this.fadeTime || this.pixiObject.alpha <= 0) this.Finish();
+        if (this.ticks >= this.fadeTime) this.Finish();
     }
 }
 
@@ -67,14 +67,11 @@ export class Tween extends Animateable {
     public update(deltaMS) {
         super.update(deltaMS);
         this.ticks += deltaMS;
-        // Calculate the fraction of time elapsed
-        const progress = this.ticks / (this.tweenTime * 16.67); // Assuming 60 FPS, 1 frame = 16.67ms
+        const progress = this.ticks / (this.tweenTime * 16.67);
 
-        // Update the position based on the progress
         this.pixiObject.x = (this.goalX - this.pixiObject.x) * progress + this.pixiObject.x;
         this.pixiObject.y = (this.goalY - this.pixiObject.y) * progress + this.pixiObject.y;
 
-        // Finish the animation if the time is up
         if (this.ticks >= this.tweenTime * 16.67) {
             this.pixiObject.x = this.goalX;
             this.pixiObject.y = this.goalY;
@@ -89,6 +86,9 @@ export class AnimationManager {
         this.AnimationQueue.push(animatable);
     }
     public update(ms) {
+        // Explanation: we go from the back of the array so that we can remove items freely without messing with
+        // foreach. From experience it gets a little screwy if you do this.AnimationQueue.forEach and doesn't properly
+        // remove elements.
         for (let i = this.AnimationQueue.length - 1; i >= 0; i--) {
             const anim = this.AnimationQueue[i];
             if (anim.finished) {

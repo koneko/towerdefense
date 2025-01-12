@@ -10,7 +10,6 @@ import NotificationManager from './classes/game/NotificationManager';
 (async () => {
     const app = new PIXI.Application();
     Engine.app = app;
-    log('main - init()');
     await app.init({
         width: 1920, // Base width
         height: 1080, // Base height
@@ -19,7 +18,6 @@ import NotificationManager from './classes/game/NotificationManager';
         backgroundColor: 0xffffff,
         sharedTicker: true,
     });
-    log('main - init() complete');
 
     document.body.appendChild(app.canvas);
 

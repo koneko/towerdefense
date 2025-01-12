@@ -39,7 +39,7 @@ export class MainScene extends Scene {
             },
         });
         text.x = text.x - text.width / 5;
-        Engine.app.stage.addChild(text);
+        Engine.GameMaster.currentScene.stage.addChild(text);
         let text2 = new PIXI.Text({
             x: 0,
             y: 0,
@@ -50,17 +50,17 @@ export class MainScene extends Scene {
                 fontWeight: 'bold',
             },
         });
-        Engine.app.stage.addChild(text2);
+        Engine.GameMaster.currentScene.stage.addChild(text2);
         const button01 = new Button(NewGameButton.rect, NewGameButton.caption, NewGameButton.texture, true);
         button01.onClick = (e) => {
-            Engine.app.stage.removeChild(text);
-            Engine.app.stage.removeChild(text2);
+            Engine.GameMaster.currentScene.stage.removeChild(text);
+            Engine.GameMaster.currentScene.stage.removeChild(text2);
             Engine.GameMaster.changeScene(new MissionPickerScene());
         };
 
         let b2 = new Button(SettingsButton.rect, SettingsButton.caption, SettingsButton.texture, true);
         b2.onClick = (e) => {
-            alert('Does nothing for now, just placeholder.');
+            Engine.NotificationManager.Notify('Not finished.', 'info');
         };
     }
 }

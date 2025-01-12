@@ -19,10 +19,10 @@ export class Cell extends GameObject {
         this.row = row;
         this.column = column;
         this.isPath = isPath;
-        this.bb.x = this.column * 64;
-        this.bb.y = this.row * 64;
-        this.bb.width = 64;
-        this.bb.height = 64;
+        this.bb.x = this.column * Engine.GridCellSize;
+        this.bb.y = this.row * Engine.GridCellSize;
+        this.bb.width = Engine.GridCellSize;
+        this.bb.height = Engine.GridCellSize;
         Engine.Grid.container.addChild(this.container);
         this.container.x = this.bb.x;
         this.container.y = this.bb.y;
@@ -35,7 +35,7 @@ export class Cell extends GameObject {
         this.clickDetector.fill({ color: 0xff0000, alpha: 0 });
         this.container.addChild(this.clickDetector);
         this.clickDetector.onpointerdown = (e) => {
-            Engine.Grid._gridCellClicked(row, column);
+            Engine.Grid.onGridCellClicked(row, column);
         };
 
         if (!GameAssets.DebuggingEnabled) return;
@@ -92,9 +92,9 @@ export class Grid extends GameObject {
         Engine.Grid = this;
         this.bb.x = 0;
         this.bb.y = 0;
-        this.bb.width = 64 * 30;
-        this.bb.height = 64 * 17;
-        Engine.app.stage.addChild(this.container);
+        this.bb.width = Engine.GridCellSize * Engine.GridColumns;
+        this.bb.height = Engine.GridCellSize * Engine.GridRows;
+        Engine.GameMaster.currentScene.stage.addChild(this.container);
 
         let background = new PIXI.Sprite(GameAssets.MissionBackgrounds[missionIndex]);
         background.x = 0;
@@ -126,7 +126,6 @@ export class Grid extends GameObject {
         this.gridShown = !this.gridShown;
     }
     public addCreep(creep: Creep) {
-        console.log('ADD CREEP');
         this.creeps.push(creep);
         creep.events.on(CreepEvents.Died, (diedCreep) => {
             this.onCreepDiedOrEscaped(diedCreep);
@@ -149,10 +148,6 @@ export class Grid extends GameObject {
     }
     public getCellByRowAndCol(row, column) {
         return this.cells.filter((item) => item.row == row && item.column == column)[0];
-    }
-    public _gridCellClicked(row, column) {
-        // function will be assigned by GameScene, but must be predefined here.
-        this.onGridCellClicked(row, column);
     }
     public onGridCellClicked(row, column) {}
 }

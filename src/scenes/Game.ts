@@ -10,7 +10,6 @@ import Scene from './Scene';
 import * as PIXI from 'pixi.js';
 import MissionStats from '../classes/game/MissionStats';
 import TowerManager from '../classes/game/TowerManager';
-import NotificationManager from '../classes/game/NotificationManager';
 import { MissionPickerScene } from './MissionPicker';
 
 enum RoundMode {
@@ -30,6 +29,7 @@ export class GameScene extends Scene {
     private currentRound: number = 0;
     private isWaveManagerFinished: boolean = false;
     private playerWon: boolean = false;
+    private destroyTicker: boolean = false;
 
     constructor(name: string) {
         super();
@@ -45,9 +45,11 @@ export class GameScene extends Scene {
         this.ticker = new PIXI.Ticker();
         this.ticker.maxFPS = 60;
         this.ticker.minFPS = 30;
-        this.ticker.add(() => this.update(this.ticker.elapsedMS)); // bruh
+        this.ticker.add(() => {
+            if (this.update) this.update(this.ticker.elapsedMS);
+        });
         this.ticker.start();
-        const SidebarRect = new PIXI.Rectangle(64 * 30 - 360, 0, 360, Engine.app.canvas.height);
+        const SidebarRect = new PIXI.Rectangle(Engine.GridCellSize * 30 - 360, 0, 360, Engine.app.canvas.height);
         const changeRoundButtonRect = new PIXI.Rectangle(50, Engine.app.canvas.height - 100, 310, 100);
         new Grid(this.mission.gameMap, this.missionIndex);
         new TowerManager();
@@ -85,6 +87,13 @@ export class GameScene extends Scene {
         this.MissionStats = new MissionStats(100, 200);
     }
     public update(elapsedMS) {
+        if (this.isGameOver) {
+            if (this.destroyTicker) {
+                this.destroyTicker = false;
+                this.ticker.destroy();
+            }
+            return;
+        }
         Engine.WaveManager.update(elapsedMS);
         Engine.Grid.update(elapsedMS);
         Engine.TowerManager.update(elapsedMS);
@@ -110,16 +119,13 @@ export class GameScene extends Scene {
         if (this.MissionStats.getHP() <= 0) {
             this.isGameOver = true;
             this.ShowScoreScreen(true);
-            this.ticker.stop();
         } else if (this.playerWon) {
             this.isGameOver = true;
             this.ShowScoreScreen(false);
-            this.ticker.stop();
         }
     }
 
     private ShowScoreScreen(lost) {
-        this.ticker.stop();
         // TODO: show to player for real
         if (lost) {
             console.log('LOSE!');
@@ -141,9 +147,16 @@ export class GameScene extends Scene {
         }
     }
 
+    public destroy(): void {
+        super.destroy();
+        this.isGameOver = true;
+        this.destroyTicker = true;
+        Engine.GameScene = null;
+    }
+
     private ReturnToMain() {
         this.destroy();
-        Engine.app.stage.removeChildren();
+        Engine.GameMaster.currentScene.stage.removeChildren();
         Engine.GameMaster.changeScene(new MissionPickerScene());
     }
     public onTowerPlaced() {}

@@ -20,7 +20,6 @@ export default class Projectile extends GameObject {
     public timeToLive: number = 1;
     constructor(x, y, spriteTexture, angle, damage) {
         super();
-        console.log('I SHOOTTED!');
         this.x = x;
         this.y = y;
         this.damage = damage;
@@ -30,7 +29,7 @@ export default class Projectile extends GameObject {
         this.container.x = this.x;
         this.container.y = this.y;
         this.container.addChild(this.sprite);
-        Engine.app.stage.addChild(this.container);
+        Engine.GameMaster.currentScene.stage.addChild(this.container);
 
         this.angle = angle;
         this.speed = 0.9;
@@ -59,7 +58,6 @@ export default class Projectile extends GameObject {
     }
 
     public onCollide(creep) {
-        console.log('COLLIDED WITH' + creep);
         Engine.GameScene.events.emit(CreepEvents.TakenDamage, creep.id, this.damage);
     }
 
@@ -68,12 +66,5 @@ export default class Projectile extends GameObject {
         let mybb = this.copyContainerToBB();
         let otherbb = creep.copyContainerToBB();
         return mybb.getBounds().intersects(otherbb.getBounds());
-        // console.log(boundsA, boundsB);
-        // return (
-        //     boundsA.x < boundsB.x + boundsB.width &&
-        //     boundsA.x + boundsA.width > boundsB.x &&
-        //     boundsA.y < boundsB.y + boundsB.height &&
-        //     boundsA.y + boundsA.height > boundsB.y
-        // );
     }
 }

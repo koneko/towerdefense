@@ -1,20 +1,20 @@
+import { Engine } from '../classes/Bastion';
 import GuiObject from '../classes/GuiObject';
 import * as PIXI from 'pixi.js';
 
 export default class Scene {
+    public stage: PIXI.Container = new PIXI.Container();
     public gui: GuiObject[] = [];
     private _events: PIXI.EventEmitter = new PIXI.EventEmitter();
 
+    constructor() {
+        Engine.app.stage.addChild(this.stage);
+    }
     public destroy() {
+        this.stage.destroy();
         this.gui.forEach((element) => {
             element.destroy();
         });
-    }
-    public GetGuiObject(object: GuiObject) {
-        return this.gui.find((obj) => obj == object);
-    }
-    public GetGuiObjectByName(name: string) {
-        return this.gui.filter((obj) => obj.name == name);
     }
 
     public get events(): PIXI.EventEmitter {

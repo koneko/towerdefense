@@ -30,24 +30,26 @@ export default class Creep extends GameObject {
     constructor(creepType: CreepType, path: PathDefinition, id) {
         super();
         this.creepType = creepType;
+        // Structured clone is used just in case, so that 1 creep doesnt alter stats for all creeps.
         this.stats = structuredClone(Assets.CreepStats[this.creepType]);
         this.sprite = new PIXI.Sprite({
             texture: GameAssets.BasicCreepTexture,
         });
         this.id = id;
-        // because wave manager spawns all instantly and i dont want
-        // it to look like a shit game (they all spawn in top left corner)
-        // i want to hide minion - mario
+        // Explanation: WaveManager spawns all creeps instantly, and since I don't want
+        // them to show up on the beginning while they are waiting, I put them outside the visible
+        // part of the currentScene.stage map.
         this.container.x = -70;
         this.container.y = -50;
-        this.sprite.width = 64;
-        this.sprite.height = 64;
+        this.sprite.width = Engine.GridCellSize;
+        this.sprite.height = Engine.GridCellSize;
         this.speed = this.stats.speed;
         this.health = this.stats.health;
         this.maxHealth = this.stats.health;
         this.path = path;
-        this.x = path[0][1] * 64 + 32; // centered
-        this.y = path[0][0] * 64 + 32;
+        // Added + 32 to center them.
+        this.x = path[0][1] * Engine.GridCellSize + Engine.GridCellSize / 2;
+        this.y = path[0][0] * Engine.GridCellSize + Engine.GridCellSize / 2;
         Engine.GameScene.events.on(CreepEvents.TakenDamage, (creepID, damage) => {
             if (creepID != this.id) return;
             this.health -= damage;
@@ -60,6 +62,8 @@ export default class Creep extends GameObject {
         if (this.health <= 0) {
             Engine.GameScene.events.emit(CreepEvents.Died, this.maxHealth, this);
             this.destroy();
+            // The reason for setting this.dead instead of deleting self is because
+            // I need to allow WaveManager/Grid to manage their death and keep array up to date.
             this.dead = true;
             return;
         }
@@ -72,8 +76,9 @@ export default class Creep extends GameObject {
         const currentCell = this.path[this.pathIndex];
         const targetCell = this.path[this.pathIndex + 1];
 
-        const targetX = targetCell[1] * 64 + 32;
-        const targetY = targetCell[0] * 64 + 32;
+        // Added + 32 for centering.
+        const targetX = targetCell[1] * Engine.GridCellSize + Engine.GridCellSize / 2;
+        const targetY = targetCell[0] * Engine.GridCellSize + Engine.GridCellSize / 2;
         const directionX = targetCell[1] - currentCell[1];
         const directionY = targetCell[0] - currentCell[0];
         let deltaX = this.speed * elapsedMS * directionX;
@@ -114,7 +119,7 @@ export default class Creep extends GameObject {
         }
     }
 
-    public override destroy() {
+    public destroy() {
         super.destroy();
         this.container.removeChildren();
     }

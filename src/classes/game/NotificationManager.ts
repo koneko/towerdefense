@@ -58,10 +58,8 @@ export default class NotificationManager extends GameObject {
     }
     public Notify(text, type: NotificationType) {
         let x = 0;
-        let y = this.notifications.length * 30;
+        let y = this.notifications.length * 32;
         this.notifications.push(new Notification(text, type, x, y, this.ticks + 180));
-        console.log('CREATED NOTIFICATION ');
-        console.log(text, type, x, y, this.ticks + 180);
     }
     public update(_) {
         this.ticks++;

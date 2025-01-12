@@ -50,7 +50,7 @@ export default class MissionStats extends GameObject {
         this.gold = initialGold;
         this.container.x = 0;
         this.container.y = 20;
-        Engine.app.stage.addChild(this.container);
+        Engine.GameMaster.currentScene.stage.addChild(this.container);
         this.healthText = new PIXI.Text({
             text: `${this.hp}`,
             style: new PIXI.TextStyle({

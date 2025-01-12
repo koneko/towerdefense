@@ -18,9 +18,6 @@ export default class GemTab extends GuiObject {
             rightWidth: 1000,
             bottomHeight: 1000,
         });
-        // this.towerTabSprite = new PIXI.Sprite({
-        //     texture: GameAssets.FrameBackground,
-        // });
         this.gemTabSprite.x = 0;
         this.gemTabSprite.y = 0;
         this.gemTabSprite.width = this.bounds.width;

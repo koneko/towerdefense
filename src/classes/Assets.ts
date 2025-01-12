@@ -81,6 +81,7 @@ export default class GameAssets {
     }
 
     private static async LoadMissions() {
+        // When adding missions, make sure to keep order.
         GameAssets.Missions = [await this.LoadMission('/assets/missions/mission_01.json')];
     }
 

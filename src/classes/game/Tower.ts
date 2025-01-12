@@ -50,36 +50,40 @@ export class Tower extends GameObject {
         let parent: Cell = Engine.Grid.getCellByRowAndCol(row, column);
         this.sprite = new PIXI.Sprite({
             texture: texture,
-            height: 64,
-            width: 64,
+            height: Engine.GridCellSize,
+            width: Engine.GridCellSize,
             zIndex: 10,
         });
         this.container.addChild(this.sprite);
         parent.container.addChild(this.container);
         parent.clickDetector.onmouseenter = (e) => {
-            this.graphics.circle(this.column * 64 + 32, this.row * 64 + 32, this.definition.stats.range * 64);
+            this.graphics.circle(
+                this.column * Engine.GridCellSize + Engine.GridCellSize / 2,
+                this.row * Engine.GridCellSize + Engine.GridCellSize / 2,
+                this.definition.stats.range * Engine.GridCellSize
+            );
             this.graphics.fill({ color: 0xff0000, alpha: 0.5 });
         };
         parent.clickDetector.onmouseleave = (e) => {
             this.graphics.clear();
         };
-        Engine.app.stage.addChild(this.graphics);
+        Engine.GameMaster.currentScene.stage.addChild(this.graphics);
     }
     public GetCreepsInRange() {
         let creeps = Engine.Grid.creeps;
         return creeps.filter((creep) => {
             const x = creep.x;
             const y = creep.y;
-            const towerX = this.column * 64 + 32;
-            const towerY = this.row * 64 + 32;
-            const radius = this.definition.stats.range * 64;
+            const towerX = this.column * Engine.GridCellSize + Engine.GridCellSize / 2;
+            const towerY = this.row * Engine.GridCellSize + Engine.GridCellSize / 2;
+            const radius = this.definition.stats.range * Engine.GridCellSize;
             const d = distance(towerX, towerY, x, y);
             return d < radius;
         });
     }
     public Shoot(creep: Creep) {
-        let x = this.column * 64 + 32;
-        let y = this.row * 64 + 32;
+        let x = this.column * Engine.GridCellSize + Engine.GridCellSize / 2;
+        let y = this.row * Engine.GridCellSize + Engine.GridCellSize / 2;
         let angle = calculateAngleToPoint(x, y, creep.x, creep.y);
         this.projectiles.push(
             new Projectile(x, y, GameAssets.BasicProjectileTexture, angle, this.definition.stats.damage)

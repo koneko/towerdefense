@@ -11,6 +11,7 @@ import * as PIXI from 'pixi.js';
 import MissionStats from '../classes/game/MissionStats';
 import TowerManager from '../classes/game/TowerManager';
 import { MissionPickerScene } from './MissionPicker';
+import GameUIConstants from '../classes/GameUIConstants';
 
 enum RoundMode {
     Purchase = 0,
@@ -49,10 +50,6 @@ export class GameScene extends Scene {
             if (this.update) this.update(this.ticker.elapsedMS);
         });
         this.ticker.start();
-        console.log(Engine.GridCellSize * (Engine.GridColumns + 5) - 360);
-        console.log(Engine.app.canvas.width - 360);
-        const SidebarRect = new PIXI.Rectangle(Engine.app.canvas.width - 360, 0, 360, Engine.app.canvas.height);
-        const changeRoundButtonRect = new PIXI.Rectangle(50, Engine.app.canvas.height - 100, 310, 100);
         new Grid(this.mission.gameMap, this.missionIndex);
         new TowerManager();
         new WaveManager(this.mission.rounds, this.mission.gameMap.paths);
@@ -73,8 +70,13 @@ export class GameScene extends Scene {
         this.events.on(CreepEvents.Died, (playerAward, creepThatDied) => {
             this.MissionStats.earnGold(playerAward);
         });
-        this.sidebar = new Sidebar(SidebarRect);
-        this.changeRoundButton = new Button(changeRoundButtonRect, 'Start', ButtonTexture.Button01, true);
+        this.sidebar = new Sidebar(GameUIConstants.SidebarRect);
+        this.changeRoundButton = new Button(
+            GameUIConstants.ChangeRoundButtonRect,
+            'Start',
+            ButtonTexture.Button01,
+            true
+        );
         this.changeRoundButton.container.removeFromParent();
         this.sidebar.container.addChild(this.changeRoundButton.container);
         this.changeRoundButton.onClick = () => {

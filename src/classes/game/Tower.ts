@@ -78,7 +78,7 @@ export class Tower extends GameObject {
             const towerY = this.row * Engine.GridCellSize + Engine.GridCellSize / 2;
             const radius = this.definition.stats.range * Engine.GridCellSize;
             const d = distance(towerX, towerY, x, y);
-            return d < radius;
+            return d < radius + Engine.GridCellSize;
         });
     }
     public Shoot(creep: Creep) {

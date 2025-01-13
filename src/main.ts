@@ -3,9 +3,9 @@ import GameMaster, { Engine } from './classes/Bastion';
 import Assets from './classes/Assets';
 import { MainScene } from './scenes/Main';
 import { GameScene } from './scenes/Game';
-import { log } from './utils';
 import { AnimationManager } from './classes/game/AnimationManager';
 import NotificationManager from './classes/game/NotificationManager';
+import GameUIConstants from './classes/GameUIConstants';
 
 (async () => {
     const app = new PIXI.Application();
@@ -46,6 +46,7 @@ import NotificationManager from './classes/game/NotificationManager';
     window.addEventListener('resize', resize);
     resize();
     await Assets.LoadAssets();
+    GameUIConstants.init();
     new GameMaster();
     Engine.AnimationManager = new AnimationManager();
     Engine.NotificationManager = new NotificationManager();

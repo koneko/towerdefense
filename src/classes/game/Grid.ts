@@ -97,11 +97,6 @@ export class Grid extends GameObject {
         Engine.GameMaster.currentScene.stage.addChild(this.container);
 
         let background = new PIXI.Sprite(GameAssets.MissionBackgrounds[missionIndex]);
-        background.x = 0;
-        background.y = 0;
-        background.width = this.bb.width;
-        background.height = this.bb.height;
-
         this.container.addChild(background);
 
         for (let y = 0; y < this.gameMap.columns; y++) {

@@ -46,7 +46,7 @@ export default class Creep extends GameObject {
         this.container.y = -50;
         this.sprite.width = Engine.GridCellSize;
         this.sprite.height = Engine.GridCellSize;
-        this.speed = this.stats.speed;
+        this.speed = this.stats.speed / 60;
         this.health = this.stats.health;
         this.maxHealth = this.stats.health;
         this.path = path;

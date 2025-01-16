@@ -72,7 +72,8 @@ export type PathDefinition = [[row: number, column: number]];
 
 export enum CreepType {
     Basic = 0,
-    Fast = 1,
+    Quick = 1,
+    Tank = 2,
 }
 
 export enum TerrainType {

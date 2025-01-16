@@ -1,14 +1,11 @@
 import * as PIXI from 'pixi.js';
-import { CreepDefinition, CreepStatsDefinition, MissionDefinition, TowerDefinition } from './Definitions';
+import { CreepDefinition, MissionDefinition, TowerDefinition } from './Definitions';
 import { Engine } from './Bastion';
 
 export default class GameAssets {
-    public static BasicTowerTexture: PIXI.Texture;
-
-    public static BasicProjectileTexture: PIXI.Texture;
-
     public static Frame01Texture: PIXI.Texture;
     public static Frame02Texture: PIXI.Texture;
+    public static Frame03Texture: PIXI.Texture;
     public static FrameBackground: PIXI.Texture;
     public static FrameTowerTab: PIXI.Texture;
     public static VioletBackground: PIXI.Texture;
@@ -29,6 +26,7 @@ export default class GameAssets {
     private static text;
     private static async Load(src) {
         this.text.text = 'Loading asset: ' + src;
+        console.log('LOADING ' + src);
         return await PIXI.Assets.load({
             src: src,
         });
@@ -63,11 +61,12 @@ export default class GameAssets {
         this.text.y = Engine.app.canvas.height / 2 + 50;
         this.text.anchor.set(0.5, 0.5);
         Engine.app.stage.addChild(this.text);
-        this.Load('/aclonica.woff2');
+        await this.Load('/aclonica.woff2');
         this.Button01Texture = await this.Load('/assets/gui/button_01.png');
         this.Button02Texture = await this.Load('/assets/gui/button_02.png');
         this.Frame01Texture = await this.Load('/assets/gui/frame_01.png');
         this.Frame02Texture = await this.Load('/assets/gui/frame_02.png');
+        this.Frame03Texture = await this.Load('/assets/gui/frame_03.png');
         this.FrameBackground = await this.Load('/assets/gui/background_01.png');
         this.FrameTowerTab = await this.Load('/assets/gui/background_02.png');
         this.VioletBackground = await this.Load('/assets/gui/frame_violet.png');
@@ -76,8 +75,6 @@ export default class GameAssets {
         this.HealthTexture = await this.Load('/assets/gui/heart.png');
         this.GoldTexture = await this.Load('/assets/gui/money.png');
         this.WaveTexture = await this.Load('/assets/gui/wave.png');
-        this.BasicTowerTexture = await this.Load('/assets/towers/basic_tower.png');
-        this.BasicProjectileTexture = await this.Load('/assets/projectiles/basic_tower.png');
         await this.LoadMissions();
         await this.LoadTowers();
         await this.LoadCreeps();
@@ -108,7 +105,17 @@ export default class GameAssets {
     private static async LoadTowers() {
         const res = await fetch('/assets/json/Towers.json');
         const towers = await res.json();
-        GameAssets.Towers = towers;
+        this.Towers = towers;
+        console.log(this.Towers);
+        for (let idx = 0; idx < this.Towers.length; idx++) {
+            const tower = this.Towers[idx];
+            for (let i = 0; i < tower.projectileTexturesArrayLength; i++) {
+                console.log(`WANT TO LOAD /assets/projectiles/${tower.sprite}/${i}.png`);
+                const texture = await this.Load(`/assets/projectiles/${tower.sprite}/${i}.png`);
+                tower.projectileTextures[i] = texture;
+                console.log(tower.projectileTextures);
+            }
+        }
         towers.forEach(async (tower) => {
             let index = this.TowerSprites.length - 1;
             if (index == -1) index = 0;

@@ -57,17 +57,21 @@ export class Tower extends GameObject {
         this.container.addChild(this.sprite);
         parent.container.addChild(this.container);
         parent.clickDetector.onmouseenter = (e) => {
-            this.graphics.circle(
-                this.column * Engine.GridCellSize + Engine.GridCellSize / 2,
-                this.row * Engine.GridCellSize + Engine.GridCellSize / 2,
-                this.definition.stats.range * Engine.GridCellSize
-            );
-            this.graphics.fill({ color: 0xff0000, alpha: 0.5 });
+            this.showRangeDisplay();
         };
         parent.clickDetector.onmouseleave = (e) => {
             this.graphics.clear();
         };
         Engine.GameMaster.currentScene.stage.addChild(this.graphics);
+        this.showRangeDisplay();
+    }
+    public showRangeDisplay() {
+        this.graphics.circle(
+            this.column * Engine.GridCellSize + Engine.GridCellSize / 2,
+            this.row * Engine.GridCellSize + Engine.GridCellSize / 2,
+            this.definition.stats.range * Engine.GridCellSize
+        );
+        this.graphics.fill({ color: 0xff0000, alpha: 0.5 });
     }
     public GetCreepsInRange() {
         let creeps = Engine.Grid.creeps;
@@ -86,7 +90,7 @@ export class Tower extends GameObject {
         let y = this.row * Engine.GridCellSize + Engine.GridCellSize / 2;
         let angle = calculateAngleToPoint(x, y, creep.x, creep.y);
         this.projectiles.push(
-            new Projectile(x, y, GameAssets.BasicProjectileTexture, angle, this.definition.stats.damage)
+            new Projectile(x, y, this.definition.projectileTextures, angle, this.definition.stats.damage)
         );
     }
     public update(elapsedMS: any): void {

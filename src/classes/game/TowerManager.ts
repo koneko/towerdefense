@@ -2,8 +2,8 @@ import * as PIXI from 'pixi.js';
 import { Engine } from '../Bastion';
 import { TerrainType, TowerDefinition } from '../Definitions';
 import GameAssets from '../Assets';
-import GameObject from '../GameObject';
 import { Tower, TowerEvents } from './Tower';
+import { Cell } from './Grid';
 
 export enum TowerBehaviours {
     BasicTowerBehaviour = 'BasicTowerBehaviour',
@@ -34,8 +34,13 @@ export default class TowerManager {
     public PlayerClickOnGrid(row, column) {
         if (!this.canPlaceTowers) return;
         if (this.isPlacingTower) {
-            if (!this.selectedTower)
+            if (!this.selectedTower) {
+                Engine.NotificationManager.Notify(
+                    'TowerManager.selectedTower is null when trying to place tower.',
+                    'danger'
+                );
                 throw console.warn('TowerManager.selectedTower is null when trying to place tower.');
+            }
             this.PlaceTower(this.selectedTower, row, column, this.selectedTower.behaviour);
         }
     }
@@ -65,11 +70,13 @@ export default class TowerManager {
             let tower = new Tower(row, column, sprite, definition, behaviour);
             this.towers.push(tower);
             this.ToggleChoosingTowerLocation('RESET');
-            console.log('SHOULDVE PLACED TOWER');
-            console.log(this.selectedTower);
             this.selectedTower = null;
             Engine.GameScene.events.emit(TowerEvents.TowerPlacedEvent, definition.name);
         } else {
+            Engine.NotificationManager.Notify(
+                'Can not place tower on path or other tower, choose another spot.',
+                'warn'
+            );
             console.warn('Can not place tower on occupied spot or path. Try again.');
         }
     }

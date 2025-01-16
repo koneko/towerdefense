@@ -57,6 +57,8 @@ export type TowerDefinition = {
     sprite: string;
     description: string;
     texture: PIXI.Texture;
+    projectileTextures: PIXI.Texture[];
+    projectileTexturesArrayLength: number;
     stats: TowerStatsDefinition;
 };
 
@@ -90,6 +92,6 @@ export enum GemType {
 }
 
 export enum TowerType {
-    Shooting = 0,
+    Basic = 0,
     Circle = 1,
 }

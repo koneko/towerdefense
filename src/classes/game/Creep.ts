@@ -15,11 +15,12 @@ export enum CreepEvents {
 export default class Creep extends GameObject {
     public id: number;
     public creepType: CreepType;
-    private sprite: PIXI.Sprite;
+    private sprite: PIXI.AnimatedSprite;
     private path: PathDefinition;
     private stats: CreepStatsDefinition;
     private pathIndex: number = 0;
     private speed: number;
+    private direction: number = 1;
     public health: number;
     public maxHealth: number;
     public escaped: boolean = false;
@@ -31,10 +32,12 @@ export default class Creep extends GameObject {
         super();
         this.creepType = creepType;
         // Structured clone is used just in case, so that 1 creep doesnt alter stats for all creeps.
-        this.stats = structuredClone(Assets.CreepStats[this.creepType]);
-        this.sprite = new PIXI.Sprite({
-            texture: GameAssets.BasicCreepTexture,
-        });
+        this.stats = structuredClone(Assets.Creeps[this.creepType].stats);
+        this.sprite = new PIXI.AnimatedSprite(Assets.Creeps[this.creepType].textures);
+        // Initially flip sprite to the right, since the asset is facing left.
+        this.sprite.scale.x *= -1;
+        this.sprite.anchor.set(0.5, 0.5);
+        this.sprite.play();
         this.id = id;
         // Explanation: WaveManager spawns all creeps instantly, and since I don't want
         // them to show up on the beginning while they are waiting, I put them outside the visible
@@ -64,6 +67,7 @@ export default class Creep extends GameObject {
             this.destroy();
             // The reason for setting this.dead instead of deleting self is because
             // I need to allow WaveManager/Grid to manage their death and keep array up to date.
+            // Also I realised that you can't do that from the object itself.
             this.dead = true;
             return;
         }
@@ -81,6 +85,19 @@ export default class Creep extends GameObject {
         const targetY = targetCell[0] * Engine.GridCellSize + Engine.GridCellSize / 2;
         const directionX = targetCell[1] - currentCell[1];
         const directionY = targetCell[0] - currentCell[0];
+        if (directionX > 0) {
+            // Going right
+            if (this.direction != 1) {
+                this.direction = 1;
+                this.sprite.scale.x *= -1;
+            }
+        } else if (directionX < 0) {
+            // Going left
+            if (this.direction != -1) {
+                this.direction = -1;
+                this.sprite.scale.x *= -1;
+            }
+        }
         let deltaX = this.speed * elapsedMS * directionX;
         let deltaY = this.speed * elapsedMS * directionY;
         let increaseIndex = false;
@@ -108,7 +125,8 @@ export default class Creep extends GameObject {
         this.x += deltaX;
         this.y += deltaY;
         if (increaseIndex) this.pathIndex++;
-        this.draw();
+        this.container.x = this.x;
+        this.container.y = this.y;
     }
 
     public takeDamage(amount: number) {
@@ -122,10 +140,5 @@ export default class Creep extends GameObject {
     public destroy() {
         super.destroy();
         this.container.removeChildren();
-    }
-    protected draw() {
-        this.sprite.anchor.set(0.5, 0.5);
-        this.container.x = this.x;
-        this.container.y = this.y;
     }
 }

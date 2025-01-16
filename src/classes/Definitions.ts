@@ -1,3 +1,4 @@
+import * as PIXI from 'pixi.js';
 export type MissionDefinition = {
     name: string;
     description: string;
@@ -28,6 +29,13 @@ export type WaveDefinition = {
     creeps: CreepType[];
 };
 
+export type CreepDefinition = {
+    name: string;
+    textures: PIXI.Texture[];
+    textureArrayLength: number;
+    stats: CreepStatsDefinition;
+};
+
 export type CreepStatsDefinition = {
     health: number;
     speed: number;
@@ -48,6 +56,7 @@ export type TowerDefinition = {
     behaviour: string;
     sprite: string;
     description: string;
+    texture: PIXI.Texture;
     stats: TowerStatsDefinition;
 };
 

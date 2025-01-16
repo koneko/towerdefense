@@ -6,9 +6,8 @@ List of things to implement following the "release" of the minimum viable produc
 
 -   [ ] Elemental resistances/attunement
 -   [x] Proper animation via PNG sequence
--   [ ] More variety in Creeps
--   [ ] Health bar + statistics on hover over
--   [ ] +/- on x or y axis to give creeps more variance when walking along path (maybe)
+-   [x] More variety in Creeps
+-   [x] Health bar
 
 ## Towers
 
@@ -16,8 +15,8 @@ List of things to implement following the "release" of the minimum viable produc
 -   [ ] Make tower react with slotted gems
 -   [ ] Alter damage based on attunement from slotted gems
 -   [ ] Tower info on click
--   [ ] Animate projectiles
--   [ ] Better mouseover tracking when placing tower and showing radius
+-   [x] Animate projectiles
+-   [x] Better mouseover tracking when placing tower and showing radius
 
 ## Gems
 

@@ -11,21 +11,21 @@ export function calculateAngleToPoint(x, y, targetX, targetY) {
 
 export default class Projectile extends GameObject {
     public deleteMe: boolean = false;
-    public sprite: PIXI.Sprite;
+    public sprite: PIXI.AnimatedSprite;
     public x: number;
     public y: number;
     public angle: number;
     public speed: number;
     public damage: number;
     public timeToLive: number = 1;
-    constructor(x, y, spriteTexture, angle, damage) {
+    constructor(x, y, textures, angle, damage) {
         super();
         this.x = x;
         this.y = y;
         this.damage = damage;
-
-        this.sprite = new PIXI.Sprite({ texture: spriteTexture, scale: 0.5, rotation: angle });
+        this.sprite = new PIXI.AnimatedSprite({ textures: textures, scale: 0.25, rotation: angle });
         this.sprite.anchor.set(0.5);
+        this.sprite.play();
         this.container.x = this.x;
         this.container.y = this.y;
         this.container.addChild(this.sprite);

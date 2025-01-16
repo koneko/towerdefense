@@ -21,6 +21,8 @@ export default class Creep extends GameObject {
     private pathIndex: number = 0;
     private speed: number;
     private direction: number = 1;
+    private healthBarGraphics: PIXI.Graphics = new PIXI.Graphics();
+    private healthBarWidth = 50;
     public health: number;
     public maxHealth: number;
     public escaped: boolean = false;
@@ -37,6 +39,7 @@ export default class Creep extends GameObject {
         // Initially flip sprite to the right, since the asset is facing left.
         this.sprite.scale.x *= -1;
         this.sprite.anchor.set(0.5, 0.5);
+        this.sprite.animationSpeed = 0.3;
         this.sprite.play();
         this.id = id;
         // Explanation: WaveManager spawns all creeps instantly, and since I don't want
@@ -46,7 +49,8 @@ export default class Creep extends GameObject {
         this.container.y = -50;
         this.sprite.width = Engine.GridCellSize;
         this.sprite.height = Engine.GridCellSize;
-        this.speed = this.stats.speed;
+        this.bb.width = this.sprite.width;
+        this.speed = this.stats.speed / 60;
         this.health = this.stats.health;
         this.maxHealth = this.stats.health;
         this.path = path;
@@ -56,9 +60,24 @@ export default class Creep extends GameObject {
         Engine.GameScene.events.on(CreepEvents.TakenDamage, (creepID, damage) => {
             if (creepID != this.id) return;
             this.health -= damage;
+            this.UpdateHealthbar();
         });
         Engine.Grid.container.addChild(this.container);
+        this.container.addChild(this.healthBarGraphics);
         this.container.addChild(this.sprite);
+        this.UpdateHealthbar();
+    }
+    private UpdateHealthbar() {
+        this.healthBarGraphics.clear();
+        const hp = this.health;
+        const maxHp = this.maxHealth;
+        const percent = hp / maxHp;
+        const width = this.healthBarWidth * percent;
+        // ! TODO: MAKE THIS BETTER! It works like this now, but I don't like how its implemented.
+        this.healthBarGraphics.rect(-this.healthBarWidth / 2 + 5, -30, this.healthBarWidth, 10);
+        this.healthBarGraphics.fill({ color: 0x00ff00 });
+        this.healthBarGraphics.rect(-this.healthBarWidth / 2 + 5, -30, width, 10);
+        this.healthBarGraphics.fill({ color: 0xff0000 });
     }
     public update(elapsedMS: number) {
         if (this.dead) return;

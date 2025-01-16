@@ -57,6 +57,8 @@ export type TowerDefinition = {
     sprite: string;
     description: string;
     texture: PIXI.Texture;
+    projectileTextures: PIXI.Texture[];
+    projectileTexturesArrayLength: number;
     stats: TowerStatsDefinition;
 };
 
@@ -72,7 +74,8 @@ export type PathDefinition = [[row: number, column: number]];
 
 export enum CreepType {
     Basic = 0,
-    Fast = 1,
+    Quick = 1,
+    Tank = 2,
 }
 
 export enum TerrainType {
@@ -89,6 +92,6 @@ export enum GemType {
 }
 
 export enum TowerType {
-    Shooting = 0,
+    Basic = 0,
     Circle = 1,
 }

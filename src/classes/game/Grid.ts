@@ -37,20 +37,6 @@ export class Cell extends GameObject {
         this.clickDetector.onpointerdown = (e) => {
             Engine.Grid.onGridCellClicked(row, column);
         };
-
-        // const text = new PIXI.Text({
-        //     text: `${this.row}|${this.column}`,
-        //     style: new PIXI.TextStyle({
-        //         fill: 0xffffff,
-        //         dropShadow: true,
-        //         fontSize: 16,
-        //     }),
-        // });
-        // this.container.addChild(text);
-        // text.anchor.set(0.5, 0.5);
-        // text.x = this.bb.width / 2;
-        // text.y = this.bb.height / 2;
-        // if (isPath) text.text += 'p';
     }
     public gDraw() {
         this.g = new PIXI.Graphics({
@@ -143,5 +129,6 @@ export class Grid extends GameObject {
     public getCellByRowAndCol(row, column) {
         return this.cells.filter((item) => item.row == row && item.column == column)[0];
     }
+    // Not defined here, rather GameScene defines it. This is just for TS.
     public onGridCellClicked(row, column) {}
 }

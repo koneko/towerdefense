@@ -4,8 +4,42 @@
         "textures": [],
         "textureArrayLength": 12,
         "stats": {
-            "health": 2,
-            "speed": 0.04,
+            "health": 5,
+            "speed": 2.4,
+            "special": null,
+            "resistance": {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0,
+                "frostfire": 0
+            }
+        }
+    },
+    {
+        "name": "quick",
+        "textures": [],
+        "textureArrayLength": 12,
+        "stats": {
+            "health": 7,
+            "speed": 2.4,
+            "special": null,
+            "resistance": {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0,
+                "frostfire": 0
+            }
+        }
+    },
+    {
+        "name": "tank",
+        "textures": [],
+        "textureArrayLength": 12,
+        "stats": {
+            "health": 7,
+            "speed": 2.4,
             "special": null,
             "resistance": {
                 "physical": 0,

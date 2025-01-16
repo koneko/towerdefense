@@ -38,20 +38,19 @@ export class Cell extends GameObject {
             Engine.Grid.onGridCellClicked(row, column);
         };
 
-        if (!GameAssets.DebuggingEnabled) return;
-        const text = new PIXI.Text({
-            text: `${this.row}|${this.column}`,
-            style: new PIXI.TextStyle({
-                fill: 0xffffff,
-                dropShadow: true,
-                fontSize: 16,
-            }),
-        });
-        this.container.addChild(text);
-        text.anchor.set(0.5, 0.5);
-        text.x = this.bb.width / 2;
-        text.y = this.bb.height / 2;
-        if (isPath) text.text += 'p';
+        // const text = new PIXI.Text({
+        //     text: `${this.row}|${this.column}`,
+        //     style: new PIXI.TextStyle({
+        //         fill: 0xffffff,
+        //         dropShadow: true,
+        //         fontSize: 16,
+        //     }),
+        // });
+        // this.container.addChild(text);
+        // text.anchor.set(0.5, 0.5);
+        // text.x = this.bb.width / 2;
+        // text.y = this.bb.height / 2;
+        // if (isPath) text.text += 'p';
     }
     public gDraw() {
         this.g = new PIXI.Graphics({

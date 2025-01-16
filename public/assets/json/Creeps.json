@@ -1,0 +1,19 @@
+[
+    {
+        "name": "basic",
+        "textures": [],
+        "textureArrayLength": 12,
+        "stats": {
+            "health": 2,
+            "speed": 0.04,
+            "special": null,
+            "resistance": {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0,
+                "frostfire": 0
+            }
+        }
+    }
+]

@@ -3,6 +3,7 @@
         "name": "Basic Tower",
         "behaviour": "BasicTowerBehaviour",
         "sprite": "basic_tower",
+        "texture": null,
         "description": "The building block of society, nothing more basic exists.",
         "stats": {
             "damage": 2,

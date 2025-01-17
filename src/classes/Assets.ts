@@ -22,10 +22,10 @@ export default class GameAssets {
     public static PauseIconTexture: PIXI.Texture;
     public static ExclamationIconTexture: PIXI.Texture;
     public static HomeIconTexture: PIXI.Texture;
+    public static HammerIconTexture: PIXI.Texture;
 
     public static Missions: MissionDefinition[];
     public static MissionBackgrounds: PIXI.Texture[] = [];
-    public static TowerSprites: PIXI.Texture[] = [];
     public static Towers: TowerDefinition[];
     public static Creeps: CreepDefinition[];
 
@@ -87,6 +87,7 @@ export default class GameAssets {
             this.Load('/assets/gui/icons/pause.png').then((texture) => (this.PauseIconTexture = texture)),
             this.Load('/assets/gui/icons/exclamation.png').then((texture) => (this.ExclamationIconTexture = texture)),
             this.Load('/assets/gui/icons/home.png').then((texture) => (this.HomeIconTexture = texture)),
+            this.Load('/assets/gui/icons/hammer.png').then((texture) => (this.HammerIconTexture = texture)),
             this.LoadMissions(),
             this.LoadTowers(),
             this.LoadCreeps(),
@@ -120,21 +121,13 @@ export default class GameAssets {
         const res = await fetch('/assets/json/Towers.json');
         const towers = await res.json();
         this.Towers = towers;
-        console.log(this.Towers);
         for (let idx = 0; idx < this.Towers.length; idx++) {
             const tower = this.Towers[idx];
             for (let i = 0; i < tower.projectileTexturesArrayLength; i++) {
                 const texture = await this.Load(`/assets/projectiles/${tower.sprite}/${i}.png`);
                 tower.projectileTextures[i] = texture;
-                console.log(tower.projectileTextures);
             }
         }
-        towers.forEach(async (tower) => {
-            let index = this.TowerSprites.length - 1;
-            if (index == -1) index = 0;
-            this.TowerSprites[index] = await this.Load(`/assets/towers/${tower.sprite}.png`);
-            tower.texture = this.TowerSprites[index];
-        });
     }
 
     private static async LoadMission(missionUrl: string) {

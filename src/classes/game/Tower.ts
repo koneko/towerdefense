@@ -51,6 +51,7 @@ export class Tower extends GameObject {
         this.definition = definition;
         this.ticksUntilNextShot = 0;
         this.parent = Engine.Grid.getCellByRowAndCol(row, column);
+        console.log(texture);
         this.sprite = new PIXI.Sprite({
             texture: texture,
             height: Engine.GridCellSize,
@@ -63,25 +64,16 @@ export class Tower extends GameObject {
         this.parent.clickDetector.on('pointerenter', this.onParentCellEnter);
         this.parent.clickDetector.on('pointerleave', this.onParentCellLeave);
         Engine.GameMaster.currentScene.stage.addChild(this.graphics);
-        //this.showRangeDisplay();
     }
 
     private onParentCellEnter = (e) => {
-        this.showRangeDisplay();
+        if (!Engine.TowerManager.isPlacingTower) this.parent.showRangePreview(false, this.definition.stats.range);
     };
 
     private onParentCellLeave = (e) => {
         this.graphics.clear();
     };
 
-    public showRangeDisplay() {
-        this.graphics.circle(
-            this.column * Engine.GridCellSize + Engine.GridCellSize / 2,
-            this.row * Engine.GridCellSize + Engine.GridCellSize / 2,
-            this.definition.stats.range * Engine.GridCellSize
-        );
-        this.graphics.fill({ color: 0xffffff, alpha: 0.5 });
-    }
     public GetCreepsInRange() {
         let creeps = Engine.Grid.creeps;
         return creeps.filter((creep) => {

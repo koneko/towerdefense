@@ -56,9 +56,7 @@ export class Cell extends GameObject {
         });
         Engine.GameScene.events.on(TowerEvents.TowerPlacedEvent, (_, row, col) => {
             if (row == this.row && col == this.column) {
-                console.log('SETTING');
-                this.setHasTowerPlaced(true);
-                console.log(this);
+                this.hasTowerPlaced = true;
                 this.rangePreview.clear();
             }
         });
@@ -68,9 +66,17 @@ export class Cell extends GameObject {
             }
         });
     }
-    private setHasTowerPlaced(v) {
-        console.log(' CALLLEd');
-        this.hasTowerPlaced = v;
+    public showRangePreview(invalid, range) {
+        let color = 0xffffff;
+        if (invalid) color = 0xff0000;
+        this.rangePreview.clear();
+        this.rangePreview.circle(Engine.GridCellSize / 2, Engine.GridCellSize / 2, range * Engine.GridCellSize);
+        this.rangePreview.fill({ color: color, alpha: 0.3 });
+    }
+    public checkIfCantPlace() {
+        return (
+            this.hasTowerPlaced || this.isPath || this.type == TerrainType.Path || this.type == TerrainType.Restricted
+        );
     }
     public gDraw() {
         this.g = new PIXI.Graphics({

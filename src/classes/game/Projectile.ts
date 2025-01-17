@@ -24,7 +24,7 @@ export default class Projectile extends GameObject {
         this.y = y;
         this.damage = damage;
         this.sprite = new PIXI.AnimatedSprite({ textures: textures, scale: 0.25, rotation: angle });
-        this.sprite.anchor.set(0.5);
+        this.sprite.anchor.set(0.5, 0.5);
         this.sprite.play();
         this.container.x = this.x;
         this.container.y = this.y;

@@ -14,5 +14,21 @@
             "cost": 100,
             "range": 3
         }
+    },
+    {
+        "name": "Circle Tower",
+        "behaviour": "BasicTowerBehaviour",
+        "sprite": "circle_tower",
+        "texture": null,
+        "projectileTextures": [],
+        "projectileTexturesArrayLength": 4,
+        "description": "If you feel a little circular.",
+        "stats": {
+            "damage": 6,
+            "cooldown": 180,
+            "gemSlotsAmount": 3,
+            "cost": 125,
+            "range": 3
+        }
     }
 ]

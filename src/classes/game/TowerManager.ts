@@ -24,24 +24,14 @@ export default class TowerManager {
     constructor() {
         Engine.TowerManager = this;
         Engine.GameScene.events.on(GridEvents.CellMouseOver, (cell: Cell) => {
-            //console.log(`${cell.column}x${cell.row}, ${cell.type}, ${this.isPlacingTower}`);
             if (this.isPlacingTower) {
-                let cantPlace =
-                    this.GetTowerByRowAndCol(cell.row, cell.column) ||
-                    cell.hasTowerPlaced ||
-                    cell.isPath ||
-                    cell.type == TerrainType.Path ||
-                    cell.type == TerrainType.Restricted;
-                cell.rangePreview.circle(
-                    Engine.GridCellSize / 2,
-                    Engine.GridCellSize / 2,
-                    this.selectedTower.stats.range * Engine.GridCellSize
-                );
+                let cantPlace = cell.checkIfCantPlace();
                 if (cantPlace) {
-                    cell.rangePreview.fill({ color: 0xff0000, alpha: 0.4 });
+                    cell.rangePreview.clear();
+                    cell.showRangePreview(true, this.selectedTower.stats.range);
                     this.previewSprite.tint = 0xff0000;
                 } else {
-                    cell.rangePreview.fill({ color: 0xffffff, alpha: 0.4 });
+                    cell.showRangePreview(false, this.selectedTower.stats.range);
                     this.previewSprite.tint = 0xffffff;
                 }
                 this.previewSprite.x = cell.column * Engine.GridCellSize;
@@ -89,11 +79,7 @@ export default class TowerManager {
         return returnTower;
     }
     public PlaceTower(definition: TowerDefinition, row, column, behaviour: string, ignoreCost?) {
-        let idx = 0;
-        GameAssets.Towers.forEach((item, index) => {
-            if (item.sprite == definition.sprite) idx = index;
-        });
-        const sprite = GameAssets.TowerSprites[idx];
+        const sprite = this.selectedTower.texture;
         if (!Engine.GameScene.MissionStats.hasEnoughGold(definition.stats.cost) && !ignoreCost)
             return Engine.NotificationManager.Notify('Not enough gold.', 'warn');
         if (

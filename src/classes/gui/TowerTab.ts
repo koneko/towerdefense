@@ -44,7 +44,7 @@ class TowerButton extends GuiObject {
         this.container.addChild(this.frameSprite);
         parent.addChild(this.container);
         Engine.GameScene.events.on(TowerEvents.TowerPlacedEvent, (name) => {
-            this.frameSprite.tint = 0xffffff; // reset the tint after a tower has been placed
+            this.resetTint();
         });
         this.container.onpointerenter = (e) => {
             // add on mouse over info (banner next to sidebar)
@@ -53,24 +53,28 @@ class TowerButton extends GuiObject {
         this.container.onpointerleave = (e) => {};
     }
     public onClick(e: PIXI.FederatedPointerEvent): void {
+        if (Engine.TowerManager.isPlacingTower && Engine.TowerManager.selectedTower.name != this.towerName) {
+            Engine.GameScene.sidebar.towerTab.resetTint();
+            Engine.TowerManager.ResetChooseTower();
+        }
         if (this.frameSprite.tint == 0x00ff00) this.frameSprite.tint = 0xffffff;
         else this.frameSprite.tint = 0x00ff00;
         Engine.TowerManager.ToggleChoosingTowerLocation(this.towerName);
+    }
+    public resetTint() {
+        this.frameSprite.tint = 0xffffff;
     }
 }
 
 export default class TowerTab extends GuiObject {
     private bounds: PIXI.Rectangle;
     private towerTabSprite: PIXI.NineSliceSprite;
-    private towerList: Array<any> = [];
+    private towerButtons: TowerButton[] = [];
 
     constructor(bounds: PIXI.Rectangle) {
         super(false);
         this.bounds = bounds;
-        GameAssets.Towers.forEach((twr) => {
-            let obj = { name: twr.name, description: twr.description, cost: twr.stats.cost };
-            this.towerList.push(obj);
-        });
+
         this.container.x = this.bounds.x;
         this.container.y = this.bounds.y;
         this.towerTabSprite = new PIXI.NineSliceSprite({
@@ -84,26 +88,32 @@ export default class TowerTab extends GuiObject {
         this.towerTabSprite.width = this.bounds.width;
         this.towerTabSprite.height = this.bounds.height;
         this.container.addChild(this.towerTabSprite);
-
-        new TowerButton(
-            0,
-            0,
-            70,
-            70,
-            this.container,
-            GameAssets.RedBackground,
-            'Basic Tower',
-            GameAssets.HammerIconTexture
+        this.towerButtons.push(
+            new TowerButton(
+                0,
+                0,
+                70,
+                70,
+                this.container,
+                GameAssets.RedBackground,
+                'Basic Tower',
+                GameAssets.HammerIconTexture
+            )
         );
-        new TowerButton(
-            0,
-            1,
-            70,
-            70,
-            this.container,
-            GameAssets.GreenBackground,
-            'Circle Tower',
-            GameAssets.HomeIconTexture
+        this.towerButtons.push(
+            new TowerButton(
+                0,
+                1,
+                70,
+                70,
+                this.container,
+                GameAssets.GreenBackground,
+                'Circle Tower',
+                GameAssets.HomeIconTexture
+            )
         );
+    }
+    public resetTint() {
+        this.towerButtons.forEach((item) => item.resetTint());
     }
 }

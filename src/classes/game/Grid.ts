@@ -38,12 +38,17 @@ export class Cell extends GameObject {
             zIndex: 99,
             interactive: true,
         });
+        // ? TODO: make range preview 1 global graphics obj, child. fix
         this.rangePreview = new PIXI.Graphics({
-            zIndex: 6,
+            zIndex: 10,
+        });
+        this.g = new PIXI.Graphics({
+            zIndex: 5,
         });
         this.clickDetector.rect(0, 0, this.bb.width, this.bb.height);
         this.clickDetector.fill({ color: 0xff0000, alpha: 0 });
         this.container.addChild(this.clickDetector);
+        this.container.addChild(this.g);
         this.container.addChild(this.rangePreview);
         this.clickDetector.on('pointerup', (e) => {
             Engine.Grid.onGridCellClicked(row, column);
@@ -79,9 +84,6 @@ export class Cell extends GameObject {
         );
     }
     public gDraw() {
-        this.g = new PIXI.Graphics({
-            zIndex: 5,
-        });
         this.g.rect(0, 0, this.bb.width, this.bb.height);
         if (this.type == TerrainType.Restricted) {
             this.g.fill({ color: 0x222222, alpha: 0.5 });
@@ -92,7 +94,6 @@ export class Cell extends GameObject {
         } else if (this.type == TerrainType.Buildable) {
             this.g.stroke({ color: 0x00ff00, alpha: 0.9 });
         }
-        this.container.addChild(this.g);
     }
     public gClear() {
         this.g.clear();
@@ -130,15 +131,25 @@ export class Grid extends GameObject {
             }
         }
     }
-    public toggleGrid() {
+    public toggleGrid(force?: 'hide' | 'show') {
         this.cells.forEach((cell) => {
+            if (force) {
+                if (force == 'hide') {
+                    cell.gClear();
+                } else {
+                    cell.gDraw();
+                }
+                return;
+            }
             if (this.gridShown) {
                 cell.gClear();
             } else {
                 cell.gDraw();
             }
         });
-        this.gridShown = !this.gridShown;
+        if (force == 'hide') this.gridShown = false;
+        else if (force == 'show') this.gridShown = true;
+        else this.gridShown = !this.gridShown;
     }
     public addCreep(creep: Creep) {
         this.creeps.push(creep);

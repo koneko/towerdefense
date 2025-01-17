@@ -39,7 +39,7 @@ export default class GameAssets {
 
     public static async LoadAssets() {
         if (this.text) {
-            throw 'Do not call GameAssets.LoadAssets() more than once.';
+            console.warn('Do not call GameAssets.LoadAssets() more than once.');
             return;
         }
         console.log('Loading Texture Assets');
@@ -124,9 +124,10 @@ export default class GameAssets {
         for (let idx = 0; idx < this.Towers.length; idx++) {
             const tower = this.Towers[idx];
             for (let i = 0; i < tower.projectileTexturesArrayLength; i++) {
-                const texture = await this.Load(`/assets/projectiles/${tower.sprite}/${i}.png`);
-                tower.projectileTextures[i] = texture;
+                const projTexture = await this.Load(`/assets/projectiles/${tower.sprite}/${i}.png`);
+                tower.projectileTextures[i] = projTexture;
             }
+            tower.texture = await this.Load(`/assets/towers/${tower.sprite}.png`);
         }
     }
 

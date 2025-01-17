@@ -14,6 +14,8 @@ export default class Button extends GuiObject {
 
     private buttonSprite: PIXI.NineSliceSprite;
     private buttonText: PIXI.Text;
+    // Used for custom button logic.
+    public buttonIcon: PIXI.Sprite;
 
     setCaption(caption: string) {
         this.caption = caption;
@@ -56,5 +58,9 @@ export default class Button extends GuiObject {
         this.buttonText.y = this.bounds.height / 2;
         this.container.x = this.bounds.x;
         this.container.y = this.bounds.y;
+    }
+
+    public CustomButtonLogic() {
+        console.warn(this.name + ' - Button.CustomButtonLogic() is not implemented.');
     }
 }

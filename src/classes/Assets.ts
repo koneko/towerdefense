@@ -13,20 +13,25 @@ export default class GameAssets {
     public static GreenBackground: PIXI.Texture;
     public static Button01Texture: PIXI.Texture;
     public static Button02Texture: PIXI.Texture;
+    public static ButtonSmallTexture: PIXI.Texture;
     public static HealthTexture: PIXI.Texture;
     public static GoldTexture: PIXI.Texture;
     public static WaveTexture: PIXI.Texture;
 
+    public static PlayIconTexture: PIXI.Texture;
+    public static PauseIconTexture: PIXI.Texture;
+    public static ExclamationIconTexture: PIXI.Texture;
+    public static HomeIconTexture: PIXI.Texture;
+    public static HammerIconTexture: PIXI.Texture;
+
     public static Missions: MissionDefinition[];
     public static MissionBackgrounds: PIXI.Texture[] = [];
-    public static TowerSprites: PIXI.Texture[] = [];
     public static Towers: TowerDefinition[];
     public static Creeps: CreepDefinition[];
 
     private static text;
     private static async Load(src) {
         this.text.text = 'Loading asset: ' + src;
-        console.log('LOADING ' + src);
         return await PIXI.Assets.load({
             src: src,
         });
@@ -66,6 +71,7 @@ export default class GameAssets {
             this.Load('/aclonica.woff2'),
             this.Load('/assets/gui/button_01.png').then((texture) => (this.Button01Texture = texture)),
             this.Load('/assets/gui/button_02.png').then((texture) => (this.Button02Texture = texture)),
+            this.Load('/assets/gui/button_small.png').then((texture) => (this.ButtonSmallTexture = texture)),
             this.Load('/assets/gui/frame_01.png').then((texture) => (this.Frame01Texture = texture)),
             this.Load('/assets/gui/frame_02.png').then((texture) => (this.Frame02Texture = texture)),
             this.Load('/assets/gui/frame_03.png').then((texture) => (this.Frame03Texture = texture)),
@@ -77,6 +83,11 @@ export default class GameAssets {
             this.Load('/assets/gui/heart.png').then((texture) => (this.HealthTexture = texture)),
             this.Load('/assets/gui/money.png').then((texture) => (this.GoldTexture = texture)),
             this.Load('/assets/gui/wave.png').then((texture) => (this.WaveTexture = texture)),
+            this.Load('/assets/gui/icons/play.png').then((texture) => (this.PlayIconTexture = texture)),
+            this.Load('/assets/gui/icons/pause.png').then((texture) => (this.PauseIconTexture = texture)),
+            this.Load('/assets/gui/icons/exclamation.png').then((texture) => (this.ExclamationIconTexture = texture)),
+            this.Load('/assets/gui/icons/home.png').then((texture) => (this.HomeIconTexture = texture)),
+            this.Load('/assets/gui/icons/hammer.png').then((texture) => (this.HammerIconTexture = texture)),
             this.LoadMissions(),
             this.LoadTowers(),
             this.LoadCreeps(),
@@ -110,21 +121,13 @@ export default class GameAssets {
         const res = await fetch('/assets/json/Towers.json');
         const towers = await res.json();
         this.Towers = towers;
-        console.log(this.Towers);
         for (let idx = 0; idx < this.Towers.length; idx++) {
             const tower = this.Towers[idx];
             for (let i = 0; i < tower.projectileTexturesArrayLength; i++) {
-                console.log(`WANT TO LOAD /assets/projectiles/${tower.sprite}/${i}.png`);
                 const texture = await this.Load(`/assets/projectiles/${tower.sprite}/${i}.png`);
                 tower.projectileTextures[i] = texture;
-                console.log(tower.projectileTextures);
             }
         }
-        towers.forEach(async (tower) => {
-            let index = this.TowerSprites.length - 1;
-            if (index == -1) index = 0;
-            this.TowerSprites[index] = await this.Load(`/assets/towers/${tower.sprite}.png`);
-        });
     }
 
     private static async LoadMission(missionUrl: string) {

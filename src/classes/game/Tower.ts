@@ -29,6 +29,7 @@ export type TowerInstance = {
 
 export enum TowerEvents {
     TowerPlacedEvent = 'towerPlacedEvent',
+    TowerSoldEvent = 'towerSoldEvent',
 }
 
 export class Tower extends GameObject {
@@ -40,6 +41,8 @@ export class Tower extends GameObject {
     private sprite: PIXI.Sprite;
     private ticksUntilNextShot: number;
     private graphics: PIXI.Graphics = new PIXI.Graphics();
+    private parent: Cell;
+
     constructor(row, column, texture, definition, behaviour) {
         super();
         this.row = row;
@@ -47,7 +50,8 @@ export class Tower extends GameObject {
         this.behaviour = behaviour;
         this.definition = definition;
         this.ticksUntilNextShot = 0;
-        let parent: Cell = Engine.Grid.getCellByRowAndCol(row, column);
+        this.parent = Engine.Grid.getCellByRowAndCol(row, column);
+        console.log(texture);
         this.sprite = new PIXI.Sprite({
             texture: texture,
             height: Engine.GridCellSize,
@@ -55,24 +59,21 @@ export class Tower extends GameObject {
             zIndex: 10,
         });
         this.container.addChild(this.sprite);
-        parent.container.addChild(this.container);
-        parent.clickDetector.onmouseenter = (e) => {
-            this.showRangeDisplay();
-        };
-        parent.clickDetector.onmouseleave = (e) => {
-            this.graphics.clear();
-        };
+        this.parent.container.addChild(this.container);
+        this.container.interactiveChildren = true;
+        this.parent.clickDetector.on('pointerenter', this.onParentCellEnter);
+        this.parent.clickDetector.on('pointerleave', this.onParentCellLeave);
         Engine.GameMaster.currentScene.stage.addChild(this.graphics);
-        this.showRangeDisplay();
     }
-    public showRangeDisplay() {
-        this.graphics.circle(
-            this.column * Engine.GridCellSize + Engine.GridCellSize / 2,
-            this.row * Engine.GridCellSize + Engine.GridCellSize / 2,
-            this.definition.stats.range * Engine.GridCellSize
-        );
-        this.graphics.fill({ color: 0xff0000, alpha: 0.5 });
-    }
+
+    private onParentCellEnter = (e) => {
+        if (!Engine.TowerManager.isPlacingTower) this.parent.showRangePreview(false, this.definition.stats.range);
+    };
+
+    private onParentCellLeave = (e) => {
+        this.graphics.clear();
+    };
+
     public GetCreepsInRange() {
         let creeps = Engine.Grid.creeps;
         return creeps.filter((creep) => {
@@ -111,5 +112,12 @@ export class Tower extends GameObject {
                 }
             }
         }
+    }
+
+    override destroy(): void {
+        super.destroy();
+        this.parent.clickDetector.off('pointerenter', this.onParentCellEnter);
+        this.parent.clickDetector.off('pointerleave', this.onParentCellLeave);
+        this.graphics.destroy();
     }
 }

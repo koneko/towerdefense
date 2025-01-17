@@ -8,8 +8,9 @@ class TowerButton extends GuiObject {
     private frameSprite: PIXI.NineSliceSprite;
     private background: PIXI.Sprite;
     private towerName: string;
+    private iconSprite: PIXI.Sprite;
     private i: number = 0;
-    constructor(index: number, row, width, height, parent: PIXI.Container, backgroundTexture, towerName) {
+    constructor(index: number, row, width, height, parent: PIXI.Container, backgroundTexture, towerName, iconTexture) {
         if (index > 3 || row > 2 || index < 0 || row < 0) throw 'Index/row out of bounds for TowerButton.';
         super(true);
         this.towerName = towerName;
@@ -18,10 +19,18 @@ class TowerButton extends GuiObject {
         this.background = new PIXI.Sprite({
             texture: backgroundTexture,
         });
+        this.iconSprite = new PIXI.Sprite({
+            texture: iconTexture,
+        });
         this.background.width = width;
         this.background.height = height;
+        this.iconSprite.x = width / 2;
+        this.iconSprite.y = height / 2;
+        this.iconSprite.width = width / 2;
+        this.iconSprite.height = height / 2;
+        this.iconSprite.anchor.set(0.5, 0.5);
         this.container.addChild(this.background);
-
+        this.container.addChild(this.iconSprite);
         this.frameSprite = new PIXI.NineSliceSprite({
             texture: GameAssets.Frame02Texture,
             leftWidth: 100,
@@ -37,11 +46,11 @@ class TowerButton extends GuiObject {
         Engine.GameScene.events.on(TowerEvents.TowerPlacedEvent, (name) => {
             this.frameSprite.tint = 0xffffff; // reset the tint after a tower has been placed
         });
-        this.container.onmouseenter = (e) => {
+        this.container.onpointerenter = (e) => {
             // add on mouse over info (banner next to sidebar)
         };
 
-        this.container.onmouseleave = (e) => {};
+        this.container.onpointerleave = (e) => {};
     }
     public onClick(e: PIXI.FederatedPointerEvent): void {
         if (this.frameSprite.tint == 0x00ff00) this.frameSprite.tint = 0xffffff;
@@ -76,7 +85,25 @@ export default class TowerTab extends GuiObject {
         this.towerTabSprite.height = this.bounds.height;
         this.container.addChild(this.towerTabSprite);
 
-        new TowerButton(0, 0, 70, 70, this.container, GameAssets.RedBackground, 'Basic Tower');
-        new TowerButton(0, 1, 70, 70, this.container, GameAssets.GreenBackground, 'Basic Tower');
+        new TowerButton(
+            0,
+            0,
+            70,
+            70,
+            this.container,
+            GameAssets.RedBackground,
+            'Basic Tower',
+            GameAssets.HammerIconTexture
+        );
+        new TowerButton(
+            0,
+            1,
+            70,
+            70,
+            this.container,
+            GameAssets.GreenBackground,
+            'Circle Tower',
+            GameAssets.HomeIconTexture
+        );
     }
 }

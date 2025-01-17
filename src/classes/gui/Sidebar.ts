@@ -5,9 +5,9 @@ import TowerTab from './TowerTab';
 import GemTab from './GemTab';
 
 export default class Sidebar extends GuiObject {
+    public towerTab: TowerTab;
     private bounds: PIXI.Rectangle;
     private sidebarSprite: PIXI.NineSliceSprite;
-    private towerTab: TowerTab;
     private gemTab: GemTab;
 
     constructor(bounds: PIXI.Rectangle) {

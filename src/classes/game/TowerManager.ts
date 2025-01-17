@@ -12,7 +12,7 @@ export enum TowerBehaviours {
 export default class TowerManager {
     public isPlacingTower: boolean = false;
     public canPlaceTowers: boolean = true;
-    private selectedTower: TowerDefinition | null = null;
+    public selectedTower: TowerDefinition | null = null;
     private previewSprite: PIXI.Sprite = new PIXI.Sprite({
         parent: Engine.GameMaster.currentScene.stage,
         zIndex: 10,
@@ -40,6 +40,11 @@ export default class TowerManager {
             }
         });
     }
+    public ResetChooseTower() {
+        this.selectedTower = null;
+        this.isPlacingTower = false;
+        Engine.Grid.toggleGrid('hide');
+    }
     public ToggleChoosingTowerLocation(towerName: string) {
         if (!this.canPlaceTowers) return;
         Engine.Grid.toggleGrid();
@@ -47,6 +52,7 @@ export default class TowerManager {
             GameAssets.Towers.forEach((item) => {
                 if (item.name == towerName) {
                     this.selectedTower = item;
+                    console.log(this.selectedTower);
                 }
             });
         } else {

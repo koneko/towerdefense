@@ -3,7 +3,7 @@ import { Engine } from '../Bastion';
 import { TerrainType, TowerDefinition } from '../Definitions';
 import GameAssets from '../Assets';
 import { Tower, TowerEvents } from './Tower';
-import { Cell } from './Grid';
+import { Cell, GridEvents } from './Grid';
 
 export enum TowerBehaviours {
     BasicTowerBehaviour = 'BasicTowerBehaviour',
@@ -13,9 +13,42 @@ export default class TowerManager {
     public isPlacingTower: boolean = false;
     public canPlaceTowers: boolean = true;
     private selectedTower: TowerDefinition | null = null;
+    private previewSprite: PIXI.Sprite = new PIXI.Sprite({
+        parent: Engine.GameMaster.currentScene.stage,
+        zIndex: 10,
+        width: 64,
+        height: 64,
+        alpha: 0.8,
+    });
     private towers: Tower[] = [];
     constructor() {
         Engine.TowerManager = this;
+        Engine.GameScene.events.on(GridEvents.CellMouseOver, (cell: Cell) => {
+            //console.log(`${cell.column}x${cell.row}, ${cell.type}, ${this.isPlacingTower}`);
+            if (this.isPlacingTower) {
+                let cantPlace =
+                    this.GetTowerByRowAndCol(cell.row, cell.column) ||
+                    cell.hasTowerPlaced ||
+                    cell.isPath ||
+                    cell.type == TerrainType.Path ||
+                    cell.type == TerrainType.Restricted;
+                cell.rangePreview.circle(
+                    Engine.GridCellSize / 2,
+                    Engine.GridCellSize / 2,
+                    this.selectedTower.stats.range * Engine.GridCellSize
+                );
+                if (cantPlace) {
+                    cell.rangePreview.fill({ color: 0xff0000, alpha: 0.4 });
+                    this.previewSprite.tint = 0xff0000;
+                } else {
+                    cell.rangePreview.fill({ color: 0xffffff, alpha: 0.4 });
+                    this.previewSprite.tint = 0xffffff;
+                }
+                this.previewSprite.x = cell.column * Engine.GridCellSize;
+                this.previewSprite.y = cell.row * Engine.GridCellSize;
+                this.previewSprite.texture = this.selectedTower.texture;
+            }
+        });
     }
     public ToggleChoosingTowerLocation(towerName: string) {
         if (!this.canPlaceTowers) return;
@@ -27,6 +60,7 @@ export default class TowerManager {
                 }
             });
         } else {
+            this.previewSprite.texture = null;
             this.selectedTower = null;
         }
         this.isPlacingTower = !this.isPlacingTower;
@@ -51,6 +85,7 @@ export default class TowerManager {
         this.towers.forEach((tower) => {
             if (tower.row == row && tower.column == col) returnTower = tower;
         });
+        // console.log(returnTower, row, col);
         return returnTower;
     }
     public PlaceTower(definition: TowerDefinition, row, column, behaviour: string, ignoreCost?) {
@@ -60,7 +95,7 @@ export default class TowerManager {
         });
         const sprite = GameAssets.TowerSprites[idx];
         if (!Engine.GameScene.MissionStats.hasEnoughGold(definition.stats.cost) && !ignoreCost)
-            return console.warn('Does not have enough gold.');
+            return Engine.NotificationManager.Notify('Not enough gold.', 'warn');
         if (
             !this.GetTowerByRowAndCol(row, column) &&
             Engine.Grid.getCellByRowAndCol(row, column).type != TerrainType.Path &&
@@ -71,7 +106,8 @@ export default class TowerManager {
             this.towers.push(tower);
             this.ToggleChoosingTowerLocation('RESET');
             this.selectedTower = null;
-            Engine.GameScene.events.emit(TowerEvents.TowerPlacedEvent, definition.name);
+            this.previewSprite.x = -100;
+            Engine.GameScene.events.emit(TowerEvents.TowerPlacedEvent, definition.name, row, column);
         } else {
             Engine.NotificationManager.Notify(
                 'Can not place tower on path or other tower, choose another spot.',

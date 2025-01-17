@@ -4,14 +4,21 @@ import { GameMapDefinition, TerrainType } from '../Definitions';
 import GameAssets from '../Assets';
 import { Engine } from '../Bastion';
 import Creep, { CreepEvents } from './Creep';
+import { TowerEvents } from './Tower';
+
+export enum GridEvents {
+    CellMouseOver = 'cellmouseover',
+}
 
 export class Cell extends GameObject {
     public type: TerrainType;
     public row: number;
     public column: number;
     public isPath: boolean = false;
-    private g: PIXI.Graphics;
+    public g: PIXI.Graphics;
+    public hasTowerPlaced: boolean = false;
     public clickDetector: PIXI.Graphics;
+    public rangePreview: PIXI.Graphics;
 
     constructor(type: TerrainType, row: number, column: number, isPath: boolean) {
         super();
@@ -31,36 +38,58 @@ export class Cell extends GameObject {
             zIndex: 99,
             interactive: true,
         });
+        this.rangePreview = new PIXI.Graphics({
+            zIndex: 6,
+        });
         this.clickDetector.rect(0, 0, this.bb.width, this.bb.height);
         this.clickDetector.fill({ color: 0xff0000, alpha: 0 });
         this.container.addChild(this.clickDetector);
-        this.clickDetector.onpointerdown = (e) => {
+        this.container.addChild(this.rangePreview);
+        this.clickDetector.on('pointerup', (e) => {
             Engine.Grid.onGridCellClicked(row, column);
-        };
+        });
+        this.clickDetector.on('pointerenter', (e) => {
+            Engine.GameScene.events.emit(GridEvents.CellMouseOver, this);
+        });
+        this.clickDetector.on('pointerleave', (e) => {
+            this.rangePreview.clear();
+        });
+        Engine.GameScene.events.on(TowerEvents.TowerPlacedEvent, (_, row, col) => {
+            if (row == this.row && col == this.column) {
+                console.log('SETTING');
+                this.setHasTowerPlaced(true);
+                console.log(this);
+                this.rangePreview.clear();
+            }
+        });
+        Engine.GameScene.events.on(TowerEvents.TowerSoldEvent, (_, row, col) => {
+            if (row == this.row && col == this.column) {
+                this.hasTowerPlaced = false;
+            }
+        });
+    }
+    private setHasTowerPlaced(v) {
+        console.log(' CALLLEd');
+        this.hasTowerPlaced = v;
     }
     public gDraw() {
         this.g = new PIXI.Graphics({
             zIndex: 5,
         });
         this.g.rect(0, 0, this.bb.width, this.bb.height);
-        switch (this.type) {
-            case TerrainType.Restricted:
-                this.g.fill({ color: 0x222222, alpha: 0.5 });
-                break;
-            case TerrainType.Path:
-                this.g.fill({ color: 0x222222, alpha: 0.5 });
-                break;
-            case TerrainType.Buildable:
-                this.g.stroke({ color: 0x00ff00, alpha: 0.9 });
-                break;
+        if (this.type == TerrainType.Restricted) {
+            this.g.fill({ color: 0x222222, alpha: 0.5 });
+        } else if (this.hasTowerPlaced) {
+            this.g.fill({ color: 0xff0000, alpha: 0.5 });
+        } else if (this.type == TerrainType.Path) {
+            this.g.fill({ color: 0x222222, alpha: 0.5 });
+        } else if (this.type == TerrainType.Buildable) {
+            this.g.stroke({ color: 0x00ff00, alpha: 0.9 });
         }
         this.container.addChild(this.g);
     }
     public gClear() {
-        if (this.g != null) {
-            this.container.removeChild(this.g);
-            this.g.destroy();
-        }
+        this.g.clear();
     }
     public update() {}
 }

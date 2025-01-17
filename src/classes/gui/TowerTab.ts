@@ -37,11 +37,11 @@ class TowerButton extends GuiObject {
         Engine.GameScene.events.on(TowerEvents.TowerPlacedEvent, (name) => {
             this.frameSprite.tint = 0xffffff; // reset the tint after a tower has been placed
         });
-        this.container.onmouseenter = (e) => {
+        this.container.onpointerenter = (e) => {
             // add on mouse over info (banner next to sidebar)
         };
 
-        this.container.onmouseleave = (e) => {};
+        this.container.onpointerleave = (e) => {};
     }
     public onClick(e: PIXI.FederatedPointerEvent): void {
         if (this.frameSprite.tint == 0x00ff00) this.frameSprite.tint = 0xffffff;

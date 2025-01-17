@@ -71,20 +71,29 @@ export class GameScene extends Scene {
             this.MissionStats.earnGold(playerAward);
         });
         this.sidebar = new Sidebar(GameUIConstants.SidebarRect);
-        this.changeRoundButton = new Button(
-            GameUIConstants.ChangeRoundButtonRect,
-            'Start',
-            ButtonTexture.Button01,
-            true
-        );
+        this.changeRoundButton = new Button(GameUIConstants.ChangeRoundButtonRect, '', ButtonTexture.Button01, true);
         this.changeRoundButton.container.removeFromParent();
         this.sidebar.container.addChild(this.changeRoundButton.container);
+        // Added custom button logic to still keep all the regular events for the button, just have an icon instead of text.
+        // TODO: maybe make this better? add like a seperate class for icon buttons or smth
+        this.changeRoundButton.CustomButtonLogic = () => {
+            this.changeRoundButton.buttonIcon = new PIXI.Sprite({
+                texture: GameAssets.PlayIconTexture,
+                x: this.changeRoundButton.container.width / 2,
+                y: this.changeRoundButton.container.height / 2,
+                scale: 0.2,
+            });
+            this.changeRoundButton.buttonIcon.anchor.set(0.5, 0.5);
+            this.changeRoundButton.container.addChild(this.changeRoundButton.buttonIcon);
+        };
+        this.changeRoundButton.CustomButtonLogic();
         this.changeRoundButton.onClick = () => {
             if (this.playerWon) return this.ReturnToMain();
-            if (this.isGameOver) return Engine.NotificationManager.Notify('No more waves.', 'warn');
-            this.changeRoundButton.setEnabled(false);
-            this.changeRoundButton.setCaption('WAVE IN PROGRESS');
+            if (this.roundMode == RoundMode.Combat)
+                return Engine.NotificationManager.Notify('Wave is already in progress.', 'warn');
+            if (this.isGameOver) return Engine.NotificationManager.Notify('No more waves.', 'danger');
             this.setRoundMode(RoundMode.Combat);
+            this.changeRoundButton.buttonIcon.texture = GameAssets.ExclamationIconTexture;
             this.events.emit(WaveManagerEvents.NewWave, `${this.currentRound + 1}`);
         };
 
@@ -103,9 +112,8 @@ export class GameScene extends Scene {
         Engine.TowerManager.update(elapsedMS);
         if (this.isWaveManagerFinished && Engine.Grid.creeps.length == 0) {
             this.isWaveManagerFinished = false;
-            this.changeRoundButton.setEnabled(true);
-            this.changeRoundButton.setCaption('Start');
             this.setRoundMode(RoundMode.Purchase);
+            this.changeRoundButton.buttonIcon.texture = GameAssets.PlayIconTexture;
             Engine.NotificationManager.Notify(
                 `Round ${this.currentRound + 1}/${this.mission.rounds.length} completed.`,
                 'info'
@@ -115,7 +123,7 @@ export class GameScene extends Scene {
             }
             if (this.currentRound + 1 == this.mission.rounds.length) {
                 Engine.NotificationManager.Notify(`Mission victory!!`, 'reward');
-                this.changeRoundButton.setCaption('Return to menu');
+                this.changeRoundButton.buttonIcon.texture = GameAssets.HomeIconTexture;
                 this.playerWon = true;
             } else this.currentRound++;
         }

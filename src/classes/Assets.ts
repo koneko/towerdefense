@@ -61,23 +61,27 @@ export default class GameAssets {
         this.text.y = Engine.app.canvas.height / 2 + 50;
         this.text.anchor.set(0.5, 0.5);
         Engine.app.stage.addChild(this.text);
-        await this.Load('/aclonica.woff2');
-        this.Button01Texture = await this.Load('/assets/gui/button_01.png');
-        this.Button02Texture = await this.Load('/assets/gui/button_02.png');
-        this.Frame01Texture = await this.Load('/assets/gui/frame_01.png');
-        this.Frame02Texture = await this.Load('/assets/gui/frame_02.png');
-        this.Frame03Texture = await this.Load('/assets/gui/frame_03.png');
-        this.FrameBackground = await this.Load('/assets/gui/background_01.png');
-        this.FrameTowerTab = await this.Load('/assets/gui/background_02.png');
-        this.VioletBackground = await this.Load('/assets/gui/frame_violet.png');
-        this.RedBackground = await this.Load('/assets/gui/frame_red.png');
-        this.GreenBackground = await this.Load('/assets/gui/frame_green.png');
-        this.HealthTexture = await this.Load('/assets/gui/heart.png');
-        this.GoldTexture = await this.Load('/assets/gui/money.png');
-        this.WaveTexture = await this.Load('/assets/gui/wave.png');
-        await this.LoadMissions();
-        await this.LoadTowers();
-        await this.LoadCreeps();
+
+        await Promise.all([
+            this.Load('/aclonica.woff2'),
+            this.Load('/assets/gui/button_01.png').then((texture) => (this.Button01Texture = texture)),
+            this.Load('/assets/gui/button_02.png').then((texture) => (this.Button02Texture = texture)),
+            this.Load('/assets/gui/frame_01.png').then((texture) => (this.Frame01Texture = texture)),
+            this.Load('/assets/gui/frame_02.png').then((texture) => (this.Frame02Texture = texture)),
+            this.Load('/assets/gui/frame_03.png').then((texture) => (this.Frame03Texture = texture)),
+            this.Load('/assets/gui/background_01.png').then((texture) => (this.FrameBackground = texture)),
+            this.Load('/assets/gui/background_02.png').then((texture) => (this.FrameTowerTab = texture)),
+            this.Load('/assets/gui/frame_violet.png').then((texture) => (this.VioletBackground = texture)),
+            this.Load('/assets/gui/frame_red.png').then((texture) => (this.RedBackground = texture)),
+            this.Load('/assets/gui/frame_green.png').then((texture) => (this.GreenBackground = texture)),
+            this.Load('/assets/gui/heart.png').then((texture) => (this.HealthTexture = texture)),
+            this.Load('/assets/gui/money.png').then((texture) => (this.GoldTexture = texture)),
+            this.Load('/assets/gui/wave.png').then((texture) => (this.WaveTexture = texture)),
+            this.LoadMissions(),
+            this.LoadTowers(),
+            this.LoadCreeps(),
+        ]);
+
         t.destroy();
         this.text.destroy();
         // Set this.text = true to disallow calling GameAssets.LoadAssets() again

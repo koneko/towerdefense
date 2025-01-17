@@ -74,8 +74,8 @@ export default class Creep extends GameObject {
         const percent = hp / maxHp;
         const width = this.healthBarWidth * percent;
         // ! TODO: MAKE THIS BETTER! It works like this now, but I don't like how its implemented.
-        this.healthBarGraphics.rect(-this.healthBarWidth / 2 + 5, -30, this.healthBarWidth, 10);
-        this.healthBarGraphics.fill({ color: 0x00ff00 });
+        this.healthBarGraphics.rect(-this.healthBarWidth / 2 + 3, -32, this.healthBarWidth + 4, 14);
+        this.healthBarGraphics.fill({ color: 0x000000 });
         this.healthBarGraphics.rect(-this.healthBarWidth / 2 + 5, -30, width, 10);
         this.healthBarGraphics.fill({ color: 0xff0000 });
     }

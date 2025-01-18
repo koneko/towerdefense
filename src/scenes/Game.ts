@@ -73,7 +73,7 @@ export class GameScene extends Scene {
             this.MissionStats.earnGold(playerAward);
         });
         this.sidebar = new Sidebar(GameUIConstants.SidebarRect);
-        this.tooltip = new Tooltip(new PIXI.Rectangle(0, 0, 400, 200));
+        this.tooltip = new Tooltip(new PIXI.Rectangle(0, 0, 350, 160));
         this.changeRoundButton = new Button(GameUIConstants.ChangeRoundButtonRect, '', ButtonTexture.Button01, true);
         this.changeRoundButton.container.removeFromParent();
         this.sidebar.container.addChild(this.changeRoundButton.container);

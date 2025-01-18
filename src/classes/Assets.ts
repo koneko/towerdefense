@@ -13,6 +13,7 @@ export default class GameAssets {
     public static VioletBackground: PIXI.Texture;
     public static RedBackground: PIXI.Texture;
     public static GreenBackground: PIXI.Texture;
+    public static BlueBackground: PIXI.Texture;
     public static Button01Texture: PIXI.Texture;
     public static Button02Texture: PIXI.Texture;
     public static ButtonSmallTexture: PIXI.Texture;
@@ -20,6 +21,7 @@ export default class GameAssets {
     public static GoldTexture: PIXI.Texture;
     public static WaveTexture: PIXI.Texture;
     public static SwordsTexture: PIXI.Texture;
+    public static TitleTexture: PIXI.Texture;
 
     public static PlayIconTexture: PIXI.Texture;
     public static PauseIconTexture: PIXI.Texture;
@@ -86,10 +88,12 @@ export default class GameAssets {
             this.Load('/assets/gui/frame_violet.png').then((texture) => (this.VioletBackground = texture)),
             this.Load('/assets/gui/frame_red.png').then((texture) => (this.RedBackground = texture)),
             this.Load('/assets/gui/frame_green.png').then((texture) => (this.GreenBackground = texture)),
+            this.Load('/assets/gui/frame_blue.png').then((texture) => (this.BlueBackground = texture)),
             this.Load('/assets/gui/heart.png').then((texture) => (this.HealthTexture = texture)),
             this.Load('/assets/gui/money.png').then((texture) => (this.GoldTexture = texture)),
             this.Load('/assets/gui/wave.png').then((texture) => (this.WaveTexture = texture)),
             this.Load('/assets/gui/sword_02.png').then((texture) => (this.SwordsTexture = texture)),
+            this.Load('/assets/gui/title01.png').then((texture) => (this.TitleTexture = texture)),
             this.Load('/assets/gui/icons/play.png').then((texture) => (this.PlayIconTexture = texture)),
             this.Load('/assets/gui/icons/pause.png').then((texture) => (this.PauseIconTexture = texture)),
             this.Load('/assets/gui/icons/exclamation.png').then((texture) => (this.ExclamationIconTexture = texture)),

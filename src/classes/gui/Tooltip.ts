@@ -9,9 +9,10 @@ export default class Tooltip extends GuiObject {
     private bounds: PIXI.Rectangle;
     private tooltipSprite: PIXI.NineSliceSprite;
 
-    public titleText: PIXI.Text;
-    public costText: PIXI.Text;
-    public previewSprite: PIXI.Sprite;
+    private titleText: PIXI.Text;
+    private costText: PIXI.Text;
+    private damageText: PIXI.Text;
+    private gemAmount: PIXI.Text;
     private gemAmountSprite: PIXI.Sprite;
 
     constructor(bounds: PIXI.Rectangle) {
@@ -28,80 +29,113 @@ export default class Tooltip extends GuiObject {
         });
         this.tooltipSprite.width = this.bounds.width;
         this.tooltipSprite.height = this.bounds.height;
-        this.container.addChild(this.tooltipSprite);
 
         this.titleText = new PIXI.Text({
-            x: 87,
-            y: 34,
-            text: 'Something went wrong if you see this.',
-            style: {
+            x: this.tooltipSprite.width / 2,
+            y: -20,
+            zIndex: 5,
+            style: new PIXI.TextStyle({
                 fill: 0xffffff,
-                dropShadow: true,
-            },
+                stroke: {
+                    color: 0x000000,
+                    width: 2,
+                },
+            }),
         });
-        this.titleText.anchor.set(0, 0.5);
-        this.container.addChild(this.titleText);
+        this.titleText.anchor.set(0.5, 0);
+        let title = new PIXI.Sprite({
+            x: this.tooltipSprite.width / 2,
+            y: -20,
+            width: 250,
+            height: 40,
+            texture: GameAssets.TitleTexture,
+        });
+        title.anchor.set(0.5, 0);
 
-        this.previewSprite = new PIXI.Sprite({
-            x: 27,
-            y: 30,
-            width: 50,
+        const costSprite = new PIXI.Sprite({
+            texture: GameAssets.GoldTexture,
+            x: 10,
+            y: 20,
+            width: 56,
             height: 50,
         });
-
-        this.container.addChild(this.previewSprite);
-        let frameSprite = new PIXI.NineSliceSprite({
-            texture: GameAssets.Frame02Texture,
-            leftWidth: 150,
-            topHeight: 150,
-            rightWidth: 150,
-            bottomHeight: 150,
-            roundPixels: true,
-            height: 64,
-            width: 64,
-            x: 20,
-            y: 20,
-        });
-        this.container.addChild(frameSprite);
-
         this.costText = new PIXI.Text({
-            x: 113,
-            y: 40,
+            x: 54,
+            y: 26,
+            zIndex: 5,
             text: 'Something went wrong if you see this.',
             style: {
                 fill: 'gold',
                 fontWeight: 'bold',
-                dropShadow: true,
+                stroke: {
+                    color: 0x000000,
+                    width: 5,
+                },
             },
         });
-        this.container.addChild(this.costText);
-        const goldSprite = new PIXI.Sprite({
-            texture: GameAssets.GoldTexture,
-            x: 82,
-            y: 40,
-            width: 36,
-            height: 34,
-        });
 
-        this.container.addChild(goldSprite);
+        this.damageText = new PIXI.Text({
+            x: 54,
+            y: 65,
+            zIndex: 5,
+            text: 'Something went wrong if you see this.',
+            style: {
+                fill: 'red',
+                fontWeight: 'bold',
+                stroke: {
+                    color: 0x000000,
+                    width: 5,
+                },
+            },
+        });
+        const damageSprite = new PIXI.Sprite({
+            texture: GameAssets.SwordsTexture,
+            x: 22,
+            y: 70,
+            width: 32,
+            height: 32,
+        });
 
         this.gemAmountSprite = new PIXI.Sprite({
             texture: GameAssets.GemAmountIcons[0],
-            x: 300,
-            y: 20,
-            width: 64,
-            height: 64,
+            x: 22,
+            y: 110,
+            width: 32,
+            height: 32,
+        });
+        this.gemAmount = new PIXI.Text({
+            x: 54,
+            y: 108,
+            zIndex: 5,
+            text: 'Something went wrong if you see this.',
+            style: {
+                fill: 'white',
+                fontWeight: 'bold',
+                stroke: {
+                    color: 0x000000,
+                    width: 5,
+                },
+            },
         });
 
+        this.container.addChild(this.tooltipSprite);
+        this.container.addChild(title);
+        this.container.addChild(costSprite);
+        this.container.addChild(damageSprite);
         this.container.addChild(this.gemAmountSprite);
+        this.container.addChild(this.costText);
+        this.container.addChild(this.titleText);
+        this.container.addChild(this.damageText);
+        this.container.addChild(this.gemAmount);
 
         Engine.GameMaster.currentScene.stage.addChild(this.container);
     }
-    public SetContent(title, spriteTexture, damage: number, cost: number, gemSlotsAmount: number) {
+    public SetContent(title, damage: number, cost: number, gemSlotsAmount: number) {
         this.titleText.text = title;
-        this.previewSprite.texture = spriteTexture;
+        this.gemAmount.text = `Has ${gemSlotsAmount} Gem slots.`;
         this.gemAmountSprite.texture = GameAssets.GemAmountIcons[gemSlotsAmount];
-        this.costText.text = cost;
+        this.costText.text = `Costs ${cost} gold.`;
+        this.damageText.text = `Deals ${damage} base damage.`;
     }
     public Show(x, y) {
         this.container.alpha = 1;

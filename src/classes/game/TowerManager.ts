@@ -27,7 +27,6 @@ export default class TowerManager {
             if (this.isPlacingTower) {
                 let cantPlace = cell.checkIfCantPlace();
                 if (cantPlace) {
-                    cell.rangePreview.clear();
                     cell.showRangePreview(true, this.selectedTower.stats.range);
                     this.previewSprite.tint = 0xff0000;
                 } else {

@@ -23,6 +23,8 @@ export class Engine {
     public static GridCellSize: number = 64;
     public static GridColumns: number = 25;
     public static GridRows: number = 17;
+    public static MouseX: number = 0;
+    public static MouseY: number = 0;
 }
 
 export default class GameMaster {

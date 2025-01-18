@@ -3,6 +3,7 @@ import GuiObject from '../GuiObject';
 import GameAssets from '../Assets';
 import { Engine } from '../Bastion';
 import { TowerEvents } from '../game/Tower';
+import { TowerDefinition } from '../Definitions';
 
 class TowerButton extends GuiObject {
     private frameSprite: PIXI.NineSliceSprite;
@@ -46,19 +47,41 @@ class TowerButton extends GuiObject {
         Engine.GameScene.events.on(TowerEvents.TowerPlacedEvent, (name) => {
             this.resetTint();
         });
-        this.container.onpointerenter = (e) => {
-            // add on mouse over info (banner next to sidebar)
+        this.container.onmousemove = (e) => {
+            if (Engine.TowerManager.isPlacingTower) return;
+            this.ShowTooltip();
         };
 
-        this.container.onpointerleave = (e) => {};
+        this.container.onpointerleave = (e) => {
+            Engine.GameScene.tooltip.Hide();
+        };
+    }
+    private ShowTooltip() {
+        let definition: TowerDefinition;
+        GameAssets.Towers.forEach((item) => {
+            if (item.name == this.towerName) {
+                definition = item;
+            }
+        });
+        Engine.GameScene.tooltip.SetContent(
+            this.towerName,
+            definition.stats.damage,
+            definition.stats.cost,
+            definition.stats.gemSlotsAmount
+        );
+        Engine.GameScene.tooltip.Show(Engine.MouseX, Engine.MouseY);
     }
     public onClick(e: PIXI.FederatedPointerEvent): void {
         if (Engine.TowerManager.isPlacingTower && Engine.TowerManager.selectedTower.name != this.towerName) {
             Engine.GameScene.sidebar.towerTab.resetTint();
             Engine.TowerManager.ResetChooseTower();
         }
-        if (this.frameSprite.tint == 0x00ff00) this.frameSprite.tint = 0xffffff;
-        else this.frameSprite.tint = 0x00ff00;
+        Engine.GameScene.tooltip.Hide();
+        if (this.frameSprite.tint == 0x00ff00) {
+            this.frameSprite.tint = 0xffffff;
+            this.ShowTooltip();
+        } else this.frameSprite.tint = 0x00ff00;
+
         Engine.TowerManager.ToggleChoosingTowerLocation(this.towerName);
     }
     public resetTint() {
@@ -97,19 +120,19 @@ export default class TowerTab extends GuiObject {
                 this.container,
                 GameAssets.RedBackground,
                 'Basic Tower',
-                GameAssets.HammerIconTexture
+                GameAssets.Towers[0].texture
             )
         );
         this.towerButtons.push(
             new TowerButton(
-                0,
+                3,
                 1,
                 70,
                 70,
                 this.container,
                 GameAssets.GreenBackground,
                 'Circle Tower',
-                GameAssets.HomeIconTexture
+                GameAssets.Towers[1].texture
             )
         );
     }

@@ -8,6 +8,7 @@ import { TowerEvents } from './Tower';
 
 export enum GridEvents {
     CellMouseOver = 'cellmouseover',
+    CellMouseLeave = 'cellmouseleave',
 }
 
 export class Cell extends GameObject {
@@ -18,7 +19,6 @@ export class Cell extends GameObject {
     public g: PIXI.Graphics;
     public hasTowerPlaced: boolean = false;
     public clickDetector: PIXI.Graphics;
-    public rangePreview: PIXI.Graphics;
 
     constructor(type: TerrainType, row: number, column: number, isPath: boolean) {
         super();
@@ -39,9 +39,7 @@ export class Cell extends GameObject {
             interactive: true,
         });
         // ? TODO: make range preview 1 global graphics obj, child. fix
-        this.rangePreview = new PIXI.Graphics({
-            zIndex: 10,
-        });
+
         this.g = new PIXI.Graphics({
             zIndex: 5,
         });
@@ -49,20 +47,21 @@ export class Cell extends GameObject {
         this.clickDetector.fill({ color: 0xff0000, alpha: 0 });
         this.container.addChild(this.clickDetector);
         this.container.addChild(this.g);
-        this.container.addChild(this.rangePreview);
         this.clickDetector.on('pointerup', (e) => {
-            Engine.Grid.onGridCellClicked(row, column);
+            if (Engine.TowerManager.isPlacingTower) Engine.Grid.onGridCellClicked(row, column);
+            else this.OpenSelectedTowerPanel();
         });
         this.clickDetector.on('pointerenter', (e) => {
             Engine.GameScene.events.emit(GridEvents.CellMouseOver, this);
         });
         this.clickDetector.on('pointerleave', (e) => {
-            this.rangePreview.clear();
+            Engine.GameScene.events.emit(GridEvents.CellMouseLeave, this);
+            Engine.Grid.rangePreview.clear();
         });
         Engine.GameScene.events.on(TowerEvents.TowerPlacedEvent, (_, row, col) => {
             if (row == this.row && col == this.column) {
                 this.hasTowerPlaced = true;
-                this.rangePreview.clear();
+                Engine.Grid.rangePreview.clear();
             }
         });
         Engine.GameScene.events.on(TowerEvents.TowerSoldEvent, (_, row, col) => {
@@ -74,9 +73,17 @@ export class Cell extends GameObject {
     public showRangePreview(invalid, range) {
         let color = 0xffffff;
         if (invalid) color = 0xff0000;
-        this.rangePreview.clear();
-        this.rangePreview.circle(Engine.GridCellSize / 2, Engine.GridCellSize / 2, range * Engine.GridCellSize);
-        this.rangePreview.fill({ color: color, alpha: 0.3 });
+        Engine.Grid.rangePreview.clear();
+        Engine.Grid.rangePreview.circle(
+            this.column * Engine.GridCellSize + Engine.GridCellSize / 2,
+            this.row * Engine.GridCellSize + Engine.GridCellSize / 2,
+            range * Engine.GridCellSize
+        );
+        Engine.Grid.rangePreview.fill({ color: color, alpha: 0.3 });
+    }
+    public OpenSelectedTowerPanel() {
+        if (this.hasTowerPlaced) {
+        }
     }
     public checkIfCantPlace() {
         return (
@@ -104,6 +111,7 @@ export class Cell extends GameObject {
 export class Grid extends GameObject {
     private gameMap: GameMapDefinition;
     private cells: Cell[] = [];
+    public rangePreview: PIXI.Graphics;
     public creeps: Creep[] = [];
     public gridShown: boolean = false;
 
@@ -115,6 +123,7 @@ export class Grid extends GameObject {
         this.bb.y = 0;
         this.bb.width = Engine.GridCellSize * Engine.GridColumns;
         this.bb.height = Engine.GridCellSize * Engine.GridRows;
+
         Engine.GameMaster.currentScene.stage.addChild(this.container);
 
         let background = new PIXI.Sprite(GameAssets.MissionBackgrounds[missionIndex]);
@@ -130,6 +139,10 @@ export class Grid extends GameObject {
                 this.cells.push(cell);
             }
         }
+        this.rangePreview = new PIXI.Graphics({
+            zIndex: 10,
+        });
+        this.container.addChild(this.rangePreview);
     }
     public toggleGrid(force?: 'hide' | 'show') {
         this.cells.forEach((cell) => {

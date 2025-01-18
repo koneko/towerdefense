@@ -55,6 +55,10 @@ import GameUIConstants from './classes/GameUIConstants';
         Engine.NotificationManager.update(ticker.elapsedMS);
         Engine.AnimationManager.update(ticker.elapsedMS);
     });
+    app.canvas.addEventListener('pointermove', function (event) {
+        Engine.MouseX = ((event.clientX - app.canvas.offsetLeft) / app.canvas.offsetWidth) * 1920;
+        Engine.MouseY = ((event.clientY - app.canvas.offsetTop) / app.canvas.offsetHeight) * 1080;
+    });
     Engine.GameMaster.changeScene(new MainScene());
     let params = new URLSearchParams(location.href);
     if (params.entries().next().value[1] == 'game') Engine.GameMaster.changeScene(new GameScene('Mission 1'));

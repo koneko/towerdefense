@@ -6,6 +6,8 @@ export default class GameAssets {
     public static Frame01Texture: PIXI.Texture;
     public static Frame02Texture: PIXI.Texture;
     public static Frame03Texture: PIXI.Texture;
+    public static Frame04Texture: PIXI.Texture;
+    public static FrameInventory: PIXI.Texture;
     public static FrameBackground: PIXI.Texture;
     public static FrameTowerTab: PIXI.Texture;
     public static VioletBackground: PIXI.Texture;
@@ -17,12 +19,14 @@ export default class GameAssets {
     public static HealthTexture: PIXI.Texture;
     public static GoldTexture: PIXI.Texture;
     public static WaveTexture: PIXI.Texture;
+    public static SwordsTexture: PIXI.Texture;
 
     public static PlayIconTexture: PIXI.Texture;
     public static PauseIconTexture: PIXI.Texture;
     public static ExclamationIconTexture: PIXI.Texture;
     public static HomeIconTexture: PIXI.Texture;
     public static HammerIconTexture: PIXI.Texture;
+    public static GemAmountIcons: PIXI.Texture[] = [];
 
     public static Missions: MissionDefinition[];
     public static MissionBackgrounds: PIXI.Texture[] = [];
@@ -75,6 +79,8 @@ export default class GameAssets {
             this.Load('/assets/gui/frame_01.png').then((texture) => (this.Frame01Texture = texture)),
             this.Load('/assets/gui/frame_02.png').then((texture) => (this.Frame02Texture = texture)),
             this.Load('/assets/gui/frame_03.png').then((texture) => (this.Frame03Texture = texture)),
+            this.Load('/assets/gui/frame_04.png').then((texture) => (this.Frame04Texture = texture)),
+            this.Load('/assets/gui/frame_inv.png').then((texture) => (this.FrameInventory = texture)),
             this.Load('/assets/gui/background_01.png').then((texture) => (this.FrameBackground = texture)),
             this.Load('/assets/gui/background_02.png').then((texture) => (this.FrameTowerTab = texture)),
             this.Load('/assets/gui/frame_violet.png').then((texture) => (this.VioletBackground = texture)),
@@ -83,6 +89,7 @@ export default class GameAssets {
             this.Load('/assets/gui/heart.png').then((texture) => (this.HealthTexture = texture)),
             this.Load('/assets/gui/money.png').then((texture) => (this.GoldTexture = texture)),
             this.Load('/assets/gui/wave.png').then((texture) => (this.WaveTexture = texture)),
+            this.Load('/assets/gui/sword_02.png').then((texture) => (this.SwordsTexture = texture)),
             this.Load('/assets/gui/icons/play.png').then((texture) => (this.PlayIconTexture = texture)),
             this.Load('/assets/gui/icons/pause.png').then((texture) => (this.PauseIconTexture = texture)),
             this.Load('/assets/gui/icons/exclamation.png').then((texture) => (this.ExclamationIconTexture = texture)),
@@ -91,12 +98,17 @@ export default class GameAssets {
             this.LoadMissions(),
             this.LoadTowers(),
             this.LoadCreeps(),
+            this.LoadGemIcons(),
         ]);
-
         t.destroy();
         this.text.destroy();
         // Set this.text = true to disallow calling GameAssets.LoadAssets() again
         this.text = true;
+    }
+    private static async LoadGemIcons() {
+        for (let i = 0; i < 7; i++) {
+            this.GemAmountIcons[i] = await this.Load(`/assets/gui/gem_amount_${i}.png`);
+        }
     }
 
     private static async LoadCreeps() {

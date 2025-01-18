@@ -38,6 +38,9 @@ export default class TowerManager {
                 this.previewSprite.texture = this.selectedTower.texture;
             }
         });
+        Engine.GameScene.events.on(GridEvents.CellMouseLeave, (cell: Cell) => {
+            this.previewSprite.texture = null;
+        });
     }
     public ResetChooseTower() {
         this.selectedTower = null;

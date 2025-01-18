@@ -3,6 +3,7 @@ import GuiObject from '../GuiObject';
 import GameAssets from '../Assets';
 import { Engine } from '../Bastion';
 import { TowerEvents } from '../game/Tower';
+import { TowerDefinition } from '../Definitions';
 
 class TowerButton extends GuiObject {
     private frameSprite: PIXI.NineSliceSprite;
@@ -46,11 +47,27 @@ class TowerButton extends GuiObject {
         Engine.GameScene.events.on(TowerEvents.TowerPlacedEvent, (name) => {
             this.resetTint();
         });
-        this.container.onpointerenter = (e) => {
-            // add on mouse over info (banner next to sidebar)
+        this.container.onmousemove = (e) => {
+            if (Engine.TowerManager.isPlacingTower) return;
+            let definition: TowerDefinition;
+            GameAssets.Towers.forEach((item) => {
+                if (item.name == towerName) {
+                    definition = item;
+                }
+            });
+            Engine.GameScene.tooltip.SetContent(
+                this.towerName,
+                definition.texture,
+                definition.stats.damage,
+                definition.stats.cost,
+                definition.stats.gemSlotsAmount
+            );
+            Engine.GameScene.tooltip.Show(Engine.MouseX, Engine.MouseY);
         };
 
-        this.container.onpointerleave = (e) => {};
+        this.container.onpointerleave = (e) => {
+            Engine.GameScene.tooltip.Hide();
+        };
     }
     public onClick(e: PIXI.FederatedPointerEvent): void {
         if (Engine.TowerManager.isPlacingTower && Engine.TowerManager.selectedTower.name != this.towerName) {
@@ -59,6 +76,7 @@ class TowerButton extends GuiObject {
         }
         if (this.frameSprite.tint == 0x00ff00) this.frameSprite.tint = 0xffffff;
         else this.frameSprite.tint = 0x00ff00;
+        Engine.GameScene.tooltip.Hide();
         Engine.TowerManager.ToggleChoosingTowerLocation(this.towerName);
     }
     public resetTint() {
@@ -102,7 +120,7 @@ export default class TowerTab extends GuiObject {
         );
         this.towerButtons.push(
             new TowerButton(
-                0,
+                3,
                 1,
                 70,
                 70,

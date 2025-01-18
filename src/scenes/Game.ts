@@ -12,6 +12,7 @@ import MissionStats from '../classes/game/MissionStats';
 import TowerManager from '../classes/game/TowerManager';
 import { MissionPickerScene } from './MissionPicker';
 import GameUIConstants from '../classes/GameUIConstants';
+import Tooltip from '../classes/gui/Tooltip';
 
 enum RoundMode {
     Purchase = 0,
@@ -27,6 +28,7 @@ export class GameScene extends Scene {
     public ticker: PIXI.Ticker;
     public changeRoundButton: Button;
     public sidebar: Sidebar;
+    public tooltip: Tooltip;
     private currentRound: number = 0;
     private isWaveManagerFinished: boolean = false;
     private playerWon: boolean = false;
@@ -71,6 +73,7 @@ export class GameScene extends Scene {
             this.MissionStats.earnGold(playerAward);
         });
         this.sidebar = new Sidebar(GameUIConstants.SidebarRect);
+        this.tooltip = new Tooltip(new PIXI.Rectangle(0, 0, 400, 200));
         this.changeRoundButton = new Button(GameUIConstants.ChangeRoundButtonRect, '', ButtonTexture.Button01, true);
         this.changeRoundButton.container.removeFromParent();
         this.sidebar.container.addChild(this.changeRoundButton.container);

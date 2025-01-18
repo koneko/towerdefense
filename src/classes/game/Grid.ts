@@ -8,6 +8,7 @@ import { TowerEvents } from './Tower';
 
 export enum GridEvents {
     CellMouseOver = 'cellmouseover',
+    CellMouseLeave = 'cellmouseleave',
 }
 
 export class Cell extends GameObject {
@@ -47,12 +48,14 @@ export class Cell extends GameObject {
         this.container.addChild(this.clickDetector);
         this.container.addChild(this.g);
         this.clickDetector.on('pointerup', (e) => {
-            Engine.Grid.onGridCellClicked(row, column);
+            if (Engine.TowerManager.isPlacingTower) Engine.Grid.onGridCellClicked(row, column);
+            else this.OpenSelectedTowerPanel();
         });
         this.clickDetector.on('pointerenter', (e) => {
             Engine.GameScene.events.emit(GridEvents.CellMouseOver, this);
         });
         this.clickDetector.on('pointerleave', (e) => {
+            Engine.GameScene.events.emit(GridEvents.CellMouseLeave, this);
             Engine.Grid.rangePreview.clear();
         });
         Engine.GameScene.events.on(TowerEvents.TowerPlacedEvent, (_, row, col) => {
@@ -77,6 +80,10 @@ export class Cell extends GameObject {
             range * Engine.GridCellSize
         );
         Engine.Grid.rangePreview.fill({ color: color, alpha: 0.3 });
+    }
+    public OpenSelectedTowerPanel() {
+        if (this.hasTowerPlaced) {
+        }
     }
     public checkIfCantPlace() {
         return (

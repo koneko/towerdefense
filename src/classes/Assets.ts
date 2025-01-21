@@ -29,6 +29,7 @@ export default class GameAssets {
     public static HomeIconTexture: PIXI.Texture;
     public static HammerIconTexture: PIXI.Texture;
     public static XIconTexture: PIXI.Texture;
+    public static PlusIconTexture: PIXI.Texture;
     public static GemAmountIcons: PIXI.Texture[] = [];
 
     public static Missions: MissionDefinition[];
@@ -101,6 +102,7 @@ export default class GameAssets {
             this.Load('/assets/gui/icons/home.png').then((texture) => (this.HomeIconTexture = texture)),
             this.Load('/assets/gui/icons/hammer.png').then((texture) => (this.HammerIconTexture = texture)),
             this.Load('/assets/gui/icons/cross.png').then((texture) => (this.XIconTexture = texture)),
+            this.Load('/assets/gui/icons/plus.png').then((texture) => (this.PlusIconTexture = texture)),
             this.LoadMissions(),
             this.LoadTowers(),
             this.LoadCreeps(),

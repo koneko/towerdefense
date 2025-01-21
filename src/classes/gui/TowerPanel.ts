@@ -5,13 +5,48 @@ import { Engine } from '../Bastion';
 import GameUIConstants from '../GameUIConstants';
 import Button, { ButtonTexture } from './Button';
 import { Tower } from '../game/Tower';
+import Gem from '../game/Gem';
+
+class VisualGemSlot extends GuiObject {
+    private background: PIXI.Sprite;
+    private iconSprite: PIXI.Sprite;
+    private i: number = 0;
+    constructor(index: number, parent: PIXI.Container, gem: Gem | null) {
+        super(true);
+        let gtexture;
+        if (gem == null) {
+            gtexture = GameAssets.PlusIconTexture;
+        } else {
+            gtexture = gem.texture;
+        }
+        this.container.x = 10;
+        this.container.y = index * Engine.GridCellSize + 300;
+        this.background = new PIXI.Sprite({
+            texture: GameAssets.FrameInventory,
+        });
+        this.iconSprite = new PIXI.Sprite({
+            texture: gtexture,
+        });
+        this.background.width = Engine.GridCellSize;
+        this.background.height = Engine.GridCellSize;
+        this.iconSprite.x = Engine.GridCellSize / 2;
+        this.iconSprite.y = Engine.GridCellSize / 2;
+        this.iconSprite.width = Engine.GridCellSize / 2;
+        this.iconSprite.height = Engine.GridCellSize / 2;
+        this.iconSprite.anchor.set(0.5, 0.5);
+        this.container.addChild(this.background);
+        this.container.addChild(this.iconSprite);
+        parent.addChild(this.container);
+    }
+    public onClick(e: PIXI.FederatedPointerEvent): void {}
+}
 
 export default class TowerPanel extends GuiObject {
     private bounds: PIXI.Rectangle;
     private towerPanel: PIXI.NineSliceSprite;
     private closeBtn: Button;
     public isShown: boolean = false;
-    titleText: PIXI.Text;
+    public titleText: PIXI.Text;
 
     constructor(bounds: PIXI.Rectangle) {
         super(false);
@@ -64,10 +99,18 @@ export default class TowerPanel extends GuiObject {
         this.titleText.anchor.set(0.5, 0);
         this.container.addChild(this.titleText);
     }
+    private MakeSlots(tower: Tower) {
+        let amount = tower.definition.stats.gemSlotsAmount;
+        amount = 6;
+        for (let i = 0; i < amount; i++) {
+            const element = new VisualGemSlot(i, this.container, null);
+        }
+    }
     public Show(tower: Tower) {
         let mouseX = Engine.MouseX;
         this.isShown = true;
         this.SetContent(tower);
+        this.MakeSlots(tower);
         if (mouseX < 900) {
             this.ShowRight();
         } else {
@@ -81,7 +124,7 @@ export default class TowerPanel extends GuiObject {
         this.towerPanel.x = -100;
         this.container.x = 0;
         this.container.alpha = 1;
-        this.closeBtn.container.x = this.container.width - 150;
+        this.closeBtn.container.x = this.bounds.width - 150;
     }
     private ShowRight() {
         this.towerPanel.x = -10;

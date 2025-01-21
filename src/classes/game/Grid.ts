@@ -84,6 +84,8 @@ export class Cell extends GameObject {
         if (this.hasTowerPlaced) {
             const tower = Engine.TowerManager.GetTowerByRowAndCol(this.row, this.column);
             Engine.GameScene.towerPanel.Show(tower);
+        } else {
+            // TODO: hide the sidepanel somehow
         }
     }
     public checkIfCantPlace() {

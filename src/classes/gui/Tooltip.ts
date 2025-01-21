@@ -105,7 +105,7 @@ export default class Tooltip extends GuiObject {
         });
         this.gemAmount = new PIXI.Text({
             x: 54,
-            y: 108,
+            y: 105,
             zIndex: 5,
             text: 'Something went wrong if you see this.',
             style: {

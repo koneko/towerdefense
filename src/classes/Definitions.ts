@@ -72,16 +72,17 @@ export type TowerStatsDefinition = {
 
 export type PathDefinition = [[row: number, column: number]];
 
-export enum CreepType {
-    Basic = 0,
-    Quick = 1,
-    Tank = 2,
-}
-
 export enum TerrainType {
     Restricted = 0,
     Buildable = 1,
     Path = 9,
+}
+
+// Make sure to sync these with the respective JSON files.
+export enum CreepType {
+    Basic = 0,
+    Quick = 1,
+    Tank = 2,
 }
 
 export enum GemType {

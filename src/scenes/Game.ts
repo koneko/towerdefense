@@ -13,6 +13,7 @@ import TowerManager from '../classes/game/TowerManager';
 import { MissionPickerScene } from './MissionPicker';
 import GameUIConstants from '../classes/GameUIConstants';
 import Tooltip from '../classes/gui/Tooltip';
+import TowerPanel from '../classes/gui/TowerPanel';
 
 enum RoundMode {
     Purchase = 0,
@@ -29,6 +30,7 @@ export class GameScene extends Scene {
     public changeRoundButton: Button;
     public sidebar: Sidebar;
     public tooltip: Tooltip;
+    public towerPanel: TowerPanel;
     private currentRound: number = 0;
     private isWaveManagerFinished: boolean = false;
     private playerWon: boolean = false;
@@ -72,6 +74,7 @@ export class GameScene extends Scene {
         this.events.on(CreepEvents.Died, (playerAward, creepThatDied) => {
             this.MissionStats.earnGold(playerAward);
         });
+        this.towerPanel = new TowerPanel(GameUIConstants.SidebarRect);
         this.sidebar = new Sidebar(GameUIConstants.SidebarRect);
         this.tooltip = new Tooltip(new PIXI.Rectangle(0, 0, 350, 160));
         this.changeRoundButton = new Button(GameUIConstants.ChangeRoundButtonRect, '', ButtonTexture.Button01, true);

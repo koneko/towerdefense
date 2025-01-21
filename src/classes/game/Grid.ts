@@ -38,7 +38,6 @@ export class Cell extends GameObject {
             zIndex: 99,
             interactive: true,
         });
-        // ? TODO: make range preview 1 global graphics obj, child. fix
 
         this.g = new PIXI.Graphics({
             zIndex: 5,
@@ -83,6 +82,8 @@ export class Cell extends GameObject {
     }
     public OpenSelectedTowerPanel() {
         if (this.hasTowerPlaced) {
+            const tower = Engine.TowerManager.GetTowerByRowAndCol(this.row, this.column);
+            Engine.GameScene.towerPanel.Show(tower);
         }
     }
     public checkIfCantPlace() {

@@ -5,27 +5,12 @@ import { TowerDefinition } from '../Definitions';
 import { Cell } from './Grid';
 import { TowerBehaviours } from './TowerManager';
 import Projectile, { calculateAngleToPoint } from './Projectile';
-import GameAssets from '../Assets';
 import Creep from './Creep';
+import Gem from './Gem';
 
 function distance(x1, y1, x2, y2) {
     return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 }
-
-export type TowerInstance = {
-    row: number;
-    column: number;
-    sprite: PIXI.Sprite;
-    projectiles: Array<any>;
-    baseDamage: number;
-    damage: number;
-    cooldown: number;
-    ticksToFireAt: number;
-    slottedGems: Array<any>;
-    cost: number;
-    baseRange: number;
-    range: number;
-};
 
 export enum TowerEvents {
     TowerPlacedEvent = 'towerPlacedEvent',
@@ -35,9 +20,11 @@ export enum TowerEvents {
 export class Tower extends GameObject {
     public row: number;
     public column: number;
+    public definition: TowerDefinition;
+    public slottedGems: Array<Gem>;
+    public damageDealt: number = 0;
     private projectiles: Projectile[] = [];
     private behaviour: string;
-    private definition: TowerDefinition;
     private sprite: PIXI.Sprite;
     private ticksUntilNextShot: number;
     private graphics: PIXI.Graphics = new PIXI.Graphics();
@@ -51,7 +38,6 @@ export class Tower extends GameObject {
         this.definition = definition;
         this.ticksUntilNextShot = 0;
         this.parent = Engine.Grid.getCellByRowAndCol(row, column);
-        console.log(texture);
         this.sprite = new PIXI.Sprite({
             texture: texture,
             height: Engine.GridCellSize,
@@ -97,6 +83,7 @@ export class Tower extends GameObject {
     public update(elapsedMS: any): void {
         this.projectiles.forEach((proj) => {
             if (proj.deleteMe) {
+                this.damageDealt += this.definition.stats.damage;
                 this.projectiles.splice(this.projectiles.indexOf(proj), 1);
                 proj = null;
             } else proj.update(elapsedMS);

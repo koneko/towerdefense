@@ -76,6 +76,7 @@ class TowerButton extends GuiObject {
             Engine.GameScene.sidebar.towerTab.resetTint();
             Engine.TowerManager.ResetChooseTower();
         }
+        Engine.GameScene.towerPanel.Hide();
         Engine.GameScene.tooltip.Hide();
         if (this.frameSprite.tint == 0x00ff00) {
             this.frameSprite.tint = 0xffffff;

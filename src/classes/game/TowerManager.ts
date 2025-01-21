@@ -71,7 +71,7 @@ export default class TowerManager {
                     'TowerManager.selectedTower is null when trying to place tower.',
                     'danger'
                 );
-                throw console.warn('TowerManager.selectedTower is null when trying to place tower.');
+                return console.warn('TowerManager.selectedTower is null when trying to place tower.');
             }
             this.PlaceTower(this.selectedTower, row, column, this.selectedTower.behaviour);
         }

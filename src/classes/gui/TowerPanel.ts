@@ -1,0 +1,97 @@
+import * as PIXI from 'pixi.js';
+import GuiObject from '../GuiObject';
+import GameAssets from '../Assets';
+import { Engine } from '../Bastion';
+import GameUIConstants from '../GameUIConstants';
+import Button, { ButtonTexture } from './Button';
+import { Tower } from '../game/Tower';
+
+export default class TowerPanel extends GuiObject {
+    private bounds: PIXI.Rectangle;
+    private towerPanel: PIXI.NineSliceSprite;
+    private closeBtn: Button;
+    public isShown: boolean = false;
+    titleText: PIXI.Text;
+
+    constructor(bounds: PIXI.Rectangle) {
+        super(false);
+        this.bounds = bounds;
+        this.towerPanel = new PIXI.NineSliceSprite({
+            texture: GameAssets.Frame03Texture,
+            leftWidth: 100,
+            topHeight: 100,
+            rightWidth: 100,
+            bottomHeight: 100,
+        });
+        this.towerPanel.width = this.bounds.width;
+        this.towerPanel.height = this.bounds.height - this.bounds.height / 3.5;
+        this.closeBtn = new Button(new PIXI.Rectangle(-20, -20, 60, 60), '', ButtonTexture.Button01, true);
+        this.closeBtn.container.removeFromParent();
+        // Added custom button logic to still keep all the regular events for the button, just have an icon instead of text.
+        // TODO: maybe make this better? add like a seperate class for icon buttons or smth
+        this.closeBtn.CustomButtonLogic = () => {
+            this.closeBtn.buttonIcon = new PIXI.Sprite({
+                texture: GameAssets.XIconTexture,
+                x: this.closeBtn.container.width / 2,
+                y: this.closeBtn.container.height / 2,
+                scale: 0.2,
+            });
+            this.closeBtn.buttonIcon.anchor.set(0.5, 0.5);
+            this.closeBtn.container.addChild(this.closeBtn.buttonIcon);
+        };
+        this.closeBtn.onClick = () => {
+            this.Hide();
+        };
+        this.Hide();
+        this.closeBtn.CustomButtonLogic();
+        this.container.y = Engine.app.canvas.height / 2 - Engine.app.canvas.height / 2.7;
+        this.container.addChild(this.towerPanel);
+        this.container.addChild(this.closeBtn.container);
+        Engine.GameMaster.currentScene.stage.addChild(this.container);
+
+        this.titleText = new PIXI.Text({
+            x: this.bounds.width / 3,
+            y: 50,
+            zIndex: 5,
+            style: new PIXI.TextStyle({
+                fill: 0xffffff,
+                stroke: {
+                    color: 0x000000,
+                    width: 2,
+                },
+            }),
+        });
+        this.titleText.anchor.set(0.5, 0);
+        this.container.addChild(this.titleText);
+    }
+    public Show(tower: Tower) {
+        let mouseX = Engine.MouseX;
+        this.isShown = true;
+        this.SetContent(tower);
+        if (mouseX < 900) {
+            this.ShowRight();
+        } else {
+            this.ShowLeft();
+        }
+    }
+    private SetContent(tower: Tower) {
+        this.titleText.text = tower.definition.name;
+    }
+    private ShowLeft() {
+        this.towerPanel.x = -100;
+        this.container.x = 0;
+        this.container.alpha = 1;
+        this.closeBtn.container.x = this.container.width - 150;
+    }
+    private ShowRight() {
+        this.towerPanel.x = -10;
+        this.container.x = GameUIConstants.SidebarRect.x - 210;
+        this.closeBtn.container.x = -20;
+        this.container.alpha = 1;
+    }
+    public Hide() {
+        this.isShown = false;
+        this.container.alpha = 0;
+        this.container.x = GameUIConstants.SidebarRect.x + 10;
+    }
+}

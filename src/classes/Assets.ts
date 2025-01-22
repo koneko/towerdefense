@@ -22,6 +22,7 @@ export default class GameAssets {
     public static WaveTexture: PIXI.Texture;
     public static SwordsTexture: PIXI.Texture;
     public static TitleTexture: PIXI.Texture;
+    public static GemFrame: PIXI.Texture;
 
     public static PlayIconTexture: PIXI.Texture;
     public static PauseIconTexture: PIXI.Texture;
@@ -92,6 +93,7 @@ export default class GameAssets {
             this.Load('./assets/gui/frame_red.png').then((texture) => (this.RedBackground = texture)),
             this.Load('./assets/gui/frame_green.png').then((texture) => (this.GreenBackground = texture)),
             this.Load('./assets/gui/frame_blue.png').then((texture) => (this.BlueBackground = texture)),
+            this.Load('./assets/gui/gem_frame.png').then((texture) => (this.GemFrame = texture)),
             this.Load('./assets/gui/heart.png').then((texture) => (this.HealthTexture = texture)),
             this.Load('./assets/gui/money.png').then((texture) => (this.GoldTexture = texture)),
             this.Load('./assets/gui/wave.png').then((texture) => (this.WaveTexture = texture)),

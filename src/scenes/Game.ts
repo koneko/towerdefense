@@ -124,14 +124,17 @@ export class GameScene extends Scene {
                 `Round ${this.currentRound + 1}/${this.mission.rounds.length} completed.`,
                 'info'
             );
-            if (this.currentRound == this.mission.rounds.length) {
+            if (this.currentRound + 2 == this.mission.rounds.length) {
                 Engine.NotificationManager.Notify(`Final round.`, 'danger');
             }
             if (this.currentRound + 1 == this.mission.rounds.length) {
                 Engine.NotificationManager.Notify(`Mission victory!!`, 'reward');
                 this.changeRoundButton.buttonIcon.texture = GameAssets.HomeIconTexture;
                 this.playerWon = true;
-            } else this.currentRound++;
+            } else {
+                this.currentRound++;
+                this.OfferPlayerGems();
+            }
         }
 
         if (this.MissionStats.getHP() <= 0) {
@@ -141,6 +144,11 @@ export class GameScene extends Scene {
             this.isGameOver = true;
             this.ShowScoreScreen(false);
         }
+    }
+    private OfferPlayerGems() {
+        Engine.Grid.gridInteractionEnabled = false;
+
+        Engine.Grid.gridInteractionEnabled = true;
     }
 
     private ShowScoreScreen(lost) {

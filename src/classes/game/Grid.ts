@@ -47,13 +47,16 @@ export class Cell extends GameObject {
         this.container.addChild(this.clickDetector);
         this.container.addChild(this.g);
         this.clickDetector.on('pointerup', (e) => {
+            if (!Engine.Grid.gridInteractionEnabled) return;
             if (Engine.TowerManager.isPlacingTower) Engine.Grid.onGridCellClicked(row, column);
             else this.OpenSelectedTowerPanel();
         });
         this.clickDetector.on('pointerenter', (e) => {
+            if (!Engine.Grid.gridInteractionEnabled) return;
             Engine.GameScene.events.emit(GridEvents.CellMouseOver, this);
         });
         this.clickDetector.on('pointerleave', (e) => {
+            if (!Engine.Grid.gridInteractionEnabled) return;
             Engine.GameScene.events.emit(GridEvents.CellMouseLeave, this);
             Engine.Grid.rangePreview.clear();
         });
@@ -84,8 +87,6 @@ export class Cell extends GameObject {
         if (this.hasTowerPlaced) {
             const tower = Engine.TowerManager.GetTowerByRowAndCol(this.row, this.column);
             Engine.GameScene.towerPanel.Show(tower);
-        } else {
-            // TODO: hide the sidepanel somehow
         }
     }
     public checkIfCantPlace() {
@@ -117,6 +118,7 @@ export class Grid extends GameObject {
     public rangePreview: PIXI.Graphics;
     public creeps: Creep[] = [];
     public gridShown: boolean = false;
+    public gridInteractionEnabled = true;
 
     constructor(map: GameMapDefinition, missionIndex) {
         super();

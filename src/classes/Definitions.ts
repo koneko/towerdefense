@@ -85,7 +85,7 @@ export type GenericGemImprovement = {
     attackSpeedUp: number;
     rangeUp: number;
     timeToLiveUp: number;
-    pieceUp: number;
+    pierceUp: number;
 };
 
 export type PathDefinition = [[row: number, column: number]];

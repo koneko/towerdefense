@@ -8,8 +8,8 @@ import { Tower } from '../game/Tower';
 import Gem from '../game/Gem';
 
 class VisualGemSlot extends GuiObject {
+    public iconSprite: PIXI.Sprite;
     private background: PIXI.Sprite;
-    private iconSprite: PIXI.Sprite;
     private i: number = 0;
     constructor(index: number, parent: PIXI.Container, gem: Gem | null) {
         super(true);

@@ -1,0 +1,26 @@
+[
+    {
+        "name": "Fire Gem",
+        "type": "Fire",
+        "totalLevels": 2,
+        "textures": [],
+        "cantCombineWith": [],
+        "specialCombine": ["Yeti"],
+        "genericImprovements": [
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 100,
+                "rangeUp": 0.5,
+                "timeToLiveUp": 0,
+                "pierceUp": 1
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 100,
+                "rangeUp": 0.5,
+                "timeToLiveUp": 0,
+                "pierceUp": 1
+            }
+        ]
+    }
+]

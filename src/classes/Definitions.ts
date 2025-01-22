@@ -70,6 +70,24 @@ export type TowerStatsDefinition = {
     range: number;
 };
 
+export type GemDefinition = {
+    name: string;
+    type: GemType;
+    totalLevels: number;
+    textures: PIXI.Texture[];
+    cantCombineWith: GemType[];
+    specialCombine: GemType[];
+    genericImprovements: GenericGemImprovement[];
+};
+
+export type GenericGemImprovement = {
+    damageUp: number;
+    attackSpeedUp: number;
+    rangeUp: number;
+    timeToLiveUp: number;
+    pieceUp: number;
+};
+
 export type PathDefinition = [[row: number, column: number]];
 
 export enum TerrainType {

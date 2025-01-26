@@ -85,6 +85,7 @@ export class GameScene extends Scene {
         this.tooltip = new Tooltip(new PIXI.Rectangle(0, 0, 350, 160));
         // Added custom button logic to still keep all the regular events for the button, just have an icon instead of text.
         // TODO: maybe make this better? add like a seperate class for icon buttons or smth
+        // nevermind, i can't be bothered to do this, and this works fine.
         this.changeRoundButton.CustomButtonLogic = () => {
             this.changeRoundButton.buttonIcon = new PIXI.Sprite({
                 texture: GameAssets.PlayIconTexture,
@@ -157,6 +158,9 @@ export class GameScene extends Scene {
         this.dimGraphics.rect(0, 0, Engine.app.canvas.width, Engine.app.canvas.height);
         this.dimGraphics.fill({ color: 0x000000, alpha: 0.5 });
     }
+    public UndarkenScreen() {
+        this.dimGraphics.clear();
+    }
     private OfferPlayerGems() {
         Engine.Grid.gridInteractionEnabled = false;
         Engine.GameScene.sidebar.towerTab.resetTint();
@@ -165,24 +169,41 @@ export class GameScene extends Scene {
         let gemsToOffer = this.mission.rounds[this.currentRound].offeredGems;
         this.DarkenScreen();
         this.offerGemsSprite = new PIXI.NineSliceSprite({
-            width: 400,
-            height: 200,
+            width: 380,
+            height: 150,
             texture: GameAssets.Frame01Texture,
             leftWidth: 100,
             topHeight: 100,
             rightWidth: 100,
             bottomHeight: 100,
             zIndex: this.dimGraphics.zIndex + 1,
-            x: Engine.app.canvas.width / 2 - 200,
-            y: Engine.app.canvas.height / 2 - 100,
+            x: Engine.app.canvas.width / 2 - 190,
+            y: Engine.app.canvas.height / 2 - 75,
         });
         Engine.GameMaster.currentScene.stage.addChildAt(this.offerGemsSprite, 0);
+        let offerText = new PIXI.Text({
+            x: Engine.app.canvas.width / 4,
+            y: Engine.app.canvas.height / 4,
+            zIndex: this.dimGraphics.zIndex + 1,
+            text: 'Choose a Gem as your reward for beating this round!',
+            style: {
+                fontSize: 40,
+                fill: 'orange',
+                fontWeight: 'bold',
+                stroke: {
+                    color: 0x000000,
+                    width: 5,
+                },
+            },
+        });
+        // offerText.x -= offerText.width;
+        Engine.GameMaster.currentScene.stage.addChildAt(offerText, 0);
         gemsToOffer.forEach((gType, index) => {
             let _Gem = new Gem(gType);
             let vGem = new VisualGemSlot(0, Engine.app.stage, _Gem);
             this.visualGems.push(vGem);
-            vGem.container.x = this.offerGemsSprite.x + 69 * (index + 1);
-            vGem.container.y = this.offerGemsSprite.y + 50;
+            vGem.container.x = this.offerGemsSprite.x - 15 + 69 * (index + 1);
+            vGem.container.y = this.offerGemsSprite.y + 40;
             vGem.container.onpointermove = () => {
                 Engine.GameScene.tooltip.SetContentGem(_Gem);
                 Engine.GameScene.tooltip.Show(Engine.MouseX, Engine.MouseY);
@@ -192,16 +213,18 @@ export class GameScene extends Scene {
             };
             vGem.onClick = () => {
                 Engine.GameScene.tooltip.Hide();
+                offerText.destroy();
                 this.PlayerPickedGem(_Gem);
             };
         });
     }
     private PlayerPickedGem(gem: Gem) {
         this.offerGemsSprite.destroy();
-        this.dimGraphics.clear();
+        this.UndarkenScreen();
         this.visualGems.forEach((item) => item.destroy());
         Engine.Grid.gridInteractionEnabled = true;
-        Engine.NotificationManager.Notify(gem.gemDefinition.name + ' added to your inventory.', 'gemaward');
+        this.MissionStats.giveGem(gem);
+        Engine.NotificationManager.Notify(gem.definition.name + ' added to your inventory.', 'gemaward');
     }
 
     private ShowScoreScreen(lost) {
@@ -238,5 +261,4 @@ export class GameScene extends Scene {
         Engine.GameMaster.currentScene.stage.removeChildren();
         Engine.GameMaster.changeScene(new MissionPickerScene());
     }
-    public onTowerPlaced() {}
 }

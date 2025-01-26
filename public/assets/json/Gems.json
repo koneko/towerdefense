@@ -1,7 +1,7 @@
 [
     {
         "name": "Fire Gem",
-        "description": "Forged from molten lava, the Fire Gem imbues your tower's attacks and adds 50% extra fire damage. It can be merged with any gem and is common.",
+        "description": "Forged from molten lava, the Fire Gem imbues your tower's attacks and adds 50% extra fire damage. It can be merged with any gem and is common. This text shouldn't be long.",
         "type": "Fire",
         "totalLevels": 2,
         "textures": [],

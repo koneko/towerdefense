@@ -178,8 +178,8 @@ export default class Tooltip extends GuiObject {
         this.gemAmount.alpha = 0;
         this.gemDescriptionText.alpha = 1;
 
-        this.titleText.text = `Lv. ${gem.level} ` + gem.gemDefinition.name;
-        this.gemDescriptionText.text = gem.gemDefinition.description;
+        this.titleText.text = `Lv. ${gem.level} ` + gem.definition.name;
+        this.gemDescriptionText.text = gem.definition.description;
     }
     public Show(x, y) {
         this.container.alpha = 1;

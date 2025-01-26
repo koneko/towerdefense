@@ -3,6 +3,7 @@ import { Engine } from '../Bastion';
 import GameObject from '../GameObject';
 import * as PIXI from 'pixi.js';
 import { WaveManagerEvents } from './WaveManager';
+import Gem from './Gem';
 
 export default class MissionStats extends GameObject {
     private hp: number = 100;
@@ -10,6 +11,10 @@ export default class MissionStats extends GameObject {
     private goldText: PIXI.Text;
     private healthText: PIXI.Text;
     private waveText: PIXI.Text;
+    private inventory: Gem[] = [];
+
+    // TODO: implement score keeping for leaderboards.
+    private score: number = 0;
 
     public getHP() {
         return this.hp;
@@ -42,6 +47,15 @@ export default class MissionStats extends GameObject {
     public spendGold(amount: number) {
         this.gold -= amount;
         this.goldText.text = this.gold;
+    }
+
+    public giveGem(gem: Gem) {
+        this.inventory.push(gem);
+        Engine.GameScene.events.emit('givegem', gem);
+    }
+
+    public getInventory() {
+        return this.inventory;
     }
 
     constructor(initialHP: number, initialGold: number) {

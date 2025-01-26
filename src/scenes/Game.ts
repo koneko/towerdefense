@@ -13,11 +13,13 @@ import TowerManager from '../classes/game/TowerManager';
 import { MissionPickerScene } from './MissionPicker';
 import GameUIConstants from '../classes/GameUIConstants';
 import Tooltip from '../classes/gui/Tooltip';
-import TowerPanel from '../classes/gui/TowerPanel';
+import TowerPanel, { VisualGemSlot } from '../classes/gui/TowerPanel';
+import Gem from '../classes/game/Gem';
 
 enum RoundMode {
     Purchase = 0,
     Combat = 1,
+    OfferingGems = 2,
 }
 
 export class GameScene extends Scene {
@@ -31,6 +33,13 @@ export class GameScene extends Scene {
     public sidebar: Sidebar;
     public tooltip: Tooltip;
     public towerPanel: TowerPanel;
+    public dimGraphics: PIXI.Graphics = new PIXI.Graphics({
+        x: 0,
+        y: 0,
+        zIndex: 120,
+    });
+    private offerGemsSprite: PIXI.NineSliceSprite;
+    private visualGems: VisualGemSlot[] = [];
     private currentRound: number = 0;
     private isWaveManagerFinished: boolean = false;
     private playerWon: boolean = false;
@@ -47,13 +56,6 @@ export class GameScene extends Scene {
         });
     }
     public init() {
-        this.ticker = new PIXI.Ticker();
-        this.ticker.maxFPS = 60;
-        this.ticker.minFPS = 30;
-        this.ticker.add(() => {
-            if (this.update) this.update(this.ticker.elapsedMS);
-        });
-        this.ticker.start();
         new Grid(this.mission.gameMap, this.missionIndex);
         new TowerManager();
         new WaveManager(this.mission.rounds, this.mission.gameMap.paths);
@@ -76,10 +78,11 @@ export class GameScene extends Scene {
         });
         this.towerPanel = new TowerPanel(GameUIConstants.SidebarRect);
         this.sidebar = new Sidebar(GameUIConstants.SidebarRect);
-        this.tooltip = new Tooltip(new PIXI.Rectangle(0, 0, 350, 160));
         this.changeRoundButton = new Button(GameUIConstants.ChangeRoundButtonRect, '', ButtonTexture.Button01, true);
         this.changeRoundButton.container.removeFromParent();
         this.sidebar.container.addChild(this.changeRoundButton.container);
+        Engine.GameMaster.currentScene.stage.addChildAt(this.dimGraphics, 0);
+        this.tooltip = new Tooltip(new PIXI.Rectangle(0, 0, 350, 160));
         // Added custom button logic to still keep all the regular events for the button, just have an icon instead of text.
         // TODO: maybe make this better? add like a seperate class for icon buttons or smth
         this.changeRoundButton.CustomButtonLogic = () => {
@@ -98,12 +101,19 @@ export class GameScene extends Scene {
             if (this.roundMode == RoundMode.Combat)
                 return Engine.NotificationManager.Notify('Wave is already in progress.', 'warn');
             if (this.isGameOver) return Engine.NotificationManager.Notify('No more waves.', 'danger');
+            if (this.roundMode == RoundMode.OfferingGems) return;
             this.setRoundMode(RoundMode.Combat);
             this.changeRoundButton.buttonIcon.texture = GameAssets.ExclamationIconTexture;
             this.events.emit(WaveManagerEvents.NewWave, `${this.currentRound + 1}`);
         };
-
         this.MissionStats = new MissionStats(100, 200);
+        this.ticker = new PIXI.Ticker();
+        this.ticker.maxFPS = 60;
+        this.ticker.minFPS = 30;
+        this.ticker.add(() => {
+            if (this.update) this.update(this.ticker.elapsedMS);
+        });
+        this.ticker.start();
     }
     public update(elapsedMS) {
         if (this.isGameOver) {
@@ -116,6 +126,7 @@ export class GameScene extends Scene {
         Engine.WaveManager.update(elapsedMS);
         Engine.Grid.update(elapsedMS);
         Engine.TowerManager.update(elapsedMS);
+        // Means the round is finished.
         if (this.isWaveManagerFinished && Engine.Grid.creeps.length == 0) {
             this.isWaveManagerFinished = false;
             this.setRoundMode(RoundMode.Purchase);
@@ -124,16 +135,13 @@ export class GameScene extends Scene {
                 `Round ${this.currentRound + 1}/${this.mission.rounds.length} completed.`,
                 'info'
             );
-            if (this.currentRound + 2 == this.mission.rounds.length) {
-                Engine.NotificationManager.Notify(`Final round.`, 'danger');
-            }
             if (this.currentRound + 1 == this.mission.rounds.length) {
                 Engine.NotificationManager.Notify(`Mission victory!!`, 'reward');
                 this.changeRoundButton.buttonIcon.texture = GameAssets.HomeIconTexture;
                 this.playerWon = true;
             } else {
-                this.currentRound++;
                 this.OfferPlayerGems();
+                this.currentRound++;
             }
         }
 
@@ -145,14 +153,59 @@ export class GameScene extends Scene {
             this.ShowScoreScreen(false);
         }
     }
+    public DarkenScreen() {
+        this.dimGraphics.rect(0, 0, Engine.app.canvas.width, Engine.app.canvas.height);
+        this.dimGraphics.fill({ color: 0x000000, alpha: 0.5 });
+    }
     private OfferPlayerGems() {
         Engine.Grid.gridInteractionEnabled = false;
-
+        Engine.GameScene.sidebar.towerTab.resetTint();
+        Engine.TowerManager.ResetChooseTower();
+        this.setRoundMode(RoundMode.OfferingGems);
+        let gemsToOffer = this.mission.rounds[this.currentRound].offeredGems;
+        this.DarkenScreen();
+        this.offerGemsSprite = new PIXI.NineSliceSprite({
+            width: 400,
+            height: 200,
+            texture: GameAssets.Frame01Texture,
+            leftWidth: 100,
+            topHeight: 100,
+            rightWidth: 100,
+            bottomHeight: 100,
+            zIndex: this.dimGraphics.zIndex + 1,
+            x: Engine.app.canvas.width / 2 - 200,
+            y: Engine.app.canvas.height / 2 - 100,
+        });
+        Engine.GameMaster.currentScene.stage.addChildAt(this.offerGemsSprite, 0);
+        gemsToOffer.forEach((gType, index) => {
+            let _Gem = new Gem(gType);
+            let vGem = new VisualGemSlot(0, Engine.app.stage, _Gem);
+            this.visualGems.push(vGem);
+            vGem.container.x = this.offerGemsSprite.x + 69 * (index + 1);
+            vGem.container.y = this.offerGemsSprite.y + 50;
+            vGem.container.onpointermove = () => {
+                Engine.GameScene.tooltip.SetContentGem(_Gem);
+                Engine.GameScene.tooltip.Show(Engine.MouseX, Engine.MouseY);
+            };
+            vGem.container.onpointerleave = () => {
+                Engine.GameScene.tooltip.Hide();
+            };
+            vGem.onClick = () => {
+                Engine.GameScene.tooltip.Hide();
+                this.PlayerPickedGem(_Gem);
+            };
+        });
+    }
+    private PlayerPickedGem(gem: Gem) {
+        this.offerGemsSprite.destroy();
+        this.dimGraphics.clear();
+        this.visualGems.forEach((item) => item.destroy());
         Engine.Grid.gridInteractionEnabled = true;
+        Engine.NotificationManager.Notify(gem.gemDefinition.name + ' added to your inventory.', 'gemaward');
     }
 
     private ShowScoreScreen(lost) {
-        // TODO: show to player for real
+        // TODO: show to player for real (see how this.OfferPlayerGems() does it)
         if (lost) {
             console.log('LOSE!');
         } else {

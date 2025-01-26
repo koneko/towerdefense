@@ -7,33 +7,43 @@ import Button, { ButtonTexture } from './Button';
 import { Tower } from '../game/Tower';
 import Gem from '../game/Gem';
 
-class VisualGemSlot extends GuiObject {
+export class VisualGemSlot extends GuiObject {
     public iconSprite: PIXI.Sprite;
     private background: PIXI.Sprite;
+    private gem: Gem;
     private i: number = 0;
     constructor(index: number, parent: PIXI.Container, gem: Gem | null) {
         super(true);
         let gtexture;
-        if (gem == null) {
-            gtexture = GameAssets.PlusIconTexture;
-        } else {
-            gtexture = gem.texture;
-        }
         this.container.x = 10;
         this.container.y = index * Engine.GridCellSize + 300;
         this.background = new PIXI.Sprite({
             texture: GameAssets.FrameInventory,
         });
+        this.gem = gem;
+        if (gem == null) {
+            gtexture = GameAssets.PlusIconTexture;
+        } else {
+            gtexture = gem.texture;
+        }
         this.iconSprite = new PIXI.Sprite({
             texture: gtexture,
+            zIndex: 10,
         });
         this.background.width = Engine.GridCellSize;
         this.background.height = Engine.GridCellSize;
-        this.iconSprite.x = Engine.GridCellSize / 2;
-        this.iconSprite.y = Engine.GridCellSize / 2;
-        this.iconSprite.width = Engine.GridCellSize / 2;
-        this.iconSprite.height = Engine.GridCellSize / 2;
-        this.iconSprite.anchor.set(0.5, 0.5);
+        if (gem == null) {
+            this.iconSprite.x = Engine.GridCellSize / 2;
+            this.iconSprite.y = Engine.GridCellSize / 2;
+            this.iconSprite.width = Engine.GridCellSize / 2;
+            this.iconSprite.height = Engine.GridCellSize / 2;
+            this.iconSprite.anchor.set(0.5, 0.5);
+        } else {
+            this.iconSprite.x = 4;
+            this.iconSprite.y = 4;
+            this.iconSprite.width = Engine.GridCellSize - 8;
+            this.iconSprite.height = Engine.GridCellSize - 8;
+        }
         this.container.addChild(this.background);
         this.container.addChild(this.iconSprite);
         parent.addChild(this.container);

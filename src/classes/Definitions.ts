@@ -72,12 +72,14 @@ export type TowerStatsDefinition = {
 
 export type GemDefinition = {
     name: string;
+    description: string;
     type: GemType;
     totalLevels: number;
     textures: PIXI.Texture[];
     cantCombineWith: GemType[];
     specialCombine: GemType[];
     genericImprovements: GenericGemImprovement[];
+    gemResistanceModifications: CreepResistancesDefinition[];
 };
 
 export type GenericGemImprovement = {

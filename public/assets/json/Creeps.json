@@ -5,7 +5,7 @@
         "textureArrayLength": 12,
         "stats": {
             "health": 5,
-            "speed": 2.4,
+            "speed": 6,
             "special": null,
             "resistance": {
                 "physical": 0,

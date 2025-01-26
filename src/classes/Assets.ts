@@ -125,7 +125,7 @@ export default class GameAssets {
             const gem = this.Gems[idx];
             for (let i = 1; i <= gem.totalLevels; i++) {
                 const texture = await this.Load(`./assets/gems/${gem.type}/${i}.png`);
-                gem.textures[i] = texture;
+                gem.textures[i - 1] = texture;
             }
         }
         for (let i = 0; i < 7; i++) {

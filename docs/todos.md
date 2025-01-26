@@ -11,16 +11,16 @@ List of things to implement following the "release" of the minimum viable produc
 
 ## Towers
 
--   [ ] Extend projectile into seperate defintion + json file
+-   [x] Extend projectile into seperate defintion + json file
 -   [ ] Make tower react with slotted gems
 -   [ ] Alter damage based on attunement from slotted gems
--   [ ] Tower info on click
+-   [x] Tower info on click
 -   [x] Animate projectiles
 -   [x] Better mouseover tracking when placing tower and showing radius
 
 ## Gems
 
--   [ ] Create Gem definitions
+-   [x] Create Gem definitions
 -   [ ] Make gems affect towers
 
 ## Other

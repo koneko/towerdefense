@@ -1,11 +1,12 @@
 import * as PIXI from 'pixi.js';
-import { GemType } from '../Definitions';
+import { GemType, GemDefinition } from '../Definitions';
 import GameAssets from '../Assets';
 export default class Gem {
     public texture: PIXI.Texture;
-    public type: GemType;
     public level: number = 1;
+    public gemDefinition: GemDefinition;
     constructor(gemType: GemType) {
-        this.texture = GameAssets.Gems[gemType].textures[0];
+        this.gemDefinition = GameAssets.Gems[gemType];
+        this.texture = this.gemDefinition.textures[0];
     }
 }

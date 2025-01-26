@@ -42,7 +42,7 @@ export class Tower extends GameObject {
             texture: texture,
             height: Engine.GridCellSize,
             width: Engine.GridCellSize,
-            zIndex: 10,
+            zIndex: 130,
         });
         this.container.addChild(this.sprite);
         this.parent.container.addChild(this.container);
@@ -53,7 +53,8 @@ export class Tower extends GameObject {
     }
 
     private onParentCellEnter = (e) => {
-        if (!Engine.TowerManager.isPlacingTower) this.parent.showRangePreview(false, this.definition.stats.range);
+        if (!Engine.TowerManager.isPlacingTower && Engine.Grid.gridInteractionEnabled)
+            this.parent.showRangePreview(false, this.definition.stats.range);
     };
 
     private onParentCellLeave = (e) => {

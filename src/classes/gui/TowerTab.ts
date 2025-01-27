@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js';
 import GuiObject from '../GuiObject';
 import GameAssets from '../Assets';
 import { Engine } from '../Bastion';
-import { TowerEvents } from '../game/Tower';
+import { TowerEvents } from '../Events';
 import { TowerDefinition } from '../Definitions';
 
 class TowerButton extends GuiObject {

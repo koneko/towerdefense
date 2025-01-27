@@ -3,13 +3,8 @@ import GameObject from '../GameObject';
 import { GameMapDefinition, TerrainType } from '../Definitions';
 import GameAssets from '../Assets';
 import { Engine } from '../Bastion';
-import Creep, { CreepEvents } from './Creep';
-import { TowerEvents } from './Tower';
-
-export enum GridEvents {
-    CellMouseOver = 'cellmouseover',
-    CellMouseLeave = 'cellmouseleave',
-}
+import Creep from './Creep';
+import { CreepEvents, TowerEvents, GridEvents } from '../Events';
 
 export class Cell extends GameObject {
     public type: TerrainType;

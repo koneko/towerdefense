@@ -2,7 +2,7 @@ import Assets from '../Assets';
 import { Engine } from '../Bastion';
 import GameObject from '../GameObject';
 import * as PIXI from 'pixi.js';
-import { WaveManagerEvents } from './WaveManager';
+import { WaveManagerEvents, StatsEvents } from '../Events';
 import Gem from './Gem';
 
 export default class MissionStats extends GameObject {
@@ -51,7 +51,7 @@ export default class MissionStats extends GameObject {
 
     public giveGem(gem: Gem) {
         this.inventory.push(gem);
-        Engine.GameScene.events.emit('givegem', gem);
+        Engine.GameScene.events.emit(StatsEvents.GemGivenEvent, gem);
     }
 
     public getInventory() {

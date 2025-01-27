@@ -1,9 +1,10 @@
 import GameAssets from '../classes/Assets';
 import { Engine } from '../classes/Bastion';
 import { MissionDefinition } from '../classes/Definitions';
-import Creep, { CreepEvents } from '../classes/game/Creep';
+import Creep from '../classes/game/Creep';
 import { Grid } from '../classes/game/Grid';
-import WaveManager, { WaveManagerEvents } from '../classes/game/WaveManager';
+import WaveManager from '../classes/game/WaveManager';
+import { WaveManagerEvents, CreepEvents } from '../classes/Events';
 import Sidebar from '../classes/gui/Sidebar';
 import Button, { ButtonTexture } from '../classes/gui/Button';
 import Scene from './Scene';

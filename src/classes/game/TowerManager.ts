@@ -2,8 +2,9 @@ import * as PIXI from 'pixi.js';
 import { Engine } from '../Bastion';
 import { TerrainType, TowerDefinition } from '../Definitions';
 import GameAssets from '../Assets';
-import { Tower, TowerEvents } from './Tower';
-import { Cell, GridEvents } from './Grid';
+import { Tower } from './Tower';
+import { Cell } from './Grid';
+import { GridEvents, TowerEvents } from '../Events';
 
 export enum TowerBehaviours {
     BasicTowerBehaviour = 'BasicTowerBehaviour',

@@ -1,7 +1,8 @@
 import * as PIXI from 'pixi.js';
 import GameObject from '../GameObject';
 import { Engine } from '../Bastion';
-import Creep, { CreepEvents } from './Creep';
+import Creep from './Creep';
+import { CreepEvents } from '../Events';
 
 export function calculateAngleToPoint(x, y, targetX, targetY) {
     const dx = targetX - x;

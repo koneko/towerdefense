@@ -8,6 +8,7 @@ import TowerManager from './game/TowerManager';
 import { GameScene } from '../scenes/Game';
 import { AnimationManager } from './game/AnimationManager';
 import NotificationManager from './game/NotificationManager';
+import Gem from './game/Gem';
 
 export class Engine {
     public static app: PIXI.Application;
@@ -25,6 +26,12 @@ export class Engine {
     public static GridRows: number = 17;
     public static MouseX: number = 0;
     public static MouseY: number = 0;
+
+    public static gemTest() {
+        for (let i = 0; i < 48; i++) {
+            this.GameScene.MissionStats.giveGem(new Gem(0));
+        }
+    }
 }
 
 export default class GameMaster {

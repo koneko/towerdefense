@@ -50,6 +50,11 @@ export default class MissionStats extends GameObject {
     }
 
     public giveGem(gem: Gem) {
+        if (this.inventory.length >= 48)
+            return Engine.NotificationManager.Notify(
+                "Can't hold more than 48 Gems. Extra Gem was thrown away.",
+                'danger'
+            );
         this.inventory.push(gem);
         Engine.GameScene.events.emit(StatsEvents.GemGivenEvent, gem);
     }

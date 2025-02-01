@@ -21,7 +21,7 @@ class Notification {
         } else if (type == 'reward') {
             fill = 0xd65afc;
         } else if (type == 'gemaward') {
-            fill = 0xffff00;
+            fill = 0xffffff;
         }
         this.ticksToFadeAway = ticksToFadeAway;
         this.textObj = new PIXI.Text({

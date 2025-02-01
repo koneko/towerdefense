@@ -24,3 +24,7 @@ export enum TowerEvents {
 export enum StatsEvents {
     GemGivenEvent = 'gemGivenEvent',
 }
+
+export enum GemEvents {
+    TowerPanelSelectGem = 'towerTabSelectGem',
+}

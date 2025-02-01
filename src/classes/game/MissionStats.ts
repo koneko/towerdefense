@@ -49,18 +49,31 @@ export default class MissionStats extends GameObject {
         this.goldText.text = this.gold;
     }
 
-    public giveGem(gem: Gem) {
+    public giveGem(gem: Gem, noNotify?) {
         if (this.inventory.length >= 48)
             return Engine.NotificationManager.Notify(
                 "Can't hold more than 48 Gems. Extra Gem was thrown away.",
                 'danger'
             );
         this.inventory.push(gem);
+        if (!noNotify)
+            Engine.NotificationManager.Notify(
+                `Lv. ${gem.level} ${gem.definition.name}` + ' added to your inventory.',
+                'gemaward'
+            );
         Engine.GameScene.events.emit(StatsEvents.GemGivenEvent, gem);
+    }
+
+    public takeGem(gem) {
+        return this.inventory.splice(this.inventory.indexOf(gem), 1)[0];
     }
 
     public getInventory() {
         return this.inventory;
+    }
+
+    public checkIfPlayerHasAnyGems() {
+        return this.inventory.length > 0;
     }
 
     constructor(initialHP: number, initialGold: number) {

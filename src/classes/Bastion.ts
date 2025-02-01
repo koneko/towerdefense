@@ -28,7 +28,7 @@ export class Engine {
     public static MouseY: number = 0;
 
     public static gemTest() {
-        for (let i = 0; i < 48; i++) {
+        for (let i = 0; i < 2; i++) {
             this.GameScene.MissionStats.giveGem(new Gem(0));
         }
     }

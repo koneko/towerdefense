@@ -6,6 +6,7 @@ import GameUIConstants from '../GameUIConstants';
 import Button, { ButtonTexture } from './Button';
 import { Tower } from '../game/Tower';
 import Gem from '../game/Gem';
+import { GemEvents } from '../Events';
 
 export class VisualGemSlot extends GuiObject {
     public iconSprite: PIXI.Sprite;
@@ -55,6 +56,7 @@ export default class TowerPanel extends GuiObject {
     private bounds: PIXI.Rectangle;
     private towerPanel: PIXI.NineSliceSprite;
     private closeBtn: Button;
+    private vGems: VisualGemSlot[] = [];
     public isShown: boolean = false;
     public titleText: PIXI.Text;
 
@@ -110,10 +112,31 @@ export default class TowerPanel extends GuiObject {
         this.container.addChild(this.titleText);
     }
     private MakeSlots(tower: Tower) {
+        this.vGems.forEach((vGem) => {
+            vGem.destroy();
+        });
+        this.vGems = [];
         let amount = tower.definition.stats.gemSlotsAmount;
-        amount = 6;
+        // amount = 6;
         for (let i = 0; i < amount; i++) {
-            const element = new VisualGemSlot(i, this.container, null);
+            let gem = tower.slottedGems[i];
+            console.log(gem);
+            if (!gem) gem = null;
+            const vGem = new VisualGemSlot(i, this.container, gem);
+            this.vGems.push(vGem);
+            vGem.container.onpointermove = () => {
+                if (!gem) return;
+                Engine.GameScene.tooltip.SetContentGem(gem);
+                Engine.GameScene.tooltip.Show(Engine.MouseX, Engine.MouseY);
+            };
+            vGem.container.onpointerleave = () => {
+                Engine.GameScene.tooltip.Hide();
+            };
+            vGem.onClick = () => {
+                Engine.GameScene.tooltip.Hide();
+                console.log('MAKESLOTS ', gem);
+                Engine.GameScene.events.emit(GemEvents.TowerPanelSelectGem, gem, i, tower);
+            };
         }
     }
     public Show(tower: Tower) {
@@ -121,7 +144,7 @@ export default class TowerPanel extends GuiObject {
         this.isShown = true;
         this.SetContent(tower);
         this.MakeSlots(tower);
-        if (mouseX < 900) {
+        if (tower.container.x < 900) {
             this.ShowRight();
         } else {
             this.ShowLeft();

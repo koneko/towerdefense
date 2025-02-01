@@ -4,7 +4,7 @@ import { MissionDefinition } from '../classes/Definitions';
 import Creep from '../classes/game/Creep';
 import { Grid } from '../classes/game/Grid';
 import WaveManager from '../classes/game/WaveManager';
-import { WaveManagerEvents, CreepEvents } from '../classes/Events';
+import { WaveManagerEvents, CreepEvents, GemEvents } from '../classes/Events';
 import Sidebar from '../classes/gui/Sidebar';
 import Button, { ButtonTexture } from '../classes/gui/Button';
 import Scene from './Scene';
@@ -34,17 +34,17 @@ export class GameScene extends Scene {
     public sidebar: Sidebar;
     public tooltip: Tooltip;
     public towerPanel: TowerPanel;
-    public dimGraphics: PIXI.Graphics = new PIXI.Graphics({
-        x: 0,
-        y: 0,
-        zIndex: 120,
-    });
-    private offerGemsSprite: PIXI.NineSliceSprite;
     private visualGems: VisualGemSlot[] = [];
     private currentRound: number = 0;
     private isWaveManagerFinished: boolean = false;
     private playerWon: boolean = false;
     private destroyTicker: boolean = false;
+    private offerGemsSprite: PIXI.NineSliceSprite;
+    private dimGraphics: PIXI.Graphics = new PIXI.Graphics({
+        x: 0,
+        y: 0,
+        zIndex: 120,
+    });
 
     constructor(name: string) {
         super();
@@ -85,8 +85,6 @@ export class GameScene extends Scene {
         Engine.GameMaster.currentScene.stage.addChildAt(this.dimGraphics, 0);
         this.tooltip = new Tooltip(new PIXI.Rectangle(0, 0, 350, 160));
         // Added custom button logic to still keep all the regular events for the button, just have an icon instead of text.
-        // TODO: maybe make this better? add like a seperate class for icon buttons or smth
-        // nevermind, i can't be bothered to do this, and this works fine.
         this.changeRoundButton.CustomButtonLogic = () => {
             this.changeRoundButton.buttonIcon = new PIXI.Sprite({
                 texture: GameAssets.PlayIconTexture,
@@ -109,6 +107,19 @@ export class GameScene extends Scene {
             this.events.emit(WaveManagerEvents.NewWave, `${this.currentRound + 1}`);
         };
         this.MissionStats = new MissionStats(100, 200);
+        this.events.on(GemEvents.TowerPanelSelectGem, (gem, index, tower) => {
+            if (gem == null) {
+                if (!this.MissionStats.checkIfPlayerHasAnyGems())
+                    return Engine.NotificationManager.Notify(
+                        'You require atleast 1 Gem in your inventory to slot it in a Gem slot.',
+                        'warn'
+                    );
+                console.log(gem);
+                this.sidebar.gemTab.TowerPanelSelectingGem(gem, index, tower);
+            } else {
+                this.sidebar.gemTab.TowerPanelSelectingGem(gem, -1, tower);
+            }
+        });
         this.ticker = new PIXI.Ticker();
         this.ticker.maxFPS = 60;
         this.ticker.minFPS = 30;
@@ -225,7 +236,6 @@ export class GameScene extends Scene {
         this.visualGems.forEach((item) => item.destroy());
         Engine.Grid.gridInteractionEnabled = true;
         this.MissionStats.giveGem(gem);
-        Engine.NotificationManager.Notify(gem.definition.name + ' added to your inventory.', 'gemaward');
     }
 
     private ShowScoreScreen(lost) {

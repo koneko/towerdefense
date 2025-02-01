@@ -16,7 +16,7 @@ export class Tower extends GameObject {
     public row: number;
     public column: number;
     public definition: TowerDefinition;
-    public slottedGems: Array<Gem>;
+    public slottedGems: Array<Gem> = [];
     public damageDealt: number = 0;
     private projectiles: Projectile[] = [];
     private behaviour: string;
@@ -55,6 +55,20 @@ export class Tower extends GameObject {
     private onParentCellLeave = (e) => {
         this.graphics.clear();
     };
+    public SlotGem(gem: Gem, index: number) {
+        console.log('ATTEMPTING TO SLOT ', gem, index);
+        this.slottedGems[index] = gem;
+        Engine.GameScene.towerPanel.Hide();
+        Engine.GameScene.towerPanel.Show(this);
+    }
+    public UnslotGem(index) {
+        const gem = this.slottedGems.splice(index, 1)[0];
+        Engine.GameScene.MissionStats.giveGem(gem, true);
+        Engine.NotificationManager.Notify(
+            `Gem Lv. ${gem.level} ${gem.definition.name} unslotted from ${this.name} and placed back in your inventory.`,
+            'info'
+        );
+    }
 
     public GetCreepsInRange() {
         let creeps = Engine.Grid.creeps;

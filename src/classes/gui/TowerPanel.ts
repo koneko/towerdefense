@@ -11,17 +11,17 @@ import { GemEvents } from '../Events';
 export class VisualGemSlot extends GuiObject {
     public iconSprite: PIXI.Sprite;
     private background: PIXI.Sprite;
-    private gem: Gem;
-    private i: number = 0;
+    private frame: PIXI.Sprite;
+    public i: number = 0;
     constructor(index: number, parent: PIXI.Container, gem: Gem | null) {
         super(true);
         let gtexture;
+        this.i = index;
         this.container.x = 10;
-        this.container.y = index * Engine.GridCellSize + 300;
+        this.container.y = index * (Engine.GridCellSize + 6) + 300;
         this.background = new PIXI.Sprite({
-            texture: GameAssets.FrameInventory,
+            texture: GameAssets.Frame01Texture,
         });
-        this.gem = gem;
         if (gem == null) {
             gtexture = GameAssets.PlusIconTexture;
         } else {
@@ -45,18 +45,47 @@ export class VisualGemSlot extends GuiObject {
             this.iconSprite.width = Engine.GridCellSize - 8;
             this.iconSprite.height = Engine.GridCellSize - 8;
         }
+        this.frame = new PIXI.Sprite({
+            texture: GameAssets.Frame05Texture,
+            width: 64,
+            height: 64,
+        });
+
         this.container.addChild(this.background);
         this.container.addChild(this.iconSprite);
+        this.container.addChild(this.frame);
+        if (Engine.latestCommit == 'DEVELOPMENT') {
+            let txt = gem ? gem.id : '';
+            let dbgText = new PIXI.Text({
+                text: txt,
+                zIndex: 11,
+                style: {
+                    fill: 'white',
+                    stroke: {
+                        color: 0x000000,
+                        width: 5,
+                    },
+                },
+            });
+            this.container.addChild(dbgText);
+        }
         parent.addChild(this.container);
     }
-    public onClick(e: PIXI.FederatedPointerEvent): void {}
+
+    public setTint(color) {
+        this.frame.tint = color;
+    }
+
+    public resetTint() {
+        this.frame.tint = 0xffffff;
+    }
 }
 
 export default class TowerPanel extends GuiObject {
     private bounds: PIXI.Rectangle;
     private towerPanel: PIXI.NineSliceSprite;
     private closeBtn: Button;
-    private vGems: VisualGemSlot[] = [];
+    public vGems: VisualGemSlot[] = [];
     public isShown: boolean = false;
     public titleText: PIXI.Text;
 
@@ -119,10 +148,11 @@ export default class TowerPanel extends GuiObject {
         let amount = tower.definition.stats.gemSlotsAmount;
         // amount = 6;
         for (let i = 0; i < amount; i++) {
+            console.log('BUILDING TOWER PANEL ' + i);
             let gem = tower.slottedGems[i];
-            console.log(gem);
             if (!gem) gem = null;
             const vGem = new VisualGemSlot(i, this.container, gem);
+            vGem.resetTint();
             this.vGems.push(vGem);
             vGem.container.onpointermove = () => {
                 if (!gem) return;
@@ -134,8 +164,10 @@ export default class TowerPanel extends GuiObject {
             };
             vGem.onClick = () => {
                 Engine.GameScene.tooltip.Hide();
-                console.log('MAKESLOTS ', gem);
-                Engine.GameScene.events.emit(GemEvents.TowerPanelSelectGem, gem, i, tower);
+                console.warn('EMITTING TOWER PANEL SELECT GEM', gem, vGem.i, i, tower);
+                Engine.GameScene.events.emit(GemEvents.TowerPanelSelectGem, gem, vGem.i, tower);
+                if (!gem && Engine.GameScene.sidebar.gemTab.isSelectingGem) vGem.setTint(0x00ffff);
+                else vGem.resetTint();
             };
         }
     }

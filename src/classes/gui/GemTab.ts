@@ -37,12 +37,12 @@ export default class GemTab extends GuiObject {
             this.RebuildInventoryVisual();
         });
     }
+    // TODO: add more visual clarity
     public TowerPanelSelectingGem(gem: Gem, index: number, tower: Tower) {
-        console.log(this);
-        if (this.isSelectingGem) {
-            this.isSelectingGem = false;
-            this.selectingGemSlotIndex = -1;
-        } else {
+        console.log('TOWER PANEL SELECTING GEM ' + index);
+        if (index < 0) console.error('TOWER PANEL SELECTING GEM INDEX IS LESS THAN 0, ', index);
+        // index = Engine.GameScene.towerPanel.vGems.indexOf(gem);
+        if (!this.isSelectingGem) {
             this.isSelectingGem = true;
             if (gem == null) {
                 // Want to select gem to slot in, already checked if player has a Gem.
@@ -58,6 +58,13 @@ export default class GemTab extends GuiObject {
                 this.RebuildInventoryVisual();
                 Engine.GameScene.towerPanel.Hide();
                 Engine.GameScene.towerPanel.Show(tower);
+                this.isSelectingGem = false;
+                this.selectingGemSlotIndex = -1;
+                this.selectingGemTowerObject = null;
+            }
+        } else {
+            if (gem == null) {
+                this.isSelectingGem = false;
                 this.selectingGemSlotIndex = -1;
                 this.selectingGemTowerObject = null;
             }
@@ -69,8 +76,8 @@ export default class GemTab extends GuiObject {
         Engine.GameScene.MissionStats.getInventory().forEach((gem, index) => {
             let vGem = new VisualGemSlot(0, this.container, gem);
 
-            let vGemYCoord = 5;
-            let vGemXCoord = (index % 4) * 64 + 20;
+            let vGemYCoord = 10;
+            let vGemXCoord = (index % 4) * 70 + 10;
             let vGemYIdx = index;
             while (true) {
                 if (vGemYIdx <= 3) break;

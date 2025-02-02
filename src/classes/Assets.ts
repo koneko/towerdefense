@@ -7,6 +7,7 @@ export default class GameAssets {
     public static Frame02Texture: PIXI.Texture;
     public static Frame03Texture: PIXI.Texture;
     public static Frame04Texture: PIXI.Texture;
+    public static Frame05Texture: PIXI.Texture;
     public static FrameInventory: PIXI.Texture;
     public static FrameBackground: PIXI.Texture;
     public static FrameTowerTab: PIXI.Texture;
@@ -86,6 +87,7 @@ export default class GameAssets {
             this.Load('./assets/gui/frame_02.png').then((texture) => (this.Frame02Texture = texture)),
             this.Load('./assets/gui/frame_03.png').then((texture) => (this.Frame03Texture = texture)),
             this.Load('./assets/gui/frame_04.png').then((texture) => (this.Frame04Texture = texture)),
+            this.Load('./assets/gui/frame_05.png').then((texture) => (this.Frame05Texture = texture)),
             this.Load('./assets/gui/frame_inv.png').then((texture) => (this.FrameInventory = texture)),
             this.Load('./assets/gui/background_01.png').then((texture) => (this.FrameBackground = texture)),
             this.Load('./assets/gui/background_02.png').then((texture) => (this.FrameTowerTab = texture)),

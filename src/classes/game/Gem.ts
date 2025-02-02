@@ -8,7 +8,7 @@ export default class Gem {
     public texture: PIXI.Texture;
     public level: number = 1;
     public definition: GemDefinition;
-    private id;
+    public id;
     constructor(gemType: GemType) {
         this.definition = GameAssets.Gems[gemType];
         this.texture = this.definition.textures[0];

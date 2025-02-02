@@ -9,6 +9,8 @@ import { GameScene } from '../scenes/Game';
 import { AnimationManager } from './game/AnimationManager';
 import NotificationManager from './game/NotificationManager';
 import Gem from './game/Gem';
+import GameAssets from './Assets';
+import { GemType } from './Definitions';
 
 export class Engine {
     public static app: PIXI.Application;
@@ -27,9 +29,12 @@ export class Engine {
     public static MouseX: number = 0;
     public static MouseY: number = 0;
 
-    public static gemTest() {
-        for (let i = 0; i < 2; i++) {
-            this.GameScene.MissionStats.giveGem(new Gem(0));
+    public static TestSuite() {
+        Engine.NotificationManager.Notify('Loaded testing suite.', 'danger');
+        Engine.TowerManager.ToggleChoosingTowerLocation('RESET');
+        Engine.TowerManager.PlaceTower(GameAssets.Towers[1], 10, 15, GameAssets.Towers[0].behaviour, true);
+        for (let i = 0; i < 16; i++) {
+            this.GameScene.MissionStats.giveGem(new Gem(GemType.Fire), true);
         }
     }
 }

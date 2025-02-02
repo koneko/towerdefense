@@ -55,7 +55,7 @@ export default class NotificationManager extends GameObject {
         this.bb.x = Engine.app.canvas.width / 2;
         this.bb.y = 40;
         this.copyBBToContainer();
-        this.container.zIndex = 100;
+        this.container.zIndex = 200;
         Engine.app.stage.addChild(this.container);
     }
     public Notify(text, type: NotificationType) {
@@ -74,7 +74,7 @@ export default class NotificationManager extends GameObject {
             if (this.ticks >= notif.ticksToFadeAway && !notif.animating) {
                 notif.animating = true;
                 Engine.AnimationManager.Animate(
-                    new FadeInOut('out', 240, notif.textObj, () => {
+                    new FadeInOut('out', 300, notif.textObj, () => {
                         notif.destroy();
                     })
                 );

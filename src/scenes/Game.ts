@@ -114,15 +114,17 @@ export class GameScene extends Scene {
                         'You require atleast 1 Gem in your inventory to slot it in a Gem slot.',
                         'warn'
                     );
-                console.log(gem);
-                this.sidebar.gemTab.TowerPanelSelectingGem(gem, index, tower);
-            } else {
-                this.sidebar.gemTab.TowerPanelSelectingGem(gem, -1, tower);
             }
+            this.sidebar.gemTab.TowerPanelSelectingGem(gem, index, tower);
         });
         this.ticker = new PIXI.Ticker();
         this.ticker.maxFPS = 60;
         this.ticker.minFPS = 30;
+        // fix tooltip behaving weirdly for some reason
+        this.tooltip.SetContentTower(0, 0, 0, 0);
+        this.tooltip.Show(Engine.MouseX, Engine.MouseY);
+        this.tooltip.Hide();
+
         this.ticker.add(() => {
             if (this.update) this.update(this.ticker.elapsedMS);
         });

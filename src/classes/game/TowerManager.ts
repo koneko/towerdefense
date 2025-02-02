@@ -88,7 +88,7 @@ export default class TowerManager {
         return returnTower;
     }
     public PlaceTower(definition: TowerDefinition, row, column, behaviour: string, ignoreCost?) {
-        const sprite = this.selectedTower.texture;
+        const sprite = definition.texture;
         if (!Engine.GameScene.MissionStats.hasEnoughGold(definition.stats.cost) && !ignoreCost)
             return Engine.NotificationManager.Notify('Not enough gold.', 'warn');
         if (
@@ -96,7 +96,7 @@ export default class TowerManager {
             Engine.Grid.getCellByRowAndCol(row, column).type != TerrainType.Path &&
             Engine.Grid.getCellByRowAndCol(row, column).type != TerrainType.Restricted
         ) {
-            Engine.GameScene.MissionStats.spendGold(definition.stats.cost);
+            if (!ignoreCost) Engine.GameScene.MissionStats.spendGold(definition.stats.cost);
             let tower = new Tower(row, column, sprite, definition, behaviour);
             this.towers.push(tower);
             this.ToggleChoosingTowerLocation('RESET');

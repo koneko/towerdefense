@@ -64,8 +64,15 @@ export class Tower extends GameObject {
     public UnslotGem(index) {
         const gem = this.slottedGems.splice(index, 1)[0];
         Engine.GameScene.MissionStats.giveGem(gem, true);
+        for (let i = index; i < this.slottedGems.length - 1; i++) {
+            if (this.slottedGems[i] == null) {
+                this.slottedGems[i] = this.slottedGems[i + 1];
+                this.slottedGems[i + 1] = null;
+            }
+        }
+        this.slottedGems = this.slottedGems.filter((gem) => gem != null);
         Engine.NotificationManager.Notify(
-            `Gem Lv. ${gem.level} ${gem.definition.name} unslotted from ${this.name} and placed back in your inventory.`,
+            `Lv. ${gem.level} ${gem.definition.name} unslotted and placed back in your inventory.`,
             'info'
         );
     }
@@ -111,7 +118,7 @@ export class Tower extends GameObject {
         }
     }
 
-    override destroy(): void {
+    public destroy(): void {
         super.destroy();
         this.parent.clickDetector.off('pointerenter', this.onParentCellEnter);
         this.parent.clickDetector.off('pointerleave', this.onParentCellLeave);

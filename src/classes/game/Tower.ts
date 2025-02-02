@@ -8,7 +8,7 @@ import Projectile, { calculateAngleToPoint } from './Projectile';
 import Creep from './Creep';
 import Gem from './Gem';
 
-function distance(x1, y1, x2, y2) {
+export function distance(x1, y1, x2, y2) {
     return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 }
 
@@ -70,6 +70,7 @@ export class Tower extends GameObject {
                 this.slottedGems[i + 1] = null;
             }
         }
+        Engine.GameScene.sidebar.gemTab.selectingGemTowerObject = this;
         this.slottedGems = this.slottedGems.filter((gem) => gem != null);
         Engine.NotificationManager.Notify(
             `Lv. ${gem.level} ${gem.definition.name} unslotted and placed back in your inventory.`,

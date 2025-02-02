@@ -10,6 +10,8 @@ export default abstract class GuiObject {
 
     protected enabled: boolean = true;
 
+    public bb: PIXI.Rectangle = new PIXI.Rectangle();
+
     public destroy() {
         this._events.removeAllListeners();
         if (this._container.parent) this._container.parent.removeChild(this._container);
@@ -34,6 +36,30 @@ export default abstract class GuiObject {
 
     public setEnabled(enabled: boolean) {
         this.enabled = enabled;
+    }
+
+    public copyContainerToBB() {
+        this.bb.x = this.container.x;
+        this.bb.y = this.container.y;
+        this.bb.width = this.container.width;
+        this.bb.height = this.container.height;
+        return this.bb;
+    }
+
+    public copyBBToContainer() {
+        this.container.x = this.bb.x;
+        this.container.y = this.bb.y;
+        this.container.width = this.bb.width;
+        this.container.height = this.bb.height;
+        return this.container;
+    }
+
+    public copyPropertiesToObj(obj: PIXI.Container) {
+        obj.x = this.bb.x;
+        obj.y = this.bb.y;
+        obj.width = this.bb.width;
+        obj.height = this.bb.height;
+        return obj;
     }
 
     constructor(interactive?: boolean) {

@@ -5,7 +5,7 @@ import { Engine } from '../Bastion';
 import { StatsEvents } from '../Events';
 import Gem from '../game/Gem';
 import { VisualGemSlot } from './TowerPanel';
-import { Tower } from '../game/Tower';
+import { distance, Tower } from '../game/Tower';
 
 export default class GemTab extends GuiObject {
     private bounds: PIXI.Rectangle;
@@ -14,6 +14,8 @@ export default class GemTab extends GuiObject {
     public isSelectingGem: boolean = false;
     public selectingGemSlotIndex: number = -1;
     public selectingGemTowerObject: Tower = null;
+    public isDragAndDroppingGem: boolean = false;
+    private dragAndDroppingGem: VisualGemSlot = null;
 
     constructor(bounds: PIXI.Rectangle) {
         super(false);
@@ -32,6 +34,9 @@ export default class GemTab extends GuiObject {
         this.gemTabSprite.width = this.bounds.width;
         this.gemTabSprite.height = this.bounds.height;
         this.container.addChild(this.gemTabSprite);
+        Engine.app.canvas.addEventListener('pointermove', () => {
+            this.pointerMoveEvent();
+        });
 
         Engine.GameScene.events.on(StatsEvents.GemGivenEvent, () => {
             this.RebuildInventoryVisual();
@@ -70,12 +75,16 @@ export default class GemTab extends GuiObject {
             }
         }
     }
+    public pointerMoveEvent() {
+        if (!this.isDragAndDroppingGem || !Engine.GameScene.towerPanel.isShown || !this.dragAndDroppingGem) return;
+        this.dragAndDroppingGem.container.x = Engine.MouseX - 32;
+        this.dragAndDroppingGem.container.y = Engine.MouseY - 32;
+    }
     public RebuildInventoryVisual() {
         this.vGems.forEach((vGem) => vGem.destroy());
         this.vGems = [];
         Engine.GameScene.MissionStats.getInventory().forEach((gem, index) => {
             let vGem = new VisualGemSlot(0, this.container, gem);
-
             let vGemYCoord = 10;
             let vGemXCoord = (index % 4) * 70 + 10;
             let vGemYIdx = index;
@@ -87,21 +96,56 @@ export default class GemTab extends GuiObject {
             vGem.container.x = vGemXCoord;
             vGem.container.y = vGemYCoord;
             vGem.container.onpointermove = () => {
-                if (gem == null) return;
+                if (gem == null || this.isDragAndDroppingGem) return;
                 Engine.GameScene.tooltip.SetContentGem(gem);
                 Engine.GameScene.tooltip.Show(Engine.MouseX, Engine.MouseY);
             };
             vGem.container.onpointerleave = () => {
                 Engine.GameScene.tooltip.Hide();
             };
-            vGem.onClick = () => {
+            vGem.container.onpointerdown = () => {
                 Engine.GameScene.tooltip.Hide();
                 if (this.isSelectingGem) {
+                    // already clicked on vGem slot in towerpanel
                     this.isSelectingGem = false;
                     let takenGem = Engine.GameScene.MissionStats.takeGem(gem);
                     this.selectingGemTowerObject.SlotGem(takenGem, this.selectingGemSlotIndex);
                     this.RebuildInventoryVisual();
+                } else {
+                    if (!Engine.GameScene.towerPanel.isShown) return;
+                    // initialise drag and drop
+                    this.isDragAndDroppingGem = true;
+                    this.dragAndDroppingGem = vGem;
+                    vGem.container.removeFromParent();
+                    Engine.GameScene.stage.addChild(vGem.container);
+                    this.pointerMoveEvent();
                 }
+            };
+            vGem.container.onpointerup = () => {
+                let overlapping = null;
+                Engine.GameScene.towerPanel.vGems.forEach((internVG) => {
+                    if (overlapping) return;
+                    let ddbb = this.dragAndDroppingGem.copyContainerToBB();
+                    let vb = internVG.copyContainerToBB();
+                    let x = Engine.GameScene.towerPanel.container.x + vb.x;
+                    let y = Engine.GameScene.towerPanel.container.y + vb.y;
+
+                    let vgbb = new PIXI.Rectangle(x, y, vb.width, vb.height);
+                    console.log(ddbb, vgbb, ddbb.getBounds().intersects(vgbb));
+                    if (ddbb.getBounds().intersects(vgbb)) {
+                        if (internVG && internVG.gem == null) overlapping = internVG;
+                    }
+                });
+                if (overlapping) {
+                    let takenGem = Engine.GameScene.MissionStats.takeGem(gem);
+                    Engine.GameScene.towerPanel.showingTower.SlotGem(takenGem, overlapping.i);
+                } else {
+                    console.warn('vGem couldnt find overlapping.');
+                }
+                // end
+                this.isDragAndDroppingGem = false;
+                this.dragAndDroppingGem = null;
+                this.RebuildInventoryVisual();
             };
             this.vGems.push(vGem);
         });

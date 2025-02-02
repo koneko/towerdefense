@@ -122,9 +122,10 @@ export default class GemTab extends GuiObject {
                 }
             };
             vGem.container.onpointerup = () => {
+                if (this.isSelectingGem) return;
                 let overlapping = null;
                 Engine.GameScene.towerPanel.vGems.forEach((internVG) => {
-                    if (overlapping) return;
+                    if (overlapping || !this.dragAndDroppingGem) return;
                     let ddbb = this.dragAndDroppingGem.copyContainerToBB();
                     let vb = internVG.copyContainerToBB();
                     let x = Engine.GameScene.towerPanel.container.x + vb.x;
@@ -139,10 +140,8 @@ export default class GemTab extends GuiObject {
                 if (overlapping) {
                     let takenGem = Engine.GameScene.MissionStats.takeGem(gem);
                     Engine.GameScene.towerPanel.showingTower.SlotGem(takenGem, overlapping.i);
-                } else {
-                    console.warn('vGem couldnt find overlapping.');
                 }
-                // end
+                // clean up
                 this.isDragAndDroppingGem = false;
                 this.dragAndDroppingGem = null;
                 this.RebuildInventoryVisual();

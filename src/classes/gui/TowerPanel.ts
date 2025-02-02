@@ -13,6 +13,7 @@ export class VisualGemSlot extends GuiObject {
     private background: PIXI.Sprite;
     private frame: PIXI.Sprite;
     public i: number = 0;
+    public gem: Gem = null;
     constructor(index: number, parent: PIXI.Container, gem: Gem | null) {
         super(true);
         let gtexture;
@@ -26,6 +27,7 @@ export class VisualGemSlot extends GuiObject {
             gtexture = GameAssets.PlusIconTexture;
         } else {
             gtexture = gem.texture;
+            this.gem = gem;
         }
         this.iconSprite = new PIXI.Sprite({
             texture: gtexture,
@@ -54,21 +56,19 @@ export class VisualGemSlot extends GuiObject {
         this.container.addChild(this.background);
         this.container.addChild(this.iconSprite);
         this.container.addChild(this.frame);
-        if (Engine.latestCommit == 'DEVELOPMENT') {
-            let txt = gem ? gem.id : '';
-            let dbgText = new PIXI.Text({
-                text: txt,
-                zIndex: 11,
-                style: {
-                    fill: 'white',
-                    stroke: {
-                        color: 0x000000,
-                        width: 5,
-                    },
+        let txt = gem ? gem.id : '';
+        let dbgText = new PIXI.Text({
+            text: txt,
+            zIndex: 11,
+            style: {
+                fill: 'white',
+                stroke: {
+                    color: 0x000000,
+                    width: 5,
                 },
-            });
-            this.container.addChild(dbgText);
-        }
+            },
+        });
+        this.container.addChild(dbgText);
         parent.addChild(this.container);
     }
 
@@ -86,6 +86,7 @@ export default class TowerPanel extends GuiObject {
     private towerPanel: PIXI.NineSliceSprite;
     private closeBtn: Button;
     public vGems: VisualGemSlot[] = [];
+    public showingTower: Tower = null;
     public isShown: boolean = false;
     public titleText: PIXI.Text;
 
@@ -104,7 +105,6 @@ export default class TowerPanel extends GuiObject {
         this.closeBtn = new Button(new PIXI.Rectangle(-20, -20, 60, 60), '', ButtonTexture.Button01, true);
         this.closeBtn.container.removeFromParent();
         // Added custom button logic to still keep all the regular events for the button, just have an icon instead of text.
-        // TODO: maybe make this better? add like a seperate class for icon buttons or smth
         this.closeBtn.CustomButtonLogic = () => {
             this.closeBtn.buttonIcon = new PIXI.Sprite({
                 texture: GameAssets.XIconTexture,
@@ -172,10 +172,11 @@ export default class TowerPanel extends GuiObject {
         }
     }
     public Show(tower: Tower) {
-        let mouseX = Engine.MouseX;
         this.isShown = true;
         this.SetContent(tower);
         this.MakeSlots(tower);
+        this.showingTower = tower;
+        Engine.GameScene.sidebar.gemTab.selectingGemTowerObject = tower;
         if (tower.container.x < 900) {
             this.ShowRight();
         } else {

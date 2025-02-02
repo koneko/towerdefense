@@ -102,7 +102,7 @@
                     "creeps": [0, 0, 0, 0, 0]
                 }
             ],
-            "offeredGems": [0, 1, 2, 3]
+            "offeredGems": [0, 0, 0, 0]
         },
         {
             "waves": [

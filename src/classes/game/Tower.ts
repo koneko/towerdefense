@@ -5,39 +5,21 @@ import { TowerDefinition } from '../Definitions';
 import { Cell } from './Grid';
 import { TowerBehaviours } from './TowerManager';
 import Projectile, { calculateAngleToPoint } from './Projectile';
-import GameAssets from '../Assets';
 import Creep from './Creep';
+import Gem from './Gem';
 
 function distance(x1, y1, x2, y2) {
     return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 }
 
-export type TowerInstance = {
-    row: number;
-    column: number;
-    sprite: PIXI.Sprite;
-    projectiles: Array<any>;
-    baseDamage: number;
-    damage: number;
-    cooldown: number;
-    ticksToFireAt: number;
-    slottedGems: Array<any>;
-    cost: number;
-    baseRange: number;
-    range: number;
-};
-
-export enum TowerEvents {
-    TowerPlacedEvent = 'towerPlacedEvent',
-    TowerSoldEvent = 'towerSoldEvent',
-}
-
 export class Tower extends GameObject {
     public row: number;
     public column: number;
+    public definition: TowerDefinition;
+    public slottedGems: Array<Gem> = [];
+    public damageDealt: number = 0;
     private projectiles: Projectile[] = [];
     private behaviour: string;
-    private definition: TowerDefinition;
     private sprite: PIXI.Sprite;
     private ticksUntilNextShot: number;
     private graphics: PIXI.Graphics = new PIXI.Graphics();
@@ -51,12 +33,11 @@ export class Tower extends GameObject {
         this.definition = definition;
         this.ticksUntilNextShot = 0;
         this.parent = Engine.Grid.getCellByRowAndCol(row, column);
-        console.log(texture);
         this.sprite = new PIXI.Sprite({
             texture: texture,
             height: Engine.GridCellSize,
             width: Engine.GridCellSize,
-            zIndex: 10,
+            zIndex: 130,
         });
         this.container.addChild(this.sprite);
         this.parent.container.addChild(this.container);
@@ -67,12 +48,34 @@ export class Tower extends GameObject {
     }
 
     private onParentCellEnter = (e) => {
-        if (!Engine.TowerManager.isPlacingTower) this.parent.showRangePreview(false, this.definition.stats.range);
+        if (!Engine.TowerManager.isPlacingTower && Engine.Grid.gridInteractionEnabled)
+            this.parent.showRangePreview(false, this.definition.stats.range);
     };
 
     private onParentCellLeave = (e) => {
         this.graphics.clear();
     };
+    public SlotGem(gem: Gem, index: number) {
+        console.log('ATTEMPTING TO SLOT ', gem, index);
+        this.slottedGems[index] = gem;
+        Engine.GameScene.towerPanel.Hide();
+        Engine.GameScene.towerPanel.Show(this);
+    }
+    public UnslotGem(index) {
+        const gem = this.slottedGems.splice(index, 1)[0];
+        Engine.GameScene.MissionStats.giveGem(gem, true);
+        for (let i = index; i < this.slottedGems.length - 1; i++) {
+            if (this.slottedGems[i] == null) {
+                this.slottedGems[i] = this.slottedGems[i + 1];
+                this.slottedGems[i + 1] = null;
+            }
+        }
+        this.slottedGems = this.slottedGems.filter((gem) => gem != null);
+        Engine.NotificationManager.Notify(
+            `Lv. ${gem.level} ${gem.definition.name} unslotted and placed back in your inventory.`,
+            'info'
+        );
+    }
 
     public GetCreepsInRange() {
         let creeps = Engine.Grid.creeps;
@@ -97,6 +100,7 @@ export class Tower extends GameObject {
     public update(elapsedMS: any): void {
         this.projectiles.forEach((proj) => {
             if (proj.deleteMe) {
+                this.damageDealt += this.definition.stats.damage;
                 this.projectiles.splice(this.projectiles.indexOf(proj), 1);
                 proj = null;
             } else proj.update(elapsedMS);
@@ -114,7 +118,7 @@ export class Tower extends GameObject {
         }
     }
 
-    override destroy(): void {
+    public destroy(): void {
         super.destroy();
         this.parent.clickDetector.off('pointerenter', this.onParentCellEnter);
         this.parent.clickDetector.off('pointerleave', this.onParentCellLeave);

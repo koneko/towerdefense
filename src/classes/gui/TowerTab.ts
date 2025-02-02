@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js';
 import GuiObject from '../GuiObject';
 import GameAssets from '../Assets';
 import { Engine } from '../Bastion';
-import { TowerEvents } from '../game/Tower';
+import { TowerEvents } from '../Events';
 import { TowerDefinition } from '../Definitions';
 
 class TowerButton extends GuiObject {
@@ -47,7 +47,8 @@ class TowerButton extends GuiObject {
         Engine.GameScene.events.on(TowerEvents.TowerPlacedEvent, (name) => {
             this.resetTint();
         });
-        this.container.onmousemove = (e) => {
+        this.container.onpointermove = (e) => {
+            if (Engine.Grid.gridInteractionEnabled == false) return;
             if (Engine.TowerManager.isPlacingTower) return;
             this.ShowTooltip();
         };
@@ -63,7 +64,7 @@ class TowerButton extends GuiObject {
                 definition = item;
             }
         });
-        Engine.GameScene.tooltip.SetContent(
+        Engine.GameScene.tooltip.SetContentTower(
             this.towerName,
             definition.stats.damage,
             definition.stats.cost,
@@ -72,10 +73,12 @@ class TowerButton extends GuiObject {
         Engine.GameScene.tooltip.Show(Engine.MouseX, Engine.MouseY);
     }
     public onClick(e: PIXI.FederatedPointerEvent): void {
+        if (Engine.Grid.gridInteractionEnabled == false) return;
         if (Engine.TowerManager.isPlacingTower && Engine.TowerManager.selectedTower.name != this.towerName) {
             Engine.GameScene.sidebar.towerTab.resetTint();
             Engine.TowerManager.ResetChooseTower();
         }
+        Engine.GameScene.towerPanel.Hide();
         Engine.GameScene.tooltip.Hide();
         if (this.frameSprite.tint == 0x00ff00) {
             this.frameSprite.tint = 0xffffff;

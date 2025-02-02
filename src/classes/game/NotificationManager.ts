@@ -3,7 +3,7 @@ import GameObject from '../GameObject';
 import * as PIXI from 'pixi.js';
 import { FadeInOut } from './AnimationManager';
 
-export type NotificationType = 'info' | 'warn' | 'danger' | 'reward';
+export type NotificationType = 'info' | 'warn' | 'danger' | 'reward' | 'gemaward';
 
 class Notification {
     public textObj: PIXI.Text;
@@ -20,6 +20,8 @@ class Notification {
             fill = 0xfc0a0a;
         } else if (type == 'reward') {
             fill = 0xd65afc;
+        } else if (type == 'gemaward') {
+            fill = 0xffffff;
         }
         this.ticksToFadeAway = ticksToFadeAway;
         this.textObj = new PIXI.Text({
@@ -53,7 +55,7 @@ export default class NotificationManager extends GameObject {
         this.bb.x = Engine.app.canvas.width / 2;
         this.bb.y = 40;
         this.copyBBToContainer();
-        this.container.zIndex = 100;
+        this.container.zIndex = 200;
         Engine.app.stage.addChild(this.container);
     }
     public Notify(text, type: NotificationType) {
@@ -72,7 +74,7 @@ export default class NotificationManager extends GameObject {
             if (this.ticks >= notif.ticksToFadeAway && !notif.animating) {
                 notif.animating = true;
                 Engine.AnimationManager.Animate(
-                    new FadeInOut('out', 240, notif.textObj, () => {
+                    new FadeInOut('out', 300, notif.textObj, () => {
                         notif.destroy();
                     })
                 );

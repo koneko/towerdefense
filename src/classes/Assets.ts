@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { CreepDefinition, MissionDefinition, TowerDefinition } from './Definitions';
+import { CreepDefinition, GemDefinition, MissionDefinition, TowerDefinition } from './Definitions';
 import { Engine } from './Bastion';
 
 export default class GameAssets {
@@ -7,6 +7,7 @@ export default class GameAssets {
     public static Frame02Texture: PIXI.Texture;
     public static Frame03Texture: PIXI.Texture;
     public static Frame04Texture: PIXI.Texture;
+    public static Frame05Texture: PIXI.Texture;
     public static FrameInventory: PIXI.Texture;
     public static FrameBackground: PIXI.Texture;
     public static FrameTowerTab: PIXI.Texture;
@@ -22,18 +23,22 @@ export default class GameAssets {
     public static WaveTexture: PIXI.Texture;
     public static SwordsTexture: PIXI.Texture;
     public static TitleTexture: PIXI.Texture;
+    public static GemFrame: PIXI.Texture;
 
     public static PlayIconTexture: PIXI.Texture;
     public static PauseIconTexture: PIXI.Texture;
     public static ExclamationIconTexture: PIXI.Texture;
     public static HomeIconTexture: PIXI.Texture;
     public static HammerIconTexture: PIXI.Texture;
+    public static XIconTexture: PIXI.Texture;
+    public static PlusIconTexture: PIXI.Texture;
     public static GemAmountIcons: PIXI.Texture[] = [];
 
     public static Missions: MissionDefinition[];
     public static MissionBackgrounds: PIXI.Texture[] = [];
     public static Towers: TowerDefinition[];
     public static Creeps: CreepDefinition[];
+    public static Gems: GemDefinition[];
 
     private static text;
     private static async Load(src) {
@@ -74,55 +79,70 @@ export default class GameAssets {
         Engine.app.stage.addChild(this.text);
 
         await Promise.all([
-            this.Load('/aclonica.woff2'),
-            this.Load('/assets/gui/button_01.png').then((texture) => (this.Button01Texture = texture)),
-            this.Load('/assets/gui/button_02.png').then((texture) => (this.Button02Texture = texture)),
-            this.Load('/assets/gui/button_small.png').then((texture) => (this.ButtonSmallTexture = texture)),
-            this.Load('/assets/gui/frame_01.png').then((texture) => (this.Frame01Texture = texture)),
-            this.Load('/assets/gui/frame_02.png').then((texture) => (this.Frame02Texture = texture)),
-            this.Load('/assets/gui/frame_03.png').then((texture) => (this.Frame03Texture = texture)),
-            this.Load('/assets/gui/frame_04.png').then((texture) => (this.Frame04Texture = texture)),
-            this.Load('/assets/gui/frame_inv.png').then((texture) => (this.FrameInventory = texture)),
-            this.Load('/assets/gui/background_01.png').then((texture) => (this.FrameBackground = texture)),
-            this.Load('/assets/gui/background_02.png').then((texture) => (this.FrameTowerTab = texture)),
-            this.Load('/assets/gui/frame_violet.png').then((texture) => (this.VioletBackground = texture)),
-            this.Load('/assets/gui/frame_red.png').then((texture) => (this.RedBackground = texture)),
-            this.Load('/assets/gui/frame_green.png').then((texture) => (this.GreenBackground = texture)),
-            this.Load('/assets/gui/frame_blue.png').then((texture) => (this.BlueBackground = texture)),
-            this.Load('/assets/gui/heart.png').then((texture) => (this.HealthTexture = texture)),
-            this.Load('/assets/gui/money.png').then((texture) => (this.GoldTexture = texture)),
-            this.Load('/assets/gui/wave.png').then((texture) => (this.WaveTexture = texture)),
-            this.Load('/assets/gui/sword_02.png').then((texture) => (this.SwordsTexture = texture)),
-            this.Load('/assets/gui/title01.png').then((texture) => (this.TitleTexture = texture)),
-            this.Load('/assets/gui/icons/play.png').then((texture) => (this.PlayIconTexture = texture)),
-            this.Load('/assets/gui/icons/pause.png').then((texture) => (this.PauseIconTexture = texture)),
-            this.Load('/assets/gui/icons/exclamation.png').then((texture) => (this.ExclamationIconTexture = texture)),
-            this.Load('/assets/gui/icons/home.png').then((texture) => (this.HomeIconTexture = texture)),
-            this.Load('/assets/gui/icons/hammer.png').then((texture) => (this.HammerIconTexture = texture)),
+            this.Load('./aclonica.woff2'),
+            this.Load('./assets/gui/button_01.png').then((texture) => (this.Button01Texture = texture)),
+            this.Load('./assets/gui/button_02.png').then((texture) => (this.Button02Texture = texture)),
+            this.Load('./assets/gui/button_small.png').then((texture) => (this.ButtonSmallTexture = texture)),
+            this.Load('./assets/gui/frame_01.png').then((texture) => (this.Frame01Texture = texture)),
+            this.Load('./assets/gui/frame_02.png').then((texture) => (this.Frame02Texture = texture)),
+            this.Load('./assets/gui/frame_03.png').then((texture) => (this.Frame03Texture = texture)),
+            this.Load('./assets/gui/frame_04.png').then((texture) => (this.Frame04Texture = texture)),
+            this.Load('./assets/gui/frame_05.png').then((texture) => (this.Frame05Texture = texture)),
+            this.Load('./assets/gui/frame_inv.png').then((texture) => (this.FrameInventory = texture)),
+            this.Load('./assets/gui/background_01.png').then((texture) => (this.FrameBackground = texture)),
+            this.Load('./assets/gui/background_02.png').then((texture) => (this.FrameTowerTab = texture)),
+            this.Load('./assets/gui/frame_violet.png').then((texture) => (this.VioletBackground = texture)),
+            this.Load('./assets/gui/frame_red.png').then((texture) => (this.RedBackground = texture)),
+            this.Load('./assets/gui/frame_green.png').then((texture) => (this.GreenBackground = texture)),
+            this.Load('./assets/gui/frame_blue.png').then((texture) => (this.BlueBackground = texture)),
+            this.Load('./assets/gui/gem_frame.png').then((texture) => (this.GemFrame = texture)),
+            this.Load('./assets/gui/heart.png').then((texture) => (this.HealthTexture = texture)),
+            this.Load('./assets/gui/money.png').then((texture) => (this.GoldTexture = texture)),
+            this.Load('./assets/gui/wave.png').then((texture) => (this.WaveTexture = texture)),
+            this.Load('./assets/gui/sword_02.png').then((texture) => (this.SwordsTexture = texture)),
+            this.Load('./assets/gui/title01.png').then((texture) => (this.TitleTexture = texture)),
+            this.Load('./assets/gui/icons/play.png').then((texture) => (this.PlayIconTexture = texture)),
+            this.Load('./assets/gui/icons/pause.png').then((texture) => (this.PauseIconTexture = texture)),
+            this.Load('./assets/gui/icons/exclamation.png').then((texture) => (this.ExclamationIconTexture = texture)),
+            this.Load('./assets/gui/icons/home.png').then((texture) => (this.HomeIconTexture = texture)),
+            this.Load('./assets/gui/icons/hammer.png').then((texture) => (this.HammerIconTexture = texture)),
+            this.Load('./assets/gui/icons/cross.png').then((texture) => (this.XIconTexture = texture)),
+            this.Load('./assets/gui/icons/plus.png').then((texture) => (this.PlusIconTexture = texture)),
             this.LoadMissions(),
             this.LoadTowers(),
             this.LoadCreeps(),
-            this.LoadGemIcons(),
+            this.LoadGems(),
         ]);
         t.destroy();
         this.text.destroy();
         // Set this.text = true to disallow calling GameAssets.LoadAssets() again
         this.text = true;
     }
-    private static async LoadGemIcons() {
+    private static async LoadGems() {
+        const res = await fetch('./assets/json/Gems.json');
+        const gems = await res.json();
+        this.Gems = gems;
+
+        for (let idx = 0; idx < gems.length; idx++) {
+            const gem = this.Gems[idx];
+            for (let i = 1; i <= gem.totalLevels; i++) {
+                const texture = await this.Load(`./assets/gems/${gem.type}/${i}.png`);
+                gem.textures[i - 1] = texture;
+            }
+        }
         for (let i = 0; i < 7; i++) {
-            this.GemAmountIcons[i] = await this.Load(`/assets/gui/gem_amount_${i}.png`);
+            this.GemAmountIcons[i] = await this.Load(`./assets/gui/gem_amount_${i}.png`);
         }
     }
 
     private static async LoadCreeps() {
-        const res = await fetch('/assets/json/Creeps.json');
+        const res = await fetch('./assets/json/Creeps.json');
         const creeps = await res.json();
         this.Creeps = creeps;
         for (let idx = 0; idx < this.Creeps.length; idx++) {
             const creep = this.Creeps[idx];
             for (let i = 0; i < creep.textureArrayLength; i++) {
-                const texture = await this.Load(`/assets/creeps/${creep.name}/${i}.png`);
+                const texture = await this.Load(`./assets/creeps/${creep.name}/${i}.png`);
                 creep.textures[i] = texture;
             }
         }
@@ -130,20 +150,20 @@ export default class GameAssets {
 
     private static async LoadMissions() {
         // When adding missions, make sure to keep order.
-        GameAssets.Missions = [await this.LoadMission('/assets/missions/mission_01.json')];
+        GameAssets.Missions = [await this.LoadMission('./assets/missions/mission_01.json')];
     }
 
     private static async LoadTowers() {
-        const res = await fetch('/assets/json/Towers.json');
+        const res = await fetch('./assets/json/Towers.json');
         const towers = await res.json();
         this.Towers = towers;
         for (let idx = 0; idx < this.Towers.length; idx++) {
             const tower = this.Towers[idx];
             for (let i = 0; i < tower.projectileTexturesArrayLength; i++) {
-                const projTexture = await this.Load(`/assets/projectiles/${tower.sprite}/${i}.png`);
+                const projTexture = await this.Load(`./assets/projectiles/${tower.sprite}/${i}.png`);
                 tower.projectileTextures[i] = projTexture;
             }
-            tower.texture = await this.Load(`/assets/towers/${tower.sprite}.png`);
+            tower.texture = await this.Load(`./assets/towers/${tower.sprite}.png`);
         }
     }
 

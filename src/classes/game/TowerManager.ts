@@ -2,8 +2,9 @@ import * as PIXI from 'pixi.js';
 import { Engine } from '../Bastion';
 import { TerrainType, TowerDefinition } from '../Definitions';
 import GameAssets from '../Assets';
-import { Tower, TowerEvents } from './Tower';
-import { Cell, GridEvents } from './Grid';
+import { Tower } from './Tower';
+import { Cell } from './Grid';
+import { GridEvents, TowerEvents } from '../Events';
 
 export enum TowerBehaviours {
     BasicTowerBehaviour = 'BasicTowerBehaviour',
@@ -71,7 +72,7 @@ export default class TowerManager {
                     'TowerManager.selectedTower is null when trying to place tower.',
                     'danger'
                 );
-                throw console.warn('TowerManager.selectedTower is null when trying to place tower.');
+                return console.warn('TowerManager.selectedTower is null when trying to place tower.');
             }
             this.PlaceTower(this.selectedTower, row, column, this.selectedTower.behaviour);
         }
@@ -87,7 +88,7 @@ export default class TowerManager {
         return returnTower;
     }
     public PlaceTower(definition: TowerDefinition, row, column, behaviour: string, ignoreCost?) {
-        const sprite = this.selectedTower.texture;
+        const sprite = definition.texture;
         if (!Engine.GameScene.MissionStats.hasEnoughGold(definition.stats.cost) && !ignoreCost)
             return Engine.NotificationManager.Notify('Not enough gold.', 'warn');
         if (
@@ -95,7 +96,7 @@ export default class TowerManager {
             Engine.Grid.getCellByRowAndCol(row, column).type != TerrainType.Path &&
             Engine.Grid.getCellByRowAndCol(row, column).type != TerrainType.Restricted
         ) {
-            Engine.GameScene.MissionStats.spendGold(definition.stats.cost);
+            if (!ignoreCost) Engine.GameScene.MissionStats.spendGold(definition.stats.cost);
             let tower = new Tower(row, column, sprite, definition, behaviour);
             this.towers.push(tower);
             this.ToggleChoosingTowerLocation('RESET');

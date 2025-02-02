@@ -4,13 +4,7 @@ import { Engine } from '../Bastion';
 import { CreepStatsDefinition, CreepType, PathDefinition } from '../Definitions';
 import GameObject from '../GameObject';
 import * as PIXI from 'pixi.js';
-
-export enum CreepEvents {
-    Died = 'died',
-    TakenDamage = 'takenDamage',
-    Escaped = 'escaped',
-    Moved = 'moved',
-}
+import { CreepEvents } from '../Events';
 
 export default class Creep extends GameObject {
     public id: number;

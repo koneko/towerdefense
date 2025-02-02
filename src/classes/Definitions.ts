@@ -70,18 +70,39 @@ export type TowerStatsDefinition = {
     range: number;
 };
 
-export type PathDefinition = [[row: number, column: number]];
+export type GemDefinition = {
+    name: string;
+    description: string;
+    type: GemType;
+    totalLevels: number;
+    textures: PIXI.Texture[];
+    cantCombineWith: GemType[];
+    specialCombine: GemType[];
+    genericImprovements: GenericGemImprovement[];
+    gemResistanceModifications: CreepResistancesDefinition[];
+};
 
-export enum CreepType {
-    Basic = 0,
-    Quick = 1,
-    Tank = 2,
-}
+export type GenericGemImprovement = {
+    damageUp: number;
+    attackSpeedUp: number;
+    rangeUp: number;
+    timeToLiveUp: number;
+    pierceUp: number;
+};
+
+export type PathDefinition = [[row: number, column: number]];
 
 export enum TerrainType {
     Restricted = 0,
     Buildable = 1,
     Path = 9,
+}
+
+// Make sure to sync these with the respective JSON files.
+export enum CreepType {
+    Basic = 0,
+    Quick = 1,
+    Tank = 2,
 }
 
 export enum GemType {

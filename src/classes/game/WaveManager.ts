@@ -1,14 +1,8 @@
 import { CreepType, MissionRoundDefinition, PathDefinition } from '../Definitions';
-import * as PIXI from 'pixi.js';
-import Creep, { CreepEvents } from './Creep';
+import Creep from './Creep';
 import { Engine } from '../Bastion';
+import { WaveManagerEvents } from '../Events';
 import GameObject from '../GameObject';
-
-export enum WaveManagerEvents {
-    CreepSpawned = 'creepSpawned',
-    Finished = 'finished',
-    NewWave = 'newwave',
-}
 
 type CreepInstance = {
     creep: Creep;

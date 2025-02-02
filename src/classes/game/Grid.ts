@@ -3,13 +3,8 @@ import GameObject from '../GameObject';
 import { GameMapDefinition, TerrainType } from '../Definitions';
 import GameAssets from '../Assets';
 import { Engine } from '../Bastion';
-import Creep, { CreepEvents } from './Creep';
-import { TowerEvents } from './Tower';
-
-export enum GridEvents {
-    CellMouseOver = 'cellmouseover',
-    CellMouseLeave = 'cellmouseleave',
-}
+import Creep from './Creep';
+import { CreepEvents, TowerEvents, GridEvents } from '../Events';
 
 export class Cell extends GameObject {
     public type: TerrainType;
@@ -38,7 +33,6 @@ export class Cell extends GameObject {
             zIndex: 99,
             interactive: true,
         });
-        // ? TODO: make range preview 1 global graphics obj, child. fix
 
         this.g = new PIXI.Graphics({
             zIndex: 5,
@@ -48,13 +42,16 @@ export class Cell extends GameObject {
         this.container.addChild(this.clickDetector);
         this.container.addChild(this.g);
         this.clickDetector.on('pointerup', (e) => {
+            if (!Engine.Grid.gridInteractionEnabled) return;
             if (Engine.TowerManager.isPlacingTower) Engine.Grid.onGridCellClicked(row, column);
             else this.OpenSelectedTowerPanel();
         });
         this.clickDetector.on('pointerenter', (e) => {
+            if (!Engine.Grid.gridInteractionEnabled) return;
             Engine.GameScene.events.emit(GridEvents.CellMouseOver, this);
         });
         this.clickDetector.on('pointerleave', (e) => {
+            if (!Engine.Grid.gridInteractionEnabled) return;
             Engine.GameScene.events.emit(GridEvents.CellMouseLeave, this);
             Engine.Grid.rangePreview.clear();
         });
@@ -83,6 +80,8 @@ export class Cell extends GameObject {
     }
     public OpenSelectedTowerPanel() {
         if (this.hasTowerPlaced) {
+            const tower = Engine.TowerManager.GetTowerByRowAndCol(this.row, this.column);
+            Engine.GameScene.towerPanel.Show(tower);
         }
     }
     public checkIfCantPlace() {
@@ -114,6 +113,7 @@ export class Grid extends GameObject {
     public rangePreview: PIXI.Graphics;
     public creeps: Creep[] = [];
     public gridShown: boolean = false;
+    public gridInteractionEnabled = true;
 
     constructor(map: GameMapDefinition, missionIndex) {
         super();

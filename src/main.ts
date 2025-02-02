@@ -67,4 +67,5 @@ import GameUIConstants from './classes/GameUIConstants';
         window.onbeforeunload = () => {
             return 'You are about to leave.';
         };
+    else Engine.TestSuite();
 })();

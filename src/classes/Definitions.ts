@@ -78,6 +78,7 @@ export type GemDefinition = {
     textures: PIXI.Texture[];
     cantCombineWith: GemType[];
     specialCombine: GemType[];
+    initialGemValue: number;
     genericImprovements: GenericGemImprovement[];
     gemResistanceModifications: CreepResistancesDefinition[];
 };
@@ -88,6 +89,7 @@ export type GenericGemImprovement = {
     rangeUp: number;
     timeToLiveUp: number;
     pierceUp: number;
+    gemValueUp: number;
 };
 
 export type PathDefinition = [[row: number, column: number]];

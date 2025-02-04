@@ -7,20 +7,23 @@
         "textures": [],
         "cantCombineWith": [],
         "specialCombine": [],
+        "initialGemValue": 10,
         "genericImprovements": [
             {
                 "damageUp": 2,
                 "attackSpeedUp": 100,
                 "rangeUp": 0.5,
                 "timeToLiveUp": 0,
-                "pierceUp": 1
+                "pierceUp": 1,
+                "gemValueUp": 0
             },
             {
                 "damageUp": 2,
                 "attackSpeedUp": 100,
                 "rangeUp": 0.5,
                 "timeToLiveUp": 0,
-                "pierceUp": 1
+                "pierceUp": 1,
+                "gemValueUp": 10
             }
         ],
         "gemResistanceModifications": [
@@ -48,20 +51,23 @@
         "textures": [],
         "cantCombineWith": [],
         "specialCombine": [],
+        "initialGemValue": 10,
         "genericImprovements": [
             {
                 "damageUp": 2,
                 "attackSpeedUp": 100,
                 "rangeUp": 0.5,
                 "timeToLiveUp": 0,
-                "pierceUp": 1
+                "pierceUp": 1,
+                "gemValueUp": 0
             },
             {
                 "damageUp": 2,
                 "attackSpeedUp": 100,
                 "rangeUp": 0.5,
                 "timeToLiveUp": 0,
-                "pierceUp": 1
+                "pierceUp": 1,
+                "gemValueUp": 10
             }
         ],
         "gemResistanceModifications": [
@@ -89,27 +95,31 @@
         "textures": [],
         "cantCombineWith": [],
         "specialCombine": [],
+        "initialGemValue": 10,
         "genericImprovements": [
             {
                 "damageUp": 2,
                 "attackSpeedUp": 100,
                 "rangeUp": 0.5,
                 "timeToLiveUp": 0,
-                "pierceUp": 1
+                "pierceUp": 1,
+                "gemValueUp": 0
             },
             {
                 "damageUp": 2,
                 "attackSpeedUp": 100,
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
-                "pierceUp": 1
+                "pierceUp": 1,
+                "gemValueUp": 10
             },
             {
                 "damageUp": 2,
                 "attackSpeedUp": 100,
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
-                "pierceUp": 1
+                "pierceUp": 1,
+                "gemValueUp": 10
             }
         ],
         "gemResistanceModifications": [
@@ -144,20 +154,23 @@
         "textures": [],
         "cantCombineWith": [],
         "specialCombine": [],
+        "initialGemValue": 10,
         "genericImprovements": [
             {
                 "damageUp": 2,
                 "attackSpeedUp": 100,
                 "rangeUp": 0.5,
                 "timeToLiveUp": 0,
-                "pierceUp": 1
+                "pierceUp": 1,
+                "gemValueUp": 0
             },
             {
                 "damageUp": 2,
                 "attackSpeedUp": 100,
                 "rangeUp": 0.5,
                 "timeToLiveUp": 0,
-                "pierceUp": 1
+                "pierceUp": 1,
+                "gemValueUp": 10
             }
         ],
         "gemResistanceModifications": [

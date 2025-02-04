@@ -7,7 +7,7 @@ import Button, { ButtonTexture } from './Button';
 import { Tower } from '../game/Tower';
 import Gem from '../game/Gem';
 import { GemEvents } from '../Events';
-import { computeDamage } from '../game/TowerBehaviours';
+import { computeGemImprovements } from '../game/TowerBehaviours';
 
 export class VisualGemSlot extends GuiObject {
     public iconSprite: PIXI.Sprite;
@@ -220,7 +220,7 @@ export default class TowerPanel extends GuiObject {
     }
     public Show(tower: Tower) {
         this.isShown = true;
-        computeDamage(tower);
+        computeGemImprovements(tower);
         this.SetContent(tower);
         this.MakeSlots(tower);
         this.showingTower = tower;

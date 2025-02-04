@@ -32,7 +32,7 @@ export default class GemTab extends GuiObject {
         this.gemTabSprite.x = 0;
         this.gemTabSprite.y = 0;
         this.gemTabSprite.width = this.bounds.width;
-        this.gemTabSprite.height = this.bounds.height;
+        this.gemTabSprite.height = this.bounds.height - 255;
         this.container.addChild(this.gemTabSprite);
         Engine.app.canvas.addEventListener('pointermove', () => {
             this.pointerMoveEvent();

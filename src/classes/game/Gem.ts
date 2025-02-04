@@ -8,12 +8,15 @@ export default class Gem {
     public texture: PIXI.Texture;
     public level: number = 1;
     public definition: GemDefinition;
-    public id: number;
-    constructor(gemType: GemType) {
+    public id: number | string;
+    constructor(gemType: GemType, doNotIncrement?: boolean) {
         this.definition = GameAssets.Gems[gemType];
         this.texture = this.definition.textures[0];
-        this.id = latestGemId + 1;
-        latestGemId++;
+
+        if (!doNotIncrement) {
+            this.id = latestGemId + 1;
+            latestGemId++;
+        } else this.id = '';
     }
     public currentGemImprovement() {
         let totalGemImprovement: GenericGemImprovement = {

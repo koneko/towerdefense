@@ -24,7 +24,7 @@ function projectileCheck(tower: Tower, elapsedMS: number) {
  *
  * @param tower - The tower whose damage is being computed.
  */
-export function computeDamage(tower: Tower) {
+export function computeGemImprovements(tower: Tower) {
     let gemDamage = 0;
     tower.slottedGems.forEach((gem) => {
         gemDamage += gem.currentGemImprovement().damageUp;
@@ -40,7 +40,7 @@ export function computeDamage(tower: Tower) {
  * @param elapsedMS - The elapsed time in milliseconds since the last update.
  */
 export function BasicTowerBehaviour(tower: Tower, elapsedMS: number) {
-    computeDamage(tower);
+    if (tower.ticksUntilNextShot % 2 == 0) computeGemImprovements(tower);
     projectileCheck(tower, elapsedMS);
     if (tower.ticksUntilNextShot > 0) tower.ticksUntilNextShot--;
     let creepsInRange = tower.GetCreepsInRange();

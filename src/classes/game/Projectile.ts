@@ -3,6 +3,7 @@ import GameObject from '../GameObject';
 import { Engine } from '../Bastion';
 import Creep from './Creep';
 import { CreepEvents } from '../Events';
+import { Tower } from './Tower';
 
 export function calculateAngleToPoint(x, y, targetX, targetY) {
     const dx = targetX - x;
@@ -19,16 +20,19 @@ export default class Projectile extends GameObject {
     public speed: number;
     public damage: number;
     public timeToLive: number = 1;
-    constructor(x, y, textures, angle, damage) {
+    public parent: Tower;
+    constructor(x, y, textures, angle, damage, tint, tower) {
         super();
         this.x = x;
         this.y = y;
+        this.parent = tower;
         this.damage = damage;
         this.sprite = new PIXI.AnimatedSprite({ textures: textures, scale: 0.25, rotation: angle });
         this.sprite.anchor.set(0.5, 0.5);
         this.sprite.play();
         this.container.x = this.x;
         this.container.y = this.y;
+        this.sprite.tint = tint;
         this.container.addChild(this.sprite);
         Engine.GameMaster.currentScene.stage.addChild(this.container);
 

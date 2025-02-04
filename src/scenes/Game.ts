@@ -213,7 +213,7 @@ export class GameScene extends Scene {
         // offerText.x -= offerText.width;
         Engine.GameMaster.currentScene.stage.addChildAt(offerText, 0);
         gemsToOffer.forEach((gType, index) => {
-            let _Gem = new Gem(gType);
+            let _Gem = new Gem(gType, true);
             let vGem = new VisualGemSlot(0, Engine.app.stage, _Gem);
             this.visualGems.push(vGem);
             vGem.container.x = this.offerGemsSprite.x - 15 + 69 * (index + 1);
@@ -228,7 +228,7 @@ export class GameScene extends Scene {
             vGem.onClick = () => {
                 Engine.GameScene.tooltip.Hide();
                 offerText.destroy();
-                this.PlayerPickedGem(_Gem);
+                this.PlayerPickedGem(new Gem(gType));
             };
         });
     }
@@ -238,6 +238,7 @@ export class GameScene extends Scene {
         this.visualGems.forEach((item) => item.destroy());
         Engine.Grid.gridInteractionEnabled = true;
         this.MissionStats.giveGem(gem);
+        this.setRoundMode(RoundMode.Purchase);
     }
 
     private ShowScoreScreen(lost) {

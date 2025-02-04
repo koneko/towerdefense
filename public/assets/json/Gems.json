@@ -39,5 +39,142 @@
                 "frostfire": 0
             }
         ]
+    },
+    {
+        "name": "Yeti Gem",
+        "description": "Yeti gem description. Something something, write this while drunk or something.",
+        "type": "Yeti",
+        "totalLevels": 2,
+        "textures": [],
+        "cantCombineWith": [],
+        "specialCombine": [],
+        "genericImprovements": [
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 100,
+                "rangeUp": 0.5,
+                "timeToLiveUp": 0,
+                "pierceUp": 1
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 100,
+                "rangeUp": 0.5,
+                "timeToLiveUp": 0,
+                "pierceUp": 1
+            }
+        ],
+        "gemResistanceModifications": [
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0,
+                "frostfire": 0
+            }
+        ]
+    },
+    {
+        "name": "Titalium Gem",
+        "description": "Titalium gem description. Something something zombie creeps working for you something something.",
+        "type": "Titalium",
+        "totalLevels": 3,
+        "textures": [],
+        "cantCombineWith": [],
+        "specialCombine": [],
+        "genericImprovements": [
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 100,
+                "rangeUp": 0.5,
+                "timeToLiveUp": 0,
+                "pierceUp": 1
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 100,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 100,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1
+            }
+        ],
+        "gemResistanceModifications": [
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0,
+                "frostfire": 0
+            }
+        ]
+    },
+    {
+        "name": "Soulforge Gem",
+        "description": "Soulforge gem description, have to write later.",
+        "type": "Soulforge",
+        "totalLevels": 2,
+        "textures": [],
+        "cantCombineWith": [],
+        "specialCombine": [],
+        "genericImprovements": [
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 100,
+                "rangeUp": 0.5,
+                "timeToLiveUp": 0,
+                "pierceUp": 1
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 100,
+                "rangeUp": 0.5,
+                "timeToLiveUp": 0,
+                "pierceUp": 1
+            }
+        ],
+        "gemResistanceModifications": [
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0,
+                "frostfire": 0
+            }
+        ]
     }
 ]

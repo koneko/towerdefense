@@ -7,6 +7,7 @@ import { TowerBehaviours } from './TowerManager';
 import Projectile, { calculateAngleToPoint } from './Projectile';
 import Creep from './Creep';
 import Gem from './Gem';
+import { BasicTowerBehaviour } from './TowerBehaviours';
 
 export function distance(x1, y1, x2, y2) {
     return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
@@ -18,12 +19,13 @@ export class Tower extends GameObject {
     public definition: TowerDefinition;
     public slottedGems: Array<Gem> = [];
     public damageDealt: number = 0;
-    private projectiles: Projectile[] = [];
-    private behaviour: string;
-    private sprite: PIXI.Sprite;
-    private ticksUntilNextShot: number;
-    private graphics: PIXI.Graphics = new PIXI.Graphics();
-    private parent: Cell;
+    public projectiles: Projectile[] = [];
+    public behaviour: string;
+    public sprite: PIXI.Sprite;
+    public ticksUntilNextShot: number;
+    public graphics: PIXI.Graphics = new PIXI.Graphics();
+    public computedDamageToDeal: number;
+    public parent: Cell;
 
     constructor(row, column, texture, definition, behaviour) {
         super();
@@ -40,6 +42,7 @@ export class Tower extends GameObject {
             zIndex: 130,
         });
         this.container.addChild(this.sprite);
+        this.computedDamageToDeal = this.definition.stats.damage;
         this.parent.container.addChild(this.container);
         this.container.interactiveChildren = true;
         this.parent.clickDetector.on('pointerenter', this.onParentCellEnter);
@@ -48,7 +51,11 @@ export class Tower extends GameObject {
     }
 
     private onParentCellEnter = (e) => {
-        if (!Engine.TowerManager.isPlacingTower && Engine.Grid.gridInteractionEnabled)
+        if (
+            !Engine.TowerManager.isPlacingTower &&
+            Engine.Grid.gridInteractionEnabled &&
+            !Engine.GameScene.towerPanel.isShown
+        )
             this.parent.showRangePreview(false, this.definition.stats.range);
     };
 
@@ -94,29 +101,16 @@ export class Tower extends GameObject {
         let x = this.column * Engine.GridCellSize + Engine.GridCellSize / 2;
         let y = this.row * Engine.GridCellSize + Engine.GridCellSize / 2;
         let angle = calculateAngleToPoint(x, y, creep.x, creep.y);
+        let tint = 0xffffff;
+        this.slottedGems.forEach((gem) => {
+            if (gem.definition.type.toString() == 'Fire') tint = 0xff0000;
+        });
         this.projectiles.push(
-            new Projectile(x, y, this.definition.projectileTextures, angle, this.definition.stats.damage)
+            new Projectile(x, y, this.definition.projectileTextures, angle, this.computedDamageToDeal, tint, this)
         );
     }
     public update(elapsedMS: any): void {
-        this.projectiles.forEach((proj) => {
-            if (proj.deleteMe) {
-                this.damageDealt += this.definition.stats.damage;
-                this.projectiles.splice(this.projectiles.indexOf(proj), 1);
-                proj = null;
-            } else proj.update(elapsedMS);
-        });
-        if (this.behaviour == TowerBehaviours.BasicTowerBehaviour) {
-            if (this.ticksUntilNextShot > 0) this.ticksUntilNextShot--;
-            let creepsInRange = this.GetCreepsInRange();
-            if (creepsInRange.length > 0) {
-                let focus = creepsInRange[0];
-                if (this.ticksUntilNextShot == 0) {
-                    this.ticksUntilNextShot = this.definition.stats.cooldown;
-                    this.Shoot(focus);
-                }
-            }
-        }
+        if (this.behaviour == TowerBehaviours.BasicTowerBehaviour) BasicTowerBehaviour(this, elapsedMS);
     }
 
     public destroy(): void {

@@ -47,11 +47,11 @@ export class Cell extends GameObject {
             else this.OpenSelectedTowerPanel();
         });
         this.clickDetector.on('pointerenter', (e) => {
-            if (!Engine.Grid.gridInteractionEnabled) return;
+            if (!Engine.Grid.gridInteractionEnabled || Engine.GameScene.towerPanel.isShown) return;
             Engine.GameScene.events.emit(GridEvents.CellMouseOver, this);
         });
         this.clickDetector.on('pointerleave', (e) => {
-            if (!Engine.Grid.gridInteractionEnabled) return;
+            if (!Engine.Grid.gridInteractionEnabled || Engine.GameScene.towerPanel.isShown) return;
             Engine.GameScene.events.emit(GridEvents.CellMouseLeave, this);
             Engine.Grid.rangePreview.clear();
         });

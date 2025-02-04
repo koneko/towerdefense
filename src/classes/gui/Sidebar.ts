@@ -3,10 +3,12 @@ import GuiObject from '../GuiObject';
 import GameAssets from '../Assets';
 import TowerTab from './TowerTab';
 import GemTab from './GemTab';
+import Gemsmith from './Gemsmith';
 
 export default class Sidebar extends GuiObject {
     public towerTab: TowerTab;
     public gemTab: GemTab;
+    public gemsmith: Gemsmith;
     private bounds: PIXI.Rectangle;
     private sidebarSprite: PIXI.NineSliceSprite;
 
@@ -33,8 +35,17 @@ export default class Sidebar extends GuiObject {
         this.towerTab = new TowerTab(towerTabRect);
         this.container.addChild(this.towerTab.container);
 
-        const gemTabRect = new PIXI.Rectangle(60, 180, this.bounds.width - 65, this.bounds.height - 280);
+        const gemTabRect = new PIXI.Rectangle(60, 180, this.bounds.width - 65, this.bounds.height - 280 - 255);
         this.gemTab = new GemTab(gemTabRect);
         this.container.addChild(this.gemTab.container);
+
+        const gemSmithRect = new PIXI.Rectangle(
+            60,
+            185 + gemTabRect.height,
+            this.bounds.width - 65,
+            this.bounds.height - 840
+        );
+        this.gemsmith = new Gemsmith(gemSmithRect);
+        this.container.addChild(this.gemsmith.container);
     }
 }

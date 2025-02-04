@@ -15,7 +15,7 @@ export class VisualGemSlot extends GuiObject {
     private frame: PIXI.Sprite;
     public i: number = 0;
     public gem: Gem = null;
-    constructor(index: number, parent: PIXI.Container, gem: Gem | null) {
+    constructor(index: number, parent: PIXI.Container, gem: Gem | null, extra?) {
         super(true);
         let gtexture;
         this.i = index;
@@ -24,7 +24,11 @@ export class VisualGemSlot extends GuiObject {
         this.background = new PIXI.Sprite({
             texture: GameAssets.Frame01Texture,
         });
-        if (gem == null) {
+        if (gem == null && !extra) {
+            gtexture = GameAssets.PlusIconTexture;
+        } else if (extra == 'SELL') {
+            gtexture = GameAssets.GoldTexture;
+        } else if (extra == 'UPGRADE') {
             gtexture = GameAssets.PlusIconTexture;
         } else {
             gtexture = gem.texture;
@@ -36,11 +40,23 @@ export class VisualGemSlot extends GuiObject {
         });
         this.background.width = Engine.GridCellSize;
         this.background.height = Engine.GridCellSize;
-        if (gem == null) {
+        if (gem == null && !extra) {
             this.iconSprite.x = Engine.GridCellSize / 2;
             this.iconSprite.y = Engine.GridCellSize / 2;
             this.iconSprite.width = Engine.GridCellSize / 2;
             this.iconSprite.height = Engine.GridCellSize / 2;
+            this.iconSprite.anchor.set(0.5, 0.5);
+        } else if (extra == 'SELL') {
+            this.iconSprite.x = 4;
+            this.iconSprite.y = 4;
+            this.iconSprite.width = Engine.GridCellSize - 8;
+            this.iconSprite.height = Engine.GridCellSize - 8;
+        } else if (extra == 'UPGRADE') {
+            this.iconSprite.x = Engine.GridCellSize / 2;
+            this.iconSprite.y = Engine.GridCellSize / 2;
+            this.iconSprite.width = Engine.GridCellSize / 2;
+            this.iconSprite.height = Engine.GridCellSize / 2;
+            this.iconSprite.tint = 0x2df937;
             this.iconSprite.anchor.set(0.5, 0.5);
         } else {
             this.iconSprite.x = 4;

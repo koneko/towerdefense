@@ -8,6 +8,7 @@ export default class Gemsmith extends GuiObject {
     public sellVGem: VisualGemSlot;
     public upgradeVGem: VisualGemSlot;
 
+    // ! NOTE: Gemsmith logic is contained within GemTab.ts
     constructor(bounds: PIXI.Rectangle) {
         super(false);
         this.bounds = bounds;

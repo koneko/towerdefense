@@ -76,9 +76,21 @@ export default class GemTab extends GuiObject {
         }
     }
     public pointerMoveEvent() {
-        if (!this.isDragAndDroppingGem || !Engine.GameScene.towerPanel.isShown || !this.dragAndDroppingGem) return;
+        if (!this.isDragAndDroppingGem || !this.dragAndDroppingGem) return;
         this.dragAndDroppingGem.container.x = Engine.MouseX - 32;
         this.dragAndDroppingGem.container.y = Engine.MouseY - 32;
+    }
+    private isOverlappingGemsmith(me: VisualGemSlot, other: VisualGemSlot, otherParent: PIXI.Container) {
+        let ddbb = me.copyContainerToBB();
+        let vb = other.copyContainerToBB();
+        let x = otherParent.x + vb.x + Engine.GameScene.sidebar.container.x;
+        let y = otherParent.y + vb.y + Engine.GameScene.sidebar.container.y;
+
+        let vgbb = new PIXI.Rectangle(x, y, vb.width, vb.height);
+        // console.log(ddbb, vgbb, ddbb.getBounds().intersects(vgbb));
+        if (ddbb.getBounds().intersects(vgbb)) {
+            if (other && other.gem == null) return true;
+        }
     }
     public RebuildInventoryVisual() {
         this.vGems.forEach((vGem) => vGem.destroy());
@@ -112,7 +124,6 @@ export default class GemTab extends GuiObject {
                     this.selectingGemTowerObject.SlotGem(takenGem, this.selectingGemSlotIndex);
                     this.RebuildInventoryVisual();
                 } else {
-                    if (!Engine.GameScene.towerPanel.isShown) return;
                     // initialise drag and drop
                     this.isDragAndDroppingGem = true;
                     this.dragAndDroppingGem = vGem;
@@ -124,6 +135,63 @@ export default class GemTab extends GuiObject {
             vGem.container.onpointerup = () => {
                 if (this.isSelectingGem) return;
                 let overlapping = null;
+                let wantToSell = this.isOverlappingGemsmith(
+                    this.dragAndDroppingGem,
+                    Engine.GameScene.sidebar.gemsmith.sellVGem,
+                    Engine.GameScene.sidebar.gemsmith.container
+                );
+                if (wantToSell) {
+                    let sellFor =
+                        this.dragAndDroppingGem.gem.definition.initialGemValue +
+                        this.dragAndDroppingGem.gem.currentGemImprovement().gemValueUp;
+                    Engine.GameScene.MissionStats.earnGold(Math.ceil(sellFor * 0.8));
+                    Engine.NotificationManager.Notify(
+                        `Sold Lv. ${this.dragAndDroppingGem.gem.level} ${
+                            this.dragAndDroppingGem.gem.definition.name
+                        } for ${Math.ceil(sellFor * 0.8)} gold.`,
+                        'info'
+                    );
+                    Engine.GameScene.MissionStats.takeGem(this.dragAndDroppingGem.gem);
+                    this.isDragAndDroppingGem = false;
+                    this.dragAndDroppingGem = null;
+                    this.RebuildInventoryVisual();
+                    return;
+                }
+                let wantToUpgrade = this.isOverlappingGemsmith(
+                    this.dragAndDroppingGem,
+                    Engine.GameScene.sidebar.gemsmith.upgradeVGem,
+                    Engine.GameScene.sidebar.gemsmith.container
+                );
+                if (wantToUpgrade) {
+                    if (this.dragAndDroppingGem.gem.isMaxLevel())
+                        Engine.NotificationManager.Notify('Gem is max level.', 'warn');
+                    else {
+                        let cost =
+                            this.dragAndDroppingGem.gem.definition.genericImprovements[
+                                this.dragAndDroppingGem.gem.level
+                            ].gemValueUp;
+                        if (Engine.GameScene.MissionStats.hasEnoughGold(cost)) {
+                            Engine.GameScene.MissionStats.spendGold(cost);
+                            this.dragAndDroppingGem.gem.levelUp(1);
+                            Engine.NotificationManager.Notify(
+                                `Spent ${cost} gold to upgrade ${this.dragAndDroppingGem.gem.definition.name} Lv. ${
+                                    this.dragAndDroppingGem.gem.level - 1
+                                } -> Lv. ${this.dragAndDroppingGem.gem.level}!`,
+                                'warn'
+                            );
+                        } else {
+                            Engine.NotificationManager.Notify(
+                                "You don't have enough, you need " + cost + ' gold to upgrade this gem.',
+                                'warn'
+                            );
+                        }
+                    }
+                    this.isDragAndDroppingGem = false;
+                    this.dragAndDroppingGem = null;
+                    this.RebuildInventoryVisual();
+
+                    return;
+                }
                 Engine.GameScene.towerPanel.vGems.forEach((internVG) => {
                     if (overlapping || !this.dragAndDroppingGem) return;
                     let ddbb = this.dragAndDroppingGem.copyContainerToBB();
@@ -132,7 +200,7 @@ export default class GemTab extends GuiObject {
                     let y = Engine.GameScene.towerPanel.container.y + vb.y;
 
                     let vgbb = new PIXI.Rectangle(x, y, vb.width, vb.height);
-                    console.log(ddbb, vgbb, ddbb.getBounds().intersects(vgbb));
+                    // console.log(ddbb, vgbb, ddbb.getBounds().intersects(vgbb));
                     if (ddbb.getBounds().intersects(vgbb)) {
                         if (internVG && internVG.gem == null) overlapping = internVG;
                     }

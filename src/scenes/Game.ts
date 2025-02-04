@@ -238,6 +238,7 @@ export class GameScene extends Scene {
         this.visualGems.forEach((item) => item.destroy());
         Engine.Grid.gridInteractionEnabled = true;
         this.MissionStats.giveGem(gem);
+        this.setRoundMode(RoundMode.Purchase);
     }
 
     private ShowScoreScreen(lost) {

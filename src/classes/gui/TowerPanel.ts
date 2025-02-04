@@ -7,6 +7,7 @@ import Button, { ButtonTexture } from './Button';
 import { Tower } from '../game/Tower';
 import Gem from '../game/Gem';
 import { GemEvents } from '../Events';
+import { computeDamage } from '../game/TowerBehaviours';
 
 export class VisualGemSlot extends GuiObject {
     public iconSprite: PIXI.Sprite;
@@ -89,6 +90,9 @@ export default class TowerPanel extends GuiObject {
     public showingTower: Tower = null;
     public isShown: boolean = false;
     public titleText: PIXI.Text;
+    public damageText: PIXI.Text;
+    public totalDamage: PIXI.Text;
+    public attackSpeedText: PIXI.Text;
 
     constructor(bounds: PIXI.Rectangle) {
         super(false);
@@ -139,6 +143,49 @@ export default class TowerPanel extends GuiObject {
         });
         this.titleText.anchor.set(0.5, 0);
         this.container.addChild(this.titleText);
+
+        this.damageText = new PIXI.Text({
+            x: 10,
+            y: 100,
+            zIndex: 5,
+            style: new PIXI.TextStyle({
+                fill: 0xffa500, // orange color
+                fontSize: 18,
+                stroke: {
+                    color: 0x000000,
+                    width: 2,
+                },
+            }),
+        });
+        this.container.addChild(this.damageText);
+        this.attackSpeedText = new PIXI.Text({
+            x: 100,
+            y: 100,
+            zIndex: 5,
+            style: new PIXI.TextStyle({
+                fill: 0xffffff,
+                fontSize: 18,
+                stroke: {
+                    color: 0x000000,
+                    width: 2,
+                },
+            }),
+        });
+        this.container.addChild(this.attackSpeedText);
+        this.totalDamage = new PIXI.Text({
+            x: 10,
+            y: 130,
+            zIndex: 5,
+            style: new PIXI.TextStyle({
+                fill: 0xff0000,
+                fontSize: 18,
+                stroke: {
+                    color: 0x000000,
+                    width: 2,
+                },
+            }),
+        });
+        this.container.addChild(this.totalDamage);
     }
     private MakeSlots(tower: Tower) {
         this.vGems.forEach((vGem) => {
@@ -173,18 +220,24 @@ export default class TowerPanel extends GuiObject {
     }
     public Show(tower: Tower) {
         this.isShown = true;
+        computeDamage(tower);
         this.SetContent(tower);
         this.MakeSlots(tower);
         this.showingTower = tower;
         Engine.GameScene.sidebar.gemTab.selectingGemTowerObject = tower;
-        if (tower.container.x < 900) {
+        if (tower.container.parent.x < 900) {
             this.ShowRight();
         } else {
             this.ShowLeft();
         }
+        tower.parent.showRangePreview(false, tower.definition.stats.range);
     }
     private SetContent(tower: Tower) {
         this.titleText.text = tower.definition.name;
+        this.damageText.text = 'Deals ' + tower.computedDamageToDeal + ' damage';
+        this.totalDamage.text = 'Damage dealt: ' + tower.damageDealt + ' damage';
+        this.attackSpeedText.x = this.damageText.width + 10;
+        this.attackSpeedText.text = ` every ${Math.floor(tower.definition.stats.cooldown / 60)}s`;
     }
     private ShowLeft() {
         this.towerPanel.x = -100;
@@ -202,5 +255,6 @@ export default class TowerPanel extends GuiObject {
         this.isShown = false;
         this.container.alpha = 0;
         this.container.x = GameUIConstants.SidebarRect.x + 10;
+        Engine.Grid.rangePreview.clear();
     }
 }

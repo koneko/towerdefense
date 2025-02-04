@@ -32,7 +32,7 @@ export class Engine {
     public static TestSuite() {
         Engine.NotificationManager.Notify('Loaded testing suite.', 'danger');
         Engine.TowerManager.ToggleChoosingTowerLocation('RESET');
-        Engine.TowerManager.PlaceTower(GameAssets.Towers[1], 10, 15, GameAssets.Towers[0].behaviour, true);
+        Engine.TowerManager.PlaceTower(GameAssets.Towers[1], 8, 10, GameAssets.Towers[0].behaviour, true);
         for (let i = 0; i < 16; i++) {
             this.GameScene.MissionStats.giveGem(new Gem(GemType.Fire), true);
         }

@@ -63,7 +63,7 @@ export default class EndGameDialog extends GuiObject {
         });
     }
 
-    private setupButtons(lost: boolean) {
+    private showButtons(lost: boolean) {
         const buttonContainer = new PIXI.Container();
         const buttonWidth = 200;
         const buttonHeight = 80;

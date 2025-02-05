@@ -9,6 +9,10 @@ export default class TextInput extends GuiObject {
     private text: PIXI.Text;
     private maxLength: number;
 
+    public getText(): string {
+        return this.text.text;
+    }
+
     constructor(bounds: PIXI.Rectangle, maxLength: number) {
         super();
         this.bounds = bounds;

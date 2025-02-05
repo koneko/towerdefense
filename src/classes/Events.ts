@@ -28,3 +28,9 @@ export enum StatsEvents {
 export enum GemEvents {
     TowerPanelSelectGem = 'towerTabSelectGem',
 }
+
+export enum EndMissionDialogEvents {
+    NextMission = 'nextMission',
+    RetryMission = 'retryMission',
+    MainMenu = 'mainMenu',
+}

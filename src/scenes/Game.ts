@@ -4,7 +4,7 @@ import { MissionDefinition } from '../classes/Definitions';
 import Creep from '../classes/game/Creep';
 import { Grid } from '../classes/game/Grid';
 import WaveManager from '../classes/game/WaveManager';
-import { WaveManagerEvents, CreepEvents, GemEvents } from '../classes/Events';
+import { WaveManagerEvents, CreepEvents, GemEvents, EndMissionDialogEvents } from '../classes/Events';
 import Sidebar from '../classes/gui/Sidebar';
 import Button, { ButtonTexture } from '../classes/gui/Button';
 import Scene from './Scene';
@@ -16,6 +16,7 @@ import GameUIConstants from '../classes/GameUIConstants';
 import Tooltip from '../classes/gui/Tooltip';
 import TowerPanel, { VisualGemSlot } from '../classes/gui/TowerPanel';
 import Gem from '../classes/game/Gem';
+import EndGameDialog from '../classes/gui/EndGameDialog';
 
 enum RoundMode {
     Purchase = 0,
@@ -40,6 +41,7 @@ export class GameScene extends Scene {
     private playerWon: boolean = false;
     private destroyTicker: boolean = false;
     private offerGemsSprite: PIXI.NineSliceSprite;
+    private endGameDialog: EndGameDialog;
     private dimGraphics: PIXI.Graphics = new PIXI.Graphics({
         x: 0,
         y: 0,
@@ -117,6 +119,9 @@ export class GameScene extends Scene {
             }
             this.sidebar.gemTab.TowerPanelSelectingGem(gem, index, tower);
         });
+        this.events.on(EndMissionDialogEvents.MainMenu, this.onEndMissionDialogMainMenuClicked.bind(this));
+        this.events.on(EndMissionDialogEvents.RetryMission, this.onEndMissionDialogRetryMissionClicked.bind(this));
+        this.events.on(EndMissionDialogEvents.NextMission, this.onEndMissionDialogNextMissionClicked.bind(this));
         this.ticker = new PIXI.Ticker();
         this.ticker.maxFPS = 60;
         this.ticker.minFPS = 30;
@@ -130,6 +135,7 @@ export class GameScene extends Scene {
         });
         this.ticker.start();
     }
+
     public update(elapsedMS) {
         if (this.isGameOver) {
             if (this.destroyTicker) {
@@ -242,12 +248,9 @@ export class GameScene extends Scene {
     }
 
     private ShowScoreScreen(lost) {
-        // TODO: show to player for real (see how this.OfferPlayerGems() does it)
-        if (lost) {
-            console.log('LOSE!');
-        } else {
-            console.log('WIN!');
-        }
+        const bounds = new PIXI.Rectangle(0, 0, Engine.app.canvas.width, Engine.app.canvas.height);
+        this.endGameDialog = new EndGameDialog(bounds, lost);
+        Engine.GameMaster.currentScene.stage.addChild(this.endGameDialog.container);
     }
 
     public onCreepEscaped(creep: Creep) {
@@ -262,6 +265,14 @@ export class GameScene extends Scene {
             Engine.WaveManager.end();
         }
     }
+
+    private onEndMissionDialogMainMenuClicked() {
+        this.ReturnToMain();
+    }
+
+    private onEndMissionDialogRetryMissionClicked() {}
+
+    private onEndMissionDialogNextMissionClicked() {}
 
     public destroy(): void {
         super.destroy();

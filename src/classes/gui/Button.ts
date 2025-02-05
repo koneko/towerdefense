@@ -22,6 +22,10 @@ export default class Button extends GuiObject {
         this.buttonText.text = caption;
     }
 
+    getCaption(): string {
+        return this.caption;
+    }
+
     constructor(bounds: PIXI.Rectangle, caption: string, buttonTexture: ButtonTexture, enabled: boolean = true) {
         super(true);
         if (buttonTexture == ButtonTexture.Button01) this.buttonTexture = Assets.Button01Texture;

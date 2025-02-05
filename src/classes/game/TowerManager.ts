@@ -23,6 +23,7 @@ export default class TowerManager {
     });
     private towers: Tower[] = [];
     constructor() {
+        // TODO: Unsubscribe from events once the scene is destroyed
         Engine.TowerManager = this;
         Engine.GameScene.events.on(GridEvents.CellMouseOver, (cell: Cell) => {
             if (this.isPlacingTower) {

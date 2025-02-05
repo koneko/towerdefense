@@ -6,6 +6,8 @@ import { GameScene } from './scenes/Game';
 import { AnimationManager } from './classes/game/AnimationManager';
 import NotificationManager from './classes/game/NotificationManager';
 import GameUIConstants from './classes/GameUIConstants';
+import MessageBox from './classes/gui/MessageBox';
+import KeyboardManager from './classes/game/KeyboardManager';
 
 (async () => {
     const app = new PIXI.Application();
@@ -47,6 +49,7 @@ import GameUIConstants from './classes/GameUIConstants';
     resize();
     await Assets.LoadAssets();
     GameUIConstants.init();
+    KeyboardManager.init();
     new GameMaster();
     Engine.AnimationManager = new AnimationManager();
     Engine.NotificationManager = new NotificationManager();

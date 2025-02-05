@@ -51,6 +51,7 @@ export default class Creep extends GameObject {
         // Added + 32 to center them.
         this.x = path[0][1] * Engine.GridCellSize + Engine.GridCellSize / 2;
         this.y = path[0][0] * Engine.GridCellSize + Engine.GridCellSize / 2;
+        // TODO: Unsubscribe from events once the scene is destroyed
         Engine.GameScene.events.on(CreepEvents.TakenDamage, (creepID, damage) => {
             if (creepID != this.id) return;
             this.health -= damage;

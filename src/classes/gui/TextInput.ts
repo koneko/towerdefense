@@ -27,7 +27,7 @@ export default class TextInput extends GuiObject {
         this.backgroundSprite.x = 0;
         this.backgroundSprite.y = 0;
         this.backgroundSprite.width = width;
-        this.backgroundSprite.height = 60;
+        this.backgroundSprite.height = 80;
         this.container.addChild(this.backgroundSprite);
         this.text = new PIXI.Text({
             text: '',
@@ -36,8 +36,8 @@ export default class TextInput extends GuiObject {
                 fontSize: 24,
             }),
         });
-        this.text.x = 20;
-        this.text.y = 20;
+        this.text.x = 30;
+        this.text.y = 25;
         this.container.addChild(this.text);
         this.keyboardManagerUnsubscribe = KeyboardManager.onKeyPressed(this.onKeyPress.bind(this));
     }

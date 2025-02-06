@@ -8,15 +8,12 @@ import KeyboardManager from '../game/KeyboardManager';
 
 export default abstract class ModalDialogBase extends GuiObject {
     protected overlay: PIXI.Graphics;
-    protected dialogPadding = 40;
-    protected contentPadding = 10;
-    protected buttonPadding = 10;
-    protected buttonAreaHeight = 40;
-    protected buttonHeight = 60;
+    protected buttonHeight = 65;
     protected buttonCaptions: string[];
     protected buttons: Button[] = [];
     protected dialogContent: PIXI.Container;
     protected dialogContainer: PIXI.Container;
+    protected background: PIXI.NineSliceSprite;
 
     private generated = false;
     private escapeKeyButton?: string | null;
@@ -43,8 +40,14 @@ export default abstract class ModalDialogBase extends GuiObject {
      */
     public show(): Promise<string | null> {
         this.generate();
+        const dialogBounds = `x: ${Math.round(this.dialogContainer.x)}, y: ${Math.round(
+            this.dialogContainer.y
+        )}, width: ${Math.round(this.dialogContainer.width)}, height: ${Math.round(this.dialogContainer.height)}`;
+        const contentBounds = `x: ${Math.round(this.dialogContent.x)}, y: ${Math.round(
+            this.dialogContent.y
+        )}, width: ${Math.round(this.dialogContent.width)}, height: ${Math.round(this.dialogContent.height)}`;
         console.debug(
-            `ModalDialogBase.show(content: ${this.dialogContainer.width}x${this.dialogContainer.height}, buttons: ${this.buttonCaptions})`
+            `ModalDialogBase.show(dialog: ${dialogBounds}, content: ${contentBounds}, buttons: ${this.buttonCaptions})`
         );
         return new Promise((resolve, reject) => {
             Engine.app.stage.addChild(this.container);
@@ -69,19 +72,14 @@ export default abstract class ModalDialogBase extends GuiObject {
     /**
      * Creates dialog background.
      */
-    protected createDialogBackground(width: number, height: number): PIXI.Container {
-        const background = new PIXI.NineSliceSprite({
+    protected createDialogBackground(): PIXI.NineSliceSprite {
+        return new PIXI.NineSliceSprite({
             texture: GameAssets.Frame04Texture,
             leftWidth: 60,
             topHeight: 60,
             rightWidth: 60,
             bottomHeight: 60,
         });
-        background.x = 0;
-        background.y = 0;
-        background.width = width;
-        background.height = height;
-        return background;
     }
 
     /**
@@ -110,23 +108,31 @@ export default abstract class ModalDialogBase extends GuiObject {
         // Prevent interaction with the underlying scene
         this.overlay.interactive = true;
         this.container.addChild(this.overlay);
-
-        this.dialogContent = this.createContent();
         const buttonDefs = this.buttonCaptions.map((btnCaption) => ({
             caption: btnCaption,
-            width: btnCaption.length * 16 + 40,
+            width: btnCaption.length * 14 + 60,
             height: this.buttonHeight,
             click: () => this.close(btnCaption),
         }));
+
+        this.background = this.createDialogBackground();
+        this.dialogContent = this.createContent();
+
         let buttonTotalWidth = 0;
         for (const buttonDef of buttonDefs) {
-            if (buttonTotalWidth > 0) buttonTotalWidth += this.buttonPadding;
+            if (buttonTotalWidth > 0) buttonTotalWidth += 10;
             buttonTotalWidth += buttonDef.width;
         }
-        const contentWidth = this.dialogContent.width + this.contentPadding * 2;
-        const contentHeight = this.dialogContent.height + this.contentPadding * 2;
-        let width = this.getWidth() || Math.max(buttonTotalWidth, contentWidth) + this.dialogPadding * 2;
-        let height = this.getHeight() || contentHeight + this.buttonAreaHeight + this.dialogPadding * 2;
+        const buttonAreaHeight = this.buttonCaptions.length > 0 ? this.buttonHeight + 10 : 0;
+
+        let width =
+            this.getWidth() ||
+            Math.max(buttonTotalWidth, this.dialogContent.width) +
+                this.background.leftWidth +
+                this.background.rightWidth;
+        let height =
+            this.getHeight() ||
+            this.dialogContent.height + buttonAreaHeight + this.background.topHeight + this.background.bottomHeight;
         const modalBounds = new PIXI.Rectangle(
             Engine.app.canvas.width / 2 - width / 2,
             Engine.app.canvas.height / 2 - height / 2,
@@ -137,14 +143,24 @@ export default abstract class ModalDialogBase extends GuiObject {
         this.dialogContainer = new PIXI.Container();
         this.dialogContainer.x = modalBounds.x;
         this.dialogContainer.y = modalBounds.y;
+        this.background.width = width;
+        this.background.height = height;
+        this.dialogContainer.addChild(this.background);
 
-        const background = this.createDialogBackground(modalBounds.width, modalBounds.height);
-        this.dialogContainer.addChild(background);
-
-        if (this.dialogContent.width < modalBounds.width)
+        if (this.dialogContent.width < modalBounds.width) {
             this.dialogContent.x = modalBounds.width / 2 - this.dialogContent.width / 2;
-        if (this.dialogContent.height < modalBounds.height - this.buttonAreaHeight)
-            this.dialogContent.y = (modalBounds.height - this.buttonAreaHeight) / 2 - this.dialogContent.height / 2;
+        }
+        if (
+            this.dialogContent.height <
+            modalBounds.height - buttonAreaHeight - this.background.topHeight - this.background.bottomHeight
+        ) {
+            this.dialogContent.y =
+                this.background.topHeight +
+                (modalBounds.height - buttonAreaHeight - this.background.topHeight - this.background.bottomHeight) / 2 -
+                this.dialogContent.height / 2;
+        } else {
+            this.dialogContent.y = this.background.topHeight;
+        }
         this.dialogContainer.addChild(this.dialogContent);
 
         let buttonXPos = modalBounds.width / 2 - buttonTotalWidth / 2;
@@ -152,7 +168,7 @@ export default abstract class ModalDialogBase extends GuiObject {
             const button = new Button(
                 new PIXI.Rectangle(
                     buttonXPos,
-                    modalBounds.height - this.buttonAreaHeight - this.dialogPadding,
+                    modalBounds.height - this.buttonHeight - this.background.bottomHeight,
                     buttonDef.width,
                     buttonDef.height
                 ),
@@ -162,7 +178,7 @@ export default abstract class ModalDialogBase extends GuiObject {
             button.onClick = buttonDef.click;
             this.buttons.push(button);
             this.dialogContainer.addChild(button.container);
-            buttonXPos += buttonDef.width + this.buttonPadding;
+            buttonXPos += buttonDef.width + 10;
         }
         this.container.addChild(this.dialogContainer);
     }

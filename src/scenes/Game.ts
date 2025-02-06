@@ -245,15 +245,17 @@ export class GameScene extends Scene {
     }
 
     private async ShowEndgameDialog(lost) {
-        const endGameDialog = new EndGameDialog(lost);
+        const endGameDialog = new EndGameDialog(this.mission.name, this.MissionStats, lost);
         await endGameDialog.show();
-        const highScore = new HighScoreDialog(this.missionIndex + 1 < GameAssets.Missions.length);
+        const highScore = new HighScoreDialog(this.mission.name, this.missionIndex + 1 < GameAssets.Missions.length);
         const result = await highScore.show();
         if (result === HighScoreDialogButtons.MainMenu) {
             this.ReturnToMain();
         } else if (result === HighScoreDialogButtons.NextMission) {
+            this.destroy();
             Engine.GameMaster.changeScene(new GameScene(GameAssets.Missions[this.missionIndex + 1].name));
         } else if (result === HighScoreDialogButtons.Retry) {
+            this.destroy();
             Engine.GameMaster.changeScene(new GameScene(this.mission.name));
         }
     }

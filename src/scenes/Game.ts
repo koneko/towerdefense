@@ -4,7 +4,7 @@ import { MissionDefinition } from '../classes/Definitions';
 import Creep from '../classes/game/Creep';
 import { Grid } from '../classes/game/Grid';
 import WaveManager from '../classes/game/WaveManager';
-import { WaveManagerEvents, CreepEvents, GemEvents, EndMissionDialogEvents } from '../classes/Events';
+import { WaveManagerEvents, CreepEvents, GemEvents } from '../classes/Events';
 import Sidebar from '../classes/gui/Sidebar';
 import Button, { ButtonTexture } from '../classes/gui/Button';
 import Scene from './Scene';
@@ -17,6 +17,7 @@ import Tooltip from '../classes/gui/Tooltip';
 import TowerPanel, { VisualGemSlot } from '../classes/gui/TowerPanel';
 import Gem from '../classes/game/Gem';
 import EndGameDialog from '../classes/gui/EndGameDialog';
+import HighScoreDialog, { HighScoreDialogButtons } from '../classes/gui/HighScoreDialog';
 
 enum RoundMode {
     Purchase = 0,
@@ -41,7 +42,6 @@ export class GameScene extends Scene {
     private playerWon: boolean = false;
     private destroyTicker: boolean = false;
     private offerGemsSprite: PIXI.NineSliceSprite;
-    private endGameDialog: EndGameDialog;
     private dimGraphics: PIXI.Graphics = new PIXI.Graphics({
         x: 0,
         y: 0,
@@ -119,9 +119,6 @@ export class GameScene extends Scene {
             }
             this.sidebar.gemTab.TowerPanelSelectingGem(gem, index, tower);
         });
-        this.events.on(EndMissionDialogEvents.MainMenu, this.onEndMissionDialogMainMenuClicked.bind(this));
-        this.events.on(EndMissionDialogEvents.RetryMission, this.onEndMissionDialogRetryMissionClicked.bind(this));
-        this.events.on(EndMissionDialogEvents.NextMission, this.onEndMissionDialogNextMissionClicked.bind(this));
         this.ticker = new PIXI.Ticker();
         this.ticker.maxFPS = 60;
         this.ticker.minFPS = 30;
@@ -168,10 +165,10 @@ export class GameScene extends Scene {
 
         if (this.MissionStats.getHP() <= 0) {
             this.isGameOver = true;
-            this.ShowScoreScreen(true);
+            this.ShowEndgameDialog(true);
         } else if (this.playerWon) {
             this.isGameOver = true;
-            this.ShowScoreScreen(false);
+            this.ShowEndgameDialog(false);
         }
     }
     public DarkenScreen() {
@@ -247,10 +244,18 @@ export class GameScene extends Scene {
         this.setRoundMode(RoundMode.Purchase);
     }
 
-    private ShowScoreScreen(lost) {
-        const bounds = new PIXI.Rectangle(0, 0, Engine.app.canvas.width, Engine.app.canvas.height);
-        this.endGameDialog = new EndGameDialog(bounds, lost);
-        Engine.GameMaster.currentScene.stage.addChild(this.endGameDialog.container);
+    private async ShowEndgameDialog(lost) {
+        const endGameDialog = new EndGameDialog(lost);
+        await endGameDialog.show();
+        const highScore = new HighScoreDialog(this.missionIndex + 1 < GameAssets.Missions.length);
+        const result = await highScore.show();
+        if (result === HighScoreDialogButtons.MainMenu) {
+            this.ReturnToMain();
+        } else if (result === HighScoreDialogButtons.NextMission) {
+            Engine.GameMaster.changeScene(new GameScene(GameAssets.Missions[this.missionIndex + 1].name));
+        } else if (result === HighScoreDialogButtons.Retry) {
+            Engine.GameMaster.changeScene(new GameScene(this.mission.name));
+        }
     }
 
     public onCreepEscaped(creep: Creep) {
@@ -266,14 +271,6 @@ export class GameScene extends Scene {
         }
     }
 
-    private onEndMissionDialogMainMenuClicked() {
-        this.ReturnToMain();
-    }
-
-    private onEndMissionDialogRetryMissionClicked() {}
-
-    private onEndMissionDialogNextMissionClicked() {}
-
     public destroy(): void {
         super.destroy();
         this.isGameOver = true;
@@ -282,8 +279,6 @@ export class GameScene extends Scene {
     }
 
     private ReturnToMain() {
-        this.destroy();
-        Engine.GameMaster.currentScene.stage.removeChildren();
         Engine.GameMaster.changeScene(new MissionPickerScene());
     }
 }

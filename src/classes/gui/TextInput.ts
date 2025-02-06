@@ -2,25 +2,21 @@ import * as PIXI from 'pixi.js';
 import GuiObject from '../GuiObject';
 import Assets from '../Assets';
 import GameAssets from '../Assets';
+import KeyboardManager from '../game/KeyboardManager';
 
 export default class TextInput extends GuiObject {
-    private bounds: PIXI.Rectangle;
     private backgroundSprite: PIXI.NineSliceSprite;
     private text: PIXI.Text;
     private maxLength: number;
+    private keyboardManagerUnsubscribe: () => void;
 
     public getText(): string {
         return this.text.text;
     }
 
-    constructor(bounds: PIXI.Rectangle, maxLength: number) {
+    constructor(width: number, maxLength: number) {
         super();
-        this.bounds = bounds;
         this.maxLength = maxLength;
-        this.container.x = this.bounds.x;
-        this.container.y = this.bounds.y;
-        this.container.width = this.bounds.width;
-        this.container.height = this.bounds.height;
         this.backgroundSprite = new PIXI.NineSliceSprite({
             texture: GameAssets.Frame01Texture,
             leftWidth: 20,
@@ -30,21 +26,20 @@ export default class TextInput extends GuiObject {
         });
         this.backgroundSprite.x = 0;
         this.backgroundSprite.y = 0;
-        this.backgroundSprite.width = this.bounds.width;
-        this.backgroundSprite.height = this.bounds.height;
+        this.backgroundSprite.width = width;
+        this.backgroundSprite.height = 60;
         this.container.addChild(this.backgroundSprite);
-        this.container.x = this.bounds.x;
-        this.container.y = this.bounds.y;
         this.text = new PIXI.Text({
             text: '',
             style: new PIXI.TextStyle({
                 fill: 0xffffff,
-                fontSize: 16,
+                fontSize: 24,
             }),
         });
-        this.text.x = 10;
-        this.text.y = 10;
+        this.text.x = 20;
+        this.text.y = 20;
         this.container.addChild(this.text);
+        this.keyboardManagerUnsubscribe = KeyboardManager.onKeyPressed(this.onKeyPress.bind(this));
     }
 
     private onKeyPress(event: KeyboardEvent) {

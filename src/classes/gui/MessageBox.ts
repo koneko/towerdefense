@@ -5,12 +5,15 @@ import GuiObject from '../GuiObject';
 export default class MessageBox extends ModalDialogBase {
     private caption: string;
 
-    constructor(caption: string, buttons: string[], escapeKeyIndex: number = buttons.length - 1) {
-        super(buttons, escapeKeyIndex);
+    constructor(caption: string, buttons: string[], escapeKeyButton?: string | null, enterKeyButton?: string | null) {
+        if (!enterKeyButton && buttons.length > 0) enterKeyButton = buttons[0];
+        if (!escapeKeyButton && buttons.length > 0) escapeKeyButton = buttons[buttons.length - 1];
+
+        super(buttons, escapeKeyButton, enterKeyButton);
         this.caption = caption;
     }
 
-    protected override createContent(): PIXI.Container | GuiObject {
+    protected override createContent(): PIXI.Container {
         const text = new PIXI.Text({
             text: this.caption,
             style: new PIXI.TextStyle({

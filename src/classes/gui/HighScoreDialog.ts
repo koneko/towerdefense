@@ -3,31 +3,32 @@ import GameAssets from '../Assets';
 import GameUIConstants from '../GameUIConstants';
 import ModalDialogBase from './ModalDialog';
 import TextInput from './TextInput';
-import MessageBox from './MessageBox';
 
-export const EndGameDialogButtons = {
-    Confirm: 'OK',
-    Skip: 'Skip',
+export const HighScoreDialogButtons = {
+    Retry: 'Retry',
+    MainMenu: 'Main Menu',
+    NextMission: 'Next Mission',
 };
 
-export default class EndGameDialog extends ModalDialogBase {
+export default class HighScoreDialog extends ModalDialogBase {
     private dialogCaption: PIXI.Text;
     private playerNameTextInput: TextInput;
     private lost: boolean;
 
-    constructor(lost: boolean) {
+    constructor(nextMissionAvailable: boolean) {
         super(
-            [EndGameDialogButtons.Confirm, EndGameDialogButtons.Skip],
-            EndGameDialogButtons.Confirm,
-            EndGameDialogButtons.Skip
+            nextMissionAvailable
+                ? [HighScoreDialogButtons.Retry, HighScoreDialogButtons.NextMission, HighScoreDialogButtons.MainMenu]
+                : [HighScoreDialogButtons.Retry, HighScoreDialogButtons.MainMenu],
+            nextMissionAvailable ? HighScoreDialogButtons.NextMission : HighScoreDialogButtons.Retry,
+            HighScoreDialogButtons.MainMenu
         );
-        this.lost = lost;
     }
 
     protected override generate(): void {
         super.generate();
         this.dialogCaption = new PIXI.Text({
-            text: this.lost ? 'You lost!' : 'You won!',
+            text: 'Highscore',
             style: new PIXI.TextStyle({
                 fill: 0xffffff,
                 fontSize: 36,
@@ -57,28 +58,14 @@ export default class EndGameDialog extends ModalDialogBase {
     protected override createContent(): PIXI.Container {
         const container = new PIXI.Container();
         const caption = new PIXI.Text({
-            text: 'Enter your name:',
+            text: 'Leaderboard:',
             style: new PIXI.TextStyle({
                 fill: 0xffffff,
                 fontSize: 24,
             }),
         });
         container.addChild(caption);
-        this.playerNameTextInput = new TextInput(
-            GameUIConstants.MaximumPlayerNameLength * 20,
-            GameUIConstants.MaximumPlayerNameLength
-        );
-        this.playerNameTextInput.container.y = caption.height + 10;
-        container.addChild(this.playerNameTextInput.container);
         return container;
-    }
-
-    override close(button?: string): void {
-        if (button === EndGameDialogButtons.Confirm && this.playerNameTextInput.getText().length == 0) {
-            MessageBox.show('Please enter your name.', ['OK']);
-        } else {
-            super.close(button);
-        }
     }
 
     protected override getWidth(): number | undefined {

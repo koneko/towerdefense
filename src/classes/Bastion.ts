@@ -41,7 +41,6 @@ export class Engine {
 
 export default class GameMaster {
     public currentScene: Scene;
-    private GameObjects: GameObject[] = [];
 
     constructor() {
         Engine.GameMaster = this;
@@ -61,9 +60,6 @@ export default class GameMaster {
         if (this.currentScene) {
             this.currentScene.destroy();
         }
-        this.GameObjects.forEach((element) => {
-            element.destroy();
-        });
         this.currentScene = newScene;
         this.currentScene.init();
     }

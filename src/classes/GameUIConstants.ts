@@ -3,7 +3,9 @@ import { Engine } from './Bastion';
 export default class GameUIConstants {
     public static SidebarRect: PIXI.Rectangle;
     public static ChangeRoundButtonRect: PIXI.Rectangle;
-    public static EndGameDialogRect: PIXI.Rectangle;
+    public static StandardDialogWidth: number;
+    public static StandardDialogHeight: number;
+    public static MaximumPlayerNameLength = 20;
 
     public static init() {
         GameUIConstants.SidebarRect = new PIXI.Rectangle(
@@ -13,13 +15,7 @@ export default class GameUIConstants {
             Engine.app.canvas.height
         );
         GameUIConstants.ChangeRoundButtonRect = new PIXI.Rectangle(50, Engine.app.canvas.height - 100, 310, 100);
-        const endGameDialogWidth = 600;
-        const endGameDialogHeight = 800;
-        GameUIConstants.EndGameDialogRect = new PIXI.Rectangle(
-            (Engine.app.canvas.width - endGameDialogWidth) / 2,
-            (Engine.app.canvas.height - endGameDialogHeight) / 2,
-            endGameDialogWidth,
-            endGameDialogHeight
-        );
+        GameUIConstants.StandardDialogWidth = 600;
+        GameUIConstants.StandardDialogHeight = 800;
     }
 }

@@ -30,6 +30,9 @@ export class Engine {
     public static MouseY: number = 0;
 
     public static TestSuite() {
+        let params = new URLSearchParams(location.href);
+        if (params.entries().next().value[1] != 'game') return;
+
         Engine.NotificationManager.Notify('Loaded testing suite.', 'danger');
         Engine.TowerManager.ToggleChoosingTowerLocation('RESET');
         Engine.TowerManager.PlaceTower(GameAssets.Towers[1], 8, 10, GameAssets.Towers[0].behaviour, true);

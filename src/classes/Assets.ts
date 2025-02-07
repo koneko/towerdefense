@@ -152,7 +152,6 @@ export default class GameAssets {
 
     private static async LoadMissions() {
         // When adding missions, make sure to keep order.
-        await this.LoadMission('./assets/missions/mission_01.json');
         await this.LoadMission('./assets/missions/01_first_steps.json');
         await this.LoadMission('./assets/missions/02_the_turn.json');
         await this.LoadMission('./assets/missions/03_fork_in_the_road.json');

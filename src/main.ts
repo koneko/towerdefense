@@ -64,7 +64,7 @@ import KeyboardManager from './classes/game/KeyboardManager';
     });
     Engine.GameMaster.changeScene(new MainScene());
     let params = new URLSearchParams(location.href);
-    if (params.entries().next().value[1] == 'game') Engine.GameMaster.changeScene(new GameScene('Mission 1'));
+    if (params.entries().next().value[1] == 'game') Engine.GameMaster.changeScene(new GameScene('The Turn'));
 
     if (Engine.latestCommit != 'DEVELOPMENT')
         window.onbeforeunload = () => {

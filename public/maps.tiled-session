@@ -55,51 +55,51 @@
             }
         },
         "tiled/01_first_steps.tmx": {
-            "scale": 0.75,
+            "scale": 0.33,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 800.6666666666665,
-                "y": 543.3333333333333
+                "x": 639.3939393939394,
+                "y": 433.33333333333326
             }
         },
         "tiled/02_the_turn.tmx": {
-            "scale": 1,
+            "scale": 0.33,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 800.5,
-                "y": 543.5
+                "x": 869.6969696969697,
+                "y": 203.03030303030323
             }
         },
         "tiled/03_fork_in_the_road.tmx": {
-            "scale": 1,
+            "scale": 0.33,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 800.5,
-                "y": 543.5
+                "x": 2693.9393939393935,
+                "y": 239.3939393939395
             }
         },
         "tiled/04_crossroads.tmx": {
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 800.5,
-                "y": 543.5
+                "x": 646.5,
+                "y": 543
             }
         },
         "tiled/05_the_maze.tmx": {
-            "scale": 1.6494375,
+            "scale": 0.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 799.9696866355955,
-                "y": 544.1248910613467
+                "x": 896,
+                "y": 406
             }
         },
         "tiled/06_multiple_fronts.tmx": {
-            "scale": 1.6494375,
+            "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 799.9696866355955,
-                "y": 544.1248910613467
+                "x": 873.3333333333333,
+                "y": 474.6666666666666
             }
         },
         "tiled/Mission01.tmx": {
@@ -107,7 +107,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 833,
-                "y": 628.5
+                "y": 629
             }
         }
     },
@@ -115,7 +115,7 @@
     "last.externalTilesetPath": "/home/koneko/Programing/js/towerdefense/public",
     "map.height": 17,
     "map.lastUsedExportFilter": "All Files (*)",
-    "map.lastUsedFormat": "json",
+    "map.lastUsedFormat": "tmx",
     "map.tileHeight": 64,
     "map.tileWidth": 64,
     "map.width": 25,
@@ -130,13 +130,13 @@
     ],
     "project": "maps.tiled-project",
     "recentFiles": [
+        "tiled/Mission01.tmx",
         "tiled/04_crossroads.tmx",
         "tiled/05_the_maze.tmx",
         "tiled/06_multiple_fronts.tmx",
         "tiled/03_fork_in_the_road.tmx",
         "tiled/02_the_turn.tmx",
         "tiled/01_first_steps.tmx",
-        "tiled/Mission01.tmx",
         "tiled/01_first_steps..tmx",
         "Mission011.tmx",
         "Tileset.tsx",

@@ -66,6 +66,27 @@ export class Cell extends GameObject {
                 this.hasTowerPlaced = false;
             }
         });
+
+        // Disable this if you want to add new maps.
+        // if(true) return;
+        const text = new PIXI.Text({
+            text: `${this.column}|${this.row}`,
+            style: new PIXI.TextStyle({
+                fill: 0xffffff,
+                stroke: {
+                    color: 0x000000,
+                    width: 2,
+                },
+            }),
+        });
+        this.container.addChild(text);
+        text.anchor.set(0.5, 0.5);
+        text.x = this.bb.width / 2;
+        text.y = this.bb.height / 2;
+        if (isPath) {
+            text.style.fill = 'pink';
+            text.style.fontWeight = 'bold';
+        }
     }
     public showRangePreview(invalid, range) {
         let color = 0xffffff;

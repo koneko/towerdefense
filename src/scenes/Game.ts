@@ -59,6 +59,7 @@ export class GameScene extends Scene {
         });
     }
     public init() {
+        Engine.latestGemId = 0;
         new Grid(this.mission.gameMap, this.missionIndex);
         new TowerManager();
         new WaveManager(this.mission.rounds, this.mission.gameMap.paths);
@@ -257,10 +258,14 @@ export class GameScene extends Scene {
             this.ReturnToMain();
         } else if (result === HighScoreDialogButtons.NextMission) {
             this.destroy();
+            Engine.GameMaster.changeScene(new MissionPickerScene());
             Engine.GameMaster.changeScene(new GameScene(GameAssets.Missions[this.missionIndex + 1].name));
+            Engine.NotificationManager.Notify('Loading next mission. Good luck.', 'green');
         } else if (result === HighScoreDialogButtons.Retry) {
             this.destroy();
+            Engine.GameMaster.changeScene(new MissionPickerScene());
             Engine.GameMaster.changeScene(new GameScene(this.mission.name));
+            Engine.NotificationManager.Notify('Retrying mission.', 'green');
         }
     }
 

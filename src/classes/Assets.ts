@@ -158,6 +158,7 @@ export default class GameAssets {
         await this.LoadMission('./assets/missions/04_crossroads.json');
         await this.LoadMission('./assets/missions/05_the_maze.json');
         await this.LoadMission('./assets/missions/06_multiple_fronts.json');
+        await this.LoadMission('./assets/missions/07_final_stretch.json');
     }
 
     private static async LoadTowers() {

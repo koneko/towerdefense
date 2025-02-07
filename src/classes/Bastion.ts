@@ -22,6 +22,7 @@ export class Engine {
     public static NotificationManager: NotificationManager;
     public static GameScene: GameScene;
     public static latestCommit: string;
+    public static latestGemId = 0;
 
     public static GridCellSize: number = 64;
     public static GridColumns: number = 25;

@@ -6,6 +6,8 @@ import { Engine } from '../Bastion';
 import Creep from './Creep';
 import { CreepEvents, TowerEvents, GridEvents } from '../Events';
 
+let genPath = [];
+
 export class Cell extends GameObject {
     public type: TerrainType;
     public row: number;
@@ -55,6 +57,7 @@ export class Cell extends GameObject {
             Engine.GameScene.events.emit(GridEvents.CellMouseLeave, this);
             Engine.Grid.rangePreview.clear();
         });
+
         Engine.GameScene.events.on(TowerEvents.TowerPlacedEvent, (_, row, col) => {
             if (row == this.row && col == this.column) {
                 this.hasTowerPlaced = true;
@@ -68,11 +71,13 @@ export class Cell extends GameObject {
         });
 
         // Disable this if you want to add new maps.
-        // if(true) return;
+        if (true) return;
+
         const text = new PIXI.Text({
             text: `${this.column}|${this.row}`,
             style: new PIXI.TextStyle({
                 fill: 0xffffff,
+                fontSize: 16,
                 stroke: {
                     color: 0x000000,
                     width: 2,
@@ -87,6 +92,18 @@ export class Cell extends GameObject {
             text.style.fill = 'pink';
             text.style.fontWeight = 'bold';
         }
+        this.clickDetector.on('pointerup', () => {
+            const cellIndex = genPath.findIndex(([col, row]) => col === this.column && row === this.row);
+            if (cellIndex !== -1) {
+                text.style.fill = 0xffffff;
+                genPath.splice(cellIndex, 1);
+            } else {
+                text.style.fill = 0xff0000;
+                genPath.push([this.column, this.row]);
+            }
+            console.log('updated gen path');
+            console.log(JSON.stringify(genPath));
+        });
     }
     public showRangePreview(invalid, range) {
         let color = 0xffffff;

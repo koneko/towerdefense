@@ -92,7 +92,7 @@ export type GenericGemImprovement = {
     gemValueUp: number;
 };
 
-export type PathDefinition = [[row: number, column: number]];
+export type PathDefinition = [[column: number, row: number]];
 
 export enum TerrainType {
     Restricted = 0,

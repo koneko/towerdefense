@@ -3,10 +3,10 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "tiled/02_the_turn.tmx",
+    "activeFile": "tiled/Mission01.tmx",
     "expandedProjectPaths": [
-        "assets/missions",
         "tiled",
+        "assets/missions",
         "."
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -43,76 +43,102 @@
             }
         },
         "Tileset.tsx": {
-            "scaleInDock": 0.5,
+            "scaleInDock": 0.75,
             "scaleInEditor": 1
         },
-        "tiled/01_first_steps.tmx": {
-            "scale": 1.6494375,
+        "tiled/01_first_steps..tmx": {
+            "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 799.9696866355956,
-                "y": 544.1248910613466
+                "x": 975,
+                "y": 640.5
+            }
+        },
+        "tiled/01_first_steps.tmx": {
+            "scale": 0.75,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 800.6666666666665,
+                "y": 543.3333333333333
             }
         },
         "tiled/02_the_turn.tmx": {
-            "scale": 1.6494375,
+            "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 799.9696866355956,
-                "y": 544.1248910613466
+                "x": 800.5,
+                "y": 543.5
             }
         },
         "tiled/03_fork_in_the_road.tmx": {
-            "scale": 1.6494375,
+            "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 799.9696866355956,
-                "y": 544.1248910613466
+                "x": 800.5,
+                "y": 543.5
             }
         },
         "tiled/04_crossroads.tmx": {
-            "scale": 1.6494375,
+            "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 799.9696866355956,
-                "y": 544.1248910613466
+                "x": 800.5,
+                "y": 543.5
             }
         },
         "tiled/05_the_maze.tmx": {
             "scale": 1.6494375,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 799.9696866355956,
-                "y": 544.1248910613466
+                "x": 799.9696866355955,
+                "y": 544.1248910613467
+            }
+        },
+        "tiled/06_multiple_fronts.tmx": {
+            "scale": 1.6494375,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 799.9696866355955,
+                "y": 544.1248910613467
             }
         },
         "tiled/Mission01.tmx": {
-            "scale": 0.5,
+            "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 799,
-                "y": 543
+                "x": 833,
+                "y": 628.5
             }
         }
     },
+    "last.exportedFilePath": "C:/Work/Projects/Matej/towerdefense/public/tiled",
     "last.externalTilesetPath": "/home/koneko/Programing/js/towerdefense/public",
     "map.height": 17,
-    "map.lastUsedFormat": "tmx",
+    "map.lastUsedExportFilter": "All Files (*)",
+    "map.lastUsedFormat": "json",
     "map.tileHeight": 64,
     "map.tileWidth": 64,
     "map.width": 25,
     "openFiles": [
-        "Mission011.tmx",
-        "tiled/Mission01.tmx",
-        "tiled/02_the_turn.tmx",
-        "tiled/01_first_steps.tmx"
-    ],
-    "project": "maps.tiled-project",
-    "recentFiles": [
-        "Mission011.tmx",
+        "tiled/04_crossroads.tmx",
+        "tiled/05_the_maze.tmx",
         "tiled/Mission01.tmx",
         "tiled/01_first_steps.tmx",
         "tiled/02_the_turn.tmx",
+        "tiled/03_fork_in_the_road.tmx",
+        "tiled/06_multiple_fronts.tmx"
+    ],
+    "project": "maps.tiled-project",
+    "recentFiles": [
+        "tiled/04_crossroads.tmx",
+        "tiled/05_the_maze.tmx",
+        "tiled/06_multiple_fronts.tmx",
+        "tiled/03_fork_in_the_road.tmx",
+        "tiled/02_the_turn.tmx",
+        "tiled/01_first_steps.tmx",
+        "tiled/Mission01.tmx",
+        "tiled/01_first_steps..tmx",
+        "Mission011.tmx",
         "Tileset.tsx",
         "Mission01.tmx",
         "C:/home/koneko/dumping/tiles/TiledTDThree64.tmx"

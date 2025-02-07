@@ -61,7 +61,7 @@ export default class WaveManager extends GameObject {
                 console.log('Wave manager creep spawned, ', creep, this.ticks);
                 if (!this.finished && this.creeps.every((creep) => creep.spawned)) {
                     this.finished = true;
-                    console.log('wave maanger finisehd');
+                    console.log('wave manager finished');
                     this.events.emit(WaveManagerEvents.Finished);
                 }
             } else if (creep.spawned) {

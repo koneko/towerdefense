@@ -49,8 +49,8 @@ export default class Creep extends GameObject {
         this.maxHealth = this.stats.health;
         this.path = path;
         // Added + 32 to center them.
-        this.x = path[0][1] * Engine.GridCellSize + Engine.GridCellSize / 2;
-        this.y = path[0][0] * Engine.GridCellSize + Engine.GridCellSize / 2;
+        this.x = path[0][0] * Engine.GridCellSize + Engine.GridCellSize / 2;
+        this.y = path[0][1] * Engine.GridCellSize + Engine.GridCellSize / 2;
         // TODO: Unsubscribe from events once the scene is destroyed
         Engine.GameScene.events.on(CreepEvents.TakenDamage, (creepID, damage) => {
             if (creepID != this.id) return;
@@ -95,10 +95,10 @@ export default class Creep extends GameObject {
         const targetCell = this.path[this.pathIndex + 1];
 
         // Added + 32 for centering.
-        const targetX = targetCell[1] * Engine.GridCellSize + Engine.GridCellSize / 2;
-        const targetY = targetCell[0] * Engine.GridCellSize + Engine.GridCellSize / 2;
-        const directionX = targetCell[1] - currentCell[1];
-        const directionY = targetCell[0] - currentCell[0];
+        const targetX = targetCell[0] * Engine.GridCellSize + Engine.GridCellSize / 2;
+        const targetY = targetCell[1] * Engine.GridCellSize + Engine.GridCellSize / 2;
+        const directionX = targetCell[0] - currentCell[0];
+        const directionY = targetCell[1] - currentCell[1];
         if (directionX > 0) {
             // Going right
             if (this.direction != 1) {

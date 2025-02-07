@@ -133,7 +133,7 @@ export class Grid extends GameObject {
             for (let x = 0; x < this.gameMap.rows; x++) {
                 let type = this.gameMap.cells[x][y];
                 if (!type) type = 1;
-                const isPath = this.gameMap.paths.some((path) => path.some((p) => p[0] === x && p[1] === y));
+                const isPath = this.gameMap.paths.some((path) => path.some((p) => p[1] === x && p[0] === y));
                 if (isPath) type = TerrainType.Path;
                 let cell = new Cell(type, x, y, isPath);
                 this.cells.push(cell);

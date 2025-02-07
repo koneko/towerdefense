@@ -88,9 +88,12 @@ export class Cell extends GameObject {
         text.anchor.set(0.5, 0.5);
         text.x = this.bb.width / 2;
         text.y = this.bb.height / 2;
-        if (isPath) {
-            text.style.fill = 'pink';
+        if (this.type == TerrainType.Path) {
+            text.style.fill = 'green';
             text.style.fontWeight = 'bold';
+        }
+        if (this.type == TerrainType.Restricted) {
+            text.style.fill = 'gold';
         }
         this.clickDetector.on('pointerup', () => {
             const cellIndex = genPath.findIndex(([col, row]) => col === this.column && row === this.row);
@@ -170,7 +173,6 @@ export class Grid extends GameObject {
         for (let y = 0; y < this.gameMap.columns; y++) {
             for (let x = 0; x < this.gameMap.rows; x++) {
                 let type = this.gameMap.cells[x][y];
-                if (!type) type = 1;
                 const isPath = this.gameMap.paths.some((path) => path.some((p) => p[1] === x && p[0] === y));
                 if (isPath) type = TerrainType.Path;
                 let cell = new Cell(type, x, y, isPath);
@@ -181,6 +183,32 @@ export class Grid extends GameObject {
             zIndex: 10,
         });
         this.container.addChild(this.rangePreview);
+    }
+    public generateCells() {
+        const newGrid = Array.from({ length: this.gameMap.rows }, () => Array(this.gameMap.columns).fill(1));
+
+        this.cells.forEach((cell) => {
+            if (cell.isPath) {
+                newGrid[cell.row][cell.column] = 9;
+                for (let i = -1; i <= 1; i++) {
+                    for (let j = -1; j <= 1; j++) {
+                        const newRow = cell.row + i;
+                        const newCol = cell.column + j;
+                        if (
+                            newRow >= 0 &&
+                            newRow < this.gameMap.rows &&
+                            newCol >= 0 &&
+                            newCol < this.gameMap.columns &&
+                            newGrid[newRow][newCol] !== 9
+                        ) {
+                            newGrid[newRow][newCol] = 0;
+                        }
+                    }
+                }
+            }
+        });
+
+        console.log(JSON.stringify(newGrid));
     }
     public toggleGrid(force?: 'hide' | 'show') {
         this.cells.forEach((cell) => {

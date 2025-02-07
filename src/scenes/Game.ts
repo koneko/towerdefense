@@ -247,7 +247,11 @@ export class GameScene extends Scene {
     private async ShowEndgameDialog(lost) {
         const endGameDialog = new EndGameDialog(this.mission.name, this.MissionStats, lost);
         await endGameDialog.show();
-        const highScore = new HighScoreDialog(this.mission.name, this.missionIndex + 1 < GameAssets.Missions.length);
+        const highScore = new HighScoreDialog(
+            this.mission.name,
+            lost,
+            !lost && this.missionIndex + 1 < GameAssets.Missions.length
+        );
         const result = await highScore.show();
         if (result === HighScoreDialogButtons.MainMenu) {
             this.ReturnToMain();

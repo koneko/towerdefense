@@ -13,12 +13,18 @@ export default class HighScoreDialog extends ModalDialogBase {
     private dialogCaption: PIXI.Text;
     private highScore: HighScoreManager;
 
-    constructor(missionName: string, nextMissionAvailable: boolean) {
+    constructor(missionName: string, retryPossible: boolean, nextMissionAvailable: boolean) {
         super(
-            nextMissionAvailable
-                ? [HighScoreDialogButtons.Retry, HighScoreDialogButtons.NextMission, HighScoreDialogButtons.MainMenu]
-                : [HighScoreDialogButtons.Retry, HighScoreDialogButtons.MainMenu],
-            nextMissionAvailable ? HighScoreDialogButtons.NextMission : HighScoreDialogButtons.Retry,
+            [
+                ...(retryPossible ? [HighScoreDialogButtons.Retry] : []),
+                ...(nextMissionAvailable ? [HighScoreDialogButtons.NextMission] : []),
+                HighScoreDialogButtons.MainMenu,
+            ],
+            retryPossible
+                ? HighScoreDialogButtons.Retry
+                : nextMissionAvailable
+                ? HighScoreDialogButtons.NextMission
+                : HighScoreDialogButtons.MainMenu,
             HighScoreDialogButtons.MainMenu
         );
         this.highScore = new HighScoreManager(missionName);

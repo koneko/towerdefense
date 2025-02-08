@@ -1,6 +1,7 @@
 import { Engine } from '../classes/Bastion';
 import { FadeInOut, Tween } from '../classes/game/AnimationManager';
 import Button, { ButtonTexture } from '../classes/gui/Button';
+import { HowToPlay } from './HowToPlay';
 import { MissionPickerScene } from './MissionPicker';
 import Scene from './Scene';
 import * as PIXI from 'pixi.js';
@@ -11,10 +12,11 @@ export class MainScene extends Scene {
             caption: 'New Game',
             rect: new PIXI.Rectangle(
                 Engine.app.canvas.width / 2 - 300 / 2,
-                Engine.app.canvas.height / 5 + 3 * 80,
+                Engine.app.canvas.height / 5 + 2 * 80,
                 300,
                 60
             ),
+
             texture: ButtonTexture.Button02,
         };
 
@@ -28,9 +30,19 @@ export class MainScene extends Scene {
             ),
             texture: ButtonTexture.Button02,
         };
+        const TutorialButton = {
+            caption: 'How to play',
+            rect: new PIXI.Rectangle(
+                Engine.app.canvas.width / 2 - 300 / 2,
+                Engine.app.canvas.height / 5 + 3 * 80,
+                300,
+                60
+            ),
+            texture: ButtonTexture.Button02,
+        };
         let text = new PIXI.Text({
             x: Engine.app.canvas.width / 2 - 300 / 2,
-            y: Engine.app.canvas.height / 5 + 1 * 80,
+            y: Engine.app.canvas.height / 5 + 20,
             text: 'BASTION',
             style: {
                 fill: 0xffaa00,
@@ -61,6 +73,12 @@ export class MainScene extends Scene {
         let b2 = new Button(SettingsButton.rect, SettingsButton.caption, SettingsButton.texture, true);
         b2.onClick = (e) => {
             Engine.NotificationManager.Notify('Not finished.', 'info');
+        };
+        let b3 = new Button(TutorialButton.rect, TutorialButton.caption, TutorialButton.texture, true);
+        b3.onClick = (e) => {
+            Engine.GameMaster.currentScene.stage.removeChild(text);
+            Engine.GameMaster.currentScene.stage.removeChild(text2);
+            Engine.GameMaster.changeScene(new HowToPlay());
         };
     }
 }

@@ -1,7 +1,7 @@
 [
     {
         "name": "Fire Gem",
-        "description": "Forged from molten lava, the Fire Gem imbues your tower's attacks and adds 50% extra fire damage. It can be merged with any gem and is common. This text shouldn't be long.",
+        "description": "Forged from molten lava, the Fire Gem imbues your tower's attacks and adds 50% extra fire damage. It can be merged with any gem and is common.",
         "color": "red",
         "type": "Fire",
         "totalLevels": 2,
@@ -12,16 +12,16 @@
         "genericImprovements": [
             {
                 "damageUp": 2,
-                "attackSpeedUp": 10,
-                "rangeUp": 0.5,
+                "attackSpeedUp": 0,
+                "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
                 "gemValueUp": 0
             },
             {
                 "damageUp": 2,
-                "attackSpeedUp": 10,
-                "rangeUp": 0.5,
+                "attackSpeedUp": 0,
+                "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
                 "gemValueUp": 10
@@ -58,7 +58,7 @@
             {
                 "damageUp": 2,
                 "attackSpeedUp": 10,
-                "rangeUp": 0.5,
+                "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
                 "gemValueUp": 0
@@ -66,7 +66,7 @@
             {
                 "damageUp": 2,
                 "attackSpeedUp": 10,
-                "rangeUp": 0.5,
+                "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
                 "gemValueUp": 10
@@ -103,7 +103,7 @@
             {
                 "damageUp": 2,
                 "attackSpeedUp": 10,
-                "rangeUp": 0.5,
+                "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
                 "gemValueUp": 0
@@ -163,7 +163,7 @@
             {
                 "damageUp": 2,
                 "attackSpeedUp": 10,
-                "rangeUp": 0.5,
+                "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
                 "gemValueUp": 0
@@ -171,7 +171,7 @@
             {
                 "damageUp": 2,
                 "attackSpeedUp": 10,
-                "rangeUp": 0.5,
+                "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
                 "gemValueUp": 10

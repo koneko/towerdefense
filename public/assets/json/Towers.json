@@ -12,8 +12,8 @@
             "cooldown": 120,
             "gemSlotsAmount": 2,
             "cost": 100,
-            "range": 3,
-            "timeToLive": 120,
+            "range": 4,
+            "timeToLive": 20,
             "pierce": 1
         }
     },
@@ -30,8 +30,8 @@
             "cooldown": 120,
             "gemSlotsAmount": 3,
             "cost": 125,
-            "range": 2,
-            "timeToLive": 8,
+            "range": 2.5,
+            "timeToLive": 12,
             "pierce": 30
         }
     }

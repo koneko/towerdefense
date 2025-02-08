@@ -17,6 +17,7 @@ List of things to implement following the "release" of the minimum viable produc
 -   [x] Tower info on click
 -   [x] Animate projectiles
 -   [x] Better mouseover tracking when placing tower and showing radius
+-   [ ] Sell tower button
 
 ## Gems
 
@@ -25,8 +26,8 @@ List of things to implement following the "release" of the minimum viable produc
 
 ## Other
 
--   [ ] Create mission authoring tool
+-   [ ] Disable player action during combat phase.
 -   [ ] Add sound effects
--   [ ] Tutorial image/mission
+-   [x] Tutorial image/mission
 -   [ ] Pause menu
 -   [x] Score screen when winning/losing map

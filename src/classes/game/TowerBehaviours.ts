@@ -16,6 +16,7 @@ function projectileCheck(tower: Tower, elapsedMS: number) {
             proj.collidedCreepIDs.forEach(() => {
                 tower.damageDealt += tower.computedDamageToDeal;
             });
+            proj.collidedCreepIDs = [];
             tower.projectiles.splice(tower.projectiles.indexOf(proj), 1);
             proj = null;
         } else proj.update(elapsedMS);

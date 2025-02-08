@@ -26,6 +26,12 @@ export default class GameAssets {
     public static BannerGemsmith: PIXI.Texture;
     public static EndScreenDialog: PIXI.Texture;
 
+    public static Tutorial01: PIXI.Texture;
+    public static Tutorial02: PIXI.Texture;
+    public static Tutorial03: PIXI.Texture;
+    public static Tutorial04: PIXI.Texture;
+    public static Tutorial05: PIXI.Texture;
+
     public static PlayIconTexture: PIXI.Texture;
     public static PauseIconTexture: PIXI.Texture;
     public static ExclamationIconTexture: PIXI.Texture;
@@ -98,6 +104,13 @@ export default class GameAssets {
             this.Load('./assets/gui/frame_blue.png').then((texture) => (this.BlueBackground = texture)),
             this.Load('./assets/gui/banner_01.png').then((texture) => (this.BannerGemsmith = texture)),
             this.Load('./assets/gui/note.png').then((texture) => (this.EndScreenDialog = texture)),
+
+            this.Load('./assets/tutorial/tutorial01.jpg').then((texture) => (this.Tutorial01 = texture)),
+            this.Load('./assets/tutorial/tutorial02.jpg').then((texture) => (this.Tutorial02 = texture)),
+            this.Load('./assets/tutorial/tutorial03.jpg').then((texture) => (this.Tutorial03 = texture)),
+            this.Load('./assets/tutorial/tutorial04.jpg').then((texture) => (this.Tutorial04 = texture)),
+            this.Load('./assets/tutorial/tutorial05.jpg').then((texture) => (this.Tutorial05 = texture)),
+
             this.Load('./assets/gui/heart.png').then((texture) => (this.HealthTexture = texture)),
             this.Load('./assets/gui/money.png').then((texture) => (this.GoldTexture = texture)),
             this.Load('./assets/gui/wave.png').then((texture) => (this.WaveTexture = texture)),

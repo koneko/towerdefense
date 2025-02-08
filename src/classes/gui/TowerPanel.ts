@@ -73,7 +73,7 @@ export class VisualGemSlot extends GuiObject {
         this.container.addChild(this.background);
         this.container.addChild(this.iconSprite);
         this.container.addChild(this.frame);
-        let txt = gem ? gem.id : '';
+        let txt = gem ? gem.level : '';
         let dbgText = new PIXI.Text({
             text: txt,
             zIndex: 11,
@@ -156,6 +156,7 @@ export default class TowerPanel extends GuiObject {
             zIndex: 5,
             style: new PIXI.TextStyle({
                 fill: 0xffffff,
+                fontSize: 25,
                 stroke: {
                     color: 0x000000,
                     width: 2,

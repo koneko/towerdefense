@@ -1,7 +1,7 @@
 import GameAssets from '../Assets';
 import Assets from '../Assets';
 import { Engine } from '../Bastion';
-import { CreepStatsDefinition, CreepType, PathDefinition } from '../Definitions';
+import { CreepResistancesDefinition, CreepStatsDefinition, CreepType, PathDefinition } from '../Definitions';
 import GameObject from '../GameObject';
 import * as PIXI from 'pixi.js';
 import { CreepEvents } from '../Events';
@@ -49,13 +49,33 @@ export default class Creep extends GameObject {
         this.maxHealth = this.stats.health;
         this.path = path;
         // Added + 32 to center them.
-        this.x = path[0][1] * Engine.GridCellSize + Engine.GridCellSize / 2;
-        this.y = path[0][0] * Engine.GridCellSize + Engine.GridCellSize / 2;
-        Engine.GameScene.events.on(CreepEvents.TakenDamage, (creepID, damage) => {
-            if (creepID != this.id) return;
-            this.health -= damage;
-            this.UpdateHealthbar();
-        });
+        this.x = path[0][0] * Engine.GridCellSize + Engine.GridCellSize / 2;
+        this.y = path[0][1] * Engine.GridCellSize + Engine.GridCellSize / 2;
+        // TODO: Unsubscribe from events once the scene is destroyed
+        Engine.GameScene.events.on(
+            CreepEvents.TakenDamage,
+            (creepID, damage, gemResistanceModifications: CreepResistancesDefinition) => {
+                if (creepID != this.id) return;
+
+                // Apply resistances.
+                this.health -= damage + damage * (gemResistanceModifications.physical - this.stats.resistance.physical);
+                if (gemResistanceModifications.fire != 0)
+                    this.health -= Math.max(damage * (gemResistanceModifications.fire - this.stats.resistance.fire), 0);
+                if (gemResistanceModifications.ice != 0)
+                    this.health -= Math.max(damage * (gemResistanceModifications.ice - this.stats.resistance.ice), 0);
+                if (gemResistanceModifications.frostfire != 0)
+                    this.health -= Math.max(
+                        damage * (gemResistanceModifications.frostfire - this.stats.resistance.frostfire),
+                        0
+                    );
+                if (gemResistanceModifications.divine != 0)
+                    this.health -= Math.max(
+                        damage * (gemResistanceModifications.divine - this.stats.resistance.divine),
+                        0
+                    );
+                this.UpdateHealthbar();
+            }
+        );
         Engine.Grid.container.addChild(this.container);
         this.container.addChild(this.healthBarGraphics);
         this.container.addChild(this.sprite);
@@ -94,10 +114,10 @@ export default class Creep extends GameObject {
         const targetCell = this.path[this.pathIndex + 1];
 
         // Added + 32 for centering.
-        const targetX = targetCell[1] * Engine.GridCellSize + Engine.GridCellSize / 2;
-        const targetY = targetCell[0] * Engine.GridCellSize + Engine.GridCellSize / 2;
-        const directionX = targetCell[1] - currentCell[1];
-        const directionY = targetCell[0] - currentCell[0];
+        const targetX = targetCell[0] * Engine.GridCellSize + Engine.GridCellSize / 2;
+        const targetY = targetCell[1] * Engine.GridCellSize + Engine.GridCellSize / 2;
+        const directionX = targetCell[0] - currentCell[0];
+        const directionY = targetCell[1] - currentCell[1];
         if (directionX > 0) {
             // Going right
             if (this.direction != 1) {

@@ -24,6 +24,7 @@ export default class GameAssets {
     public static SwordsTexture: PIXI.Texture;
     public static TitleTexture: PIXI.Texture;
     public static BannerGemsmith: PIXI.Texture;
+    public static EndScreenDialog: PIXI.Texture;
 
     public static PlayIconTexture: PIXI.Texture;
     public static PauseIconTexture: PIXI.Texture;
@@ -34,7 +35,7 @@ export default class GameAssets {
     public static PlusIconTexture: PIXI.Texture;
     public static GemAmountIcons: PIXI.Texture[] = [];
 
-    public static Missions: MissionDefinition[];
+    public static Missions: MissionDefinition[] = [];
     public static MissionBackgrounds: PIXI.Texture[] = [];
     public static Towers: TowerDefinition[];
     public static Creeps: CreepDefinition[];
@@ -96,6 +97,7 @@ export default class GameAssets {
             this.Load('./assets/gui/frame_green.png').then((texture) => (this.GreenBackground = texture)),
             this.Load('./assets/gui/frame_blue.png').then((texture) => (this.BlueBackground = texture)),
             this.Load('./assets/gui/banner_01.png').then((texture) => (this.BannerGemsmith = texture)),
+            this.Load('./assets/gui/note.png').then((texture) => (this.EndScreenDialog = texture)),
             this.Load('./assets/gui/heart.png').then((texture) => (this.HealthTexture = texture)),
             this.Load('./assets/gui/money.png').then((texture) => (this.GoldTexture = texture)),
             this.Load('./assets/gui/wave.png').then((texture) => (this.WaveTexture = texture)),
@@ -150,7 +152,13 @@ export default class GameAssets {
 
     private static async LoadMissions() {
         // When adding missions, make sure to keep order.
-        GameAssets.Missions = [await this.LoadMission('./assets/missions/mission_01.json')];
+        await this.LoadMission('./assets/missions/01_first_steps.json');
+        await this.LoadMission('./assets/missions/02_the_turn.json');
+        await this.LoadMission('./assets/missions/03_fork_in_the_road.json');
+        await this.LoadMission('./assets/missions/04_crossroads.json');
+        await this.LoadMission('./assets/missions/05_the_maze.json');
+        await this.LoadMission('./assets/missions/06_multiple_fronts.json');
+        await this.LoadMission('./assets/missions/07_final_stretch.json');
     }
 
     private static async LoadTowers() {
@@ -170,13 +178,8 @@ export default class GameAssets {
     private static async LoadMission(missionUrl: string) {
         const res = await fetch(missionUrl);
         const mission = await res.json();
-        await this.LoadBackground(mission.mapImage.url);
-        return mission;
-    }
-
-    private static async LoadBackground(backgroundUrl: string) {
-        let index = this.MissionBackgrounds.length - 1;
-        if (index == -1) index = 0;
-        this.MissionBackgrounds[index] = await this.Load(backgroundUrl);
+        console.log(`Loading mission: ${missionUrl} [${mission.name} / ${mission.mapImage.url}]`);
+        GameAssets.Missions.push(mission);
+        GameAssets.MissionBackgrounds.push(await this.Load(mission.mapImage.url));
     }
 }

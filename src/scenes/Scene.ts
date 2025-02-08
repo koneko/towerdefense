@@ -12,6 +12,7 @@ export default class Scene {
     }
     public destroy() {
         this.stage.destroy();
+        this._events.removeAllListeners();
         this.gui.forEach((element) => {
             element.destroy();
         });

@@ -1,8 +1,10 @@
 import * as PIXI from 'pixi.js';
 import { Engine } from './Bastion';
 export default class GameUIConstants {
-    public static SidebarRect;
-    public static ChangeRoundButtonRect;
+    public static SidebarRect: PIXI.Rectangle;
+    public static ChangeRoundButtonRect: PIXI.Rectangle;
+    public static MaximumPlayerNameLength = 20;
+
     public static init() {
         GameUIConstants.SidebarRect = new PIXI.Rectangle(
             Engine.app.canvas.width - 360,

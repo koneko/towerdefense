@@ -5,7 +5,7 @@
         "textureArrayLength": 12,
         "stats": {
             "health": 5,
-            "speed": 2.4,
+            "speed": 4,
             "special": null,
             "resistance": {
                 "physical": 0,
@@ -19,9 +19,9 @@
     {
         "name": "quick",
         "textures": [],
-        "textureArrayLength": 12,
+        "textureArrayLength": 8,
         "stats": {
-            "health": 3,
+            "health": 2,
             "speed": 6,
             "special": null,
             "resistance": {
@@ -38,8 +38,8 @@
         "textures": [],
         "textureArrayLength": 12,
         "stats": {
-            "health": 10,
-            "speed": 2.4,
+            "health": 12,
+            "speed": 2,
             "special": null,
             "resistance": {
                 "physical": 0,

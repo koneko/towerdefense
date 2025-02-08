@@ -246,14 +246,14 @@ export default class TowerPanel extends GuiObject {
         } else {
             this.ShowLeft();
         }
-        tower.parent.showRangePreview(false, tower.definition.stats.range);
+        tower.parent.showRangePreview(false, tower.computedRange);
     }
     private SetContent(tower: Tower) {
         this.titleText.text = tower.definition.name;
         this.damageText.text = 'Deals ' + tower.computedDamageToDeal + ' damage';
         this.totalDamage.text = 'Damage dealt: ' + tower.damageDealt + ' damage';
         this.attackSpeedText.x = this.damageText.width + 10;
-        this.attackSpeedText.text = ` every ${Math.floor(tower.definition.stats.cooldown / 60)}s`;
+        this.attackSpeedText.text = ` every ${Math.floor((tower.computedAttackSpeed / 60) * 100) / 100}s`;
     }
     private ShowLeft() {
         this.towerPanel.x = -100;
@@ -270,7 +270,7 @@ export default class TowerPanel extends GuiObject {
     public Hide() {
         this.isShown = false;
         this.container.alpha = 0;
-        this.container.x = GameUIConstants.SidebarRect.x + 10;
+        this.container.x = -1000;
         Engine.Grid.rangePreview.clear();
     }
 }

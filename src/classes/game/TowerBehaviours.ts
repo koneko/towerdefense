@@ -1,3 +1,5 @@
+import { Engine } from '../Bastion';
+import { calculateAngleToPoint } from './Projectile';
 import { Tower } from './Tower';
 
 /**
@@ -26,10 +28,24 @@ function projectileCheck(tower: Tower, elapsedMS: number) {
  */
 export function computeGemImprovements(tower: Tower) {
     let gemDamage = 0;
+    let gemAttackSpeedUp = 0;
+    let gemRangeUp = 0;
+    let gemTimeToLiveUp = 0;
+    let gemPierceUp = 0;
+
     tower.slottedGems.forEach((gem) => {
-        gemDamage += gem.currentGemImprovement().damageUp;
+        let ccurrentGemImprovements = gem.currentGemImprovement();
+        gemDamage += ccurrentGemImprovements.damageUp;
+        gemAttackSpeedUp += ccurrentGemImprovements.attackSpeedUp;
+        gemRangeUp += ccurrentGemImprovements.rangeUp;
+        gemTimeToLiveUp += ccurrentGemImprovements.timeToLiveUp;
+        gemPierceUp += ccurrentGemImprovements.pierceUp;
     });
     tower.computedDamageToDeal = tower.definition.stats.damage + gemDamage;
+    tower.computedAttackSpeed = tower.definition.stats.cooldown - gemAttackSpeedUp;
+    tower.computedRange = tower.definition.stats.range + gemRangeUp;
+    tower.computedTimeToLive = tower.definition.stats.timeToLive + gemTimeToLiveUp;
+    tower.computedPierce = tower.definition.stats.pierce + gemPierceUp;
 }
 
 /**
@@ -46,9 +62,34 @@ export function BasicTowerBehaviour(tower: Tower, elapsedMS: number) {
     let creepsInRange = tower.GetCreepsInRange();
     if (creepsInRange.length > 0) {
         let focus = creepsInRange[0];
-        if (tower.ticksUntilNextShot == 0) {
-            tower.ticksUntilNextShot = tower.definition.stats.cooldown;
-            tower.Shoot(focus);
+        if (tower.ticksUntilNextShot <= 0) {
+            let x = tower.column * Engine.GridCellSize + Engine.GridCellSize / 2;
+            let y = tower.row * Engine.GridCellSize + Engine.GridCellSize / 2;
+            tower.ticksUntilNextShot = tower.computedAttackSpeed;
+            tower.Shoot(calculateAngleToPoint(x, y, focus.x, focus.y));
+        }
+    }
+}
+
+export function CircleTowerBehaviour(tower: Tower, elapsedMS: number) {
+    if (tower.ticksUntilNextShot % 2 == 0) computeGemImprovements(tower);
+    projectileCheck(tower, elapsedMS);
+    if (tower.ticksUntilNextShot > 0) tower.ticksUntilNextShot--;
+    let creepsInRange = tower.GetCreepsInRange();
+    if (creepsInRange.length > 0) {
+        let focus = creepsInRange[0];
+        if (tower.ticksUntilNextShot <= 0) {
+            tower.ticksUntilNextShot = tower.computedAttackSpeed;
+            let x = tower.column * Engine.GridCellSize + Engine.GridCellSize / 2;
+            let y = tower.row * Engine.GridCellSize + Engine.GridCellSize / 2;
+            tower.Shoot(calculateAngleToPoint(x, y, x, y + 10)); // Up
+            tower.Shoot(calculateAngleToPoint(x, y, x + 10, y)); // Right
+            tower.Shoot(calculateAngleToPoint(x, y, x - 10, y)); // Left
+            tower.Shoot(calculateAngleToPoint(x, y, x, y - 10)); // Down
+            tower.Shoot(calculateAngleToPoint(x, y, x + 10, y + 10)); // Up right
+            tower.Shoot(calculateAngleToPoint(x, y, x - 10, y + 10)); // Up left
+            tower.Shoot(calculateAngleToPoint(x, y, x - 10, y - 10)); // Down left
+            tower.Shoot(calculateAngleToPoint(x, y, x + 10, y - 10)); // Down right
         }
     }
 }

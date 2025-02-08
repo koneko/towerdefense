@@ -1,13 +1,13 @@
 import { Engine } from '../Bastion';
 import * as PIXI from 'pixi.js';
 import GameObject from '../GameObject';
-import { TowerDefinition } from '../Definitions';
+import { CreepResistancesDefinition, GemType, TowerDefinition } from '../Definitions';
 import { Cell } from './Grid';
 import { TowerBehaviours } from './TowerManager';
 import Projectile, { calculateAngleToPoint } from './Projectile';
 import Creep from './Creep';
 import Gem from './Gem';
-import { BasicTowerBehaviour } from './TowerBehaviours';
+import { BasicTowerBehaviour, CircleTowerBehaviour } from './TowerBehaviours';
 
 export function distance(x1, y1, x2, y2) {
     return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
@@ -25,6 +25,11 @@ export class Tower extends GameObject {
     public ticksUntilNextShot: number;
     public graphics: PIXI.Graphics = new PIXI.Graphics();
     public computedDamageToDeal: number;
+    public computedAttackSpeed: number;
+    public computedRange: number;
+    public computedTimeToLive: number;
+    public computedPierce: number;
+    public totalGemResistanceModifications: CreepResistancesDefinition;
     public parent: Cell;
 
     constructor(row, column, texture, definition, behaviour) {
@@ -56,14 +61,13 @@ export class Tower extends GameObject {
             Engine.Grid.gridInteractionEnabled &&
             !Engine.GameScene.towerPanel.isShown
         )
-            this.parent.showRangePreview(false, this.definition.stats.range);
+            this.parent.showRangePreview(false, this.computedRange);
     };
 
     private onParentCellLeave = (e) => {
         this.graphics.clear();
     };
     public SlotGem(gem: Gem, index: number) {
-        console.log('ATTEMPTING TO SLOT ', gem, index);
         this.slottedGems[index] = gem;
         Engine.GameScene.towerPanel.Hide();
         Engine.GameScene.towerPanel.Show(this);
@@ -92,25 +96,48 @@ export class Tower extends GameObject {
             const y = creep.y;
             const towerX = this.column * Engine.GridCellSize + Engine.GridCellSize / 2;
             const towerY = this.row * Engine.GridCellSize + Engine.GridCellSize / 2;
-            const radius = this.definition.stats.range * Engine.GridCellSize;
+            const radius = this.computedRange * Engine.GridCellSize;
             const d = distance(towerX, towerY, x, y);
             return d < radius + (Engine.GridCellSize * 2) / 3;
         });
     }
-    public Shoot(creep: Creep) {
+    public Shoot(angle) {
         let x = this.column * Engine.GridCellSize + Engine.GridCellSize / 2;
         let y = this.row * Engine.GridCellSize + Engine.GridCellSize / 2;
-        let angle = calculateAngleToPoint(x, y, creep.x, creep.y);
-        let tint = 0xffffff;
-        this.slottedGems.forEach((gem) => {
-            if (gem.definition.type.toString() == 'Fire') tint = 0xff0000;
-        });
-        this.projectiles.push(
-            new Projectile(x, y, this.definition.projectileTextures, angle, this.computedDamageToDeal, tint, this)
+        let combinedTint = new PIXI.Color('white');
+        if (this.slottedGems.length > 0) {
+            let color = new PIXI.Color(this.slottedGems[0].definition.color);
+            for (let i = 1; i < this.slottedGems.length; i++) {
+                const element = this.slottedGems[i];
+                color.multiply(element.definition.color);
+            }
+            combinedTint = color;
+        }
+        // this.slottedGems.forEach((gem) => {
+        //     let rgb = new PIXI.Color(gem.definition.color).toRgb();
+        //     combinedTint =
+        //         ((combinedTint & 0xff0000) + (rgb.r << 16)) |
+        //         ((combinedTint & 0x00ff00) + (rgb.g << 8)) |
+        //         ((combinedTint & 0x0000ff) + rgb.b);
+        // });
+        // combinedTint = new PIXI.Color(this.slottedGems[0].definition.color).
+        let proj = new Projectile(
+            x,
+            y,
+            this.definition.projectileTextures,
+            angle,
+            this.computedDamageToDeal,
+            combinedTint,
+            this.computedTimeToLive,
+            this.computedPierce,
+            this.totalGemResistanceModifications
         );
+        this.projectiles.push(proj);
+        return proj;
     }
     public update(elapsedMS: any): void {
         if (this.behaviour == TowerBehaviours.BasicTowerBehaviour) BasicTowerBehaviour(this, elapsedMS);
+        if (this.behaviour == TowerBehaviours.CircleTowerBehaviour) CircleTowerBehaviour(this, elapsedMS);
     }
 
     public destroy(): void {

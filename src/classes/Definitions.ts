@@ -68,11 +68,14 @@ export type TowerStatsDefinition = {
     gemSlotsAmount: number;
     cost: number;
     range: number;
+    timeToLive: number;
+    pierce: number;
 };
 
 export type GemDefinition = {
     name: string;
     description: string;
+    color: PIXI.ColorSource;
     type: GemType;
     totalLevels: number;
     textures: PIXI.Texture[];
@@ -92,7 +95,7 @@ export type GenericGemImprovement = {
     gemValueUp: number;
 };
 
-export type PathDefinition = [[row: number, column: number]];
+export type PathDefinition = [[column: number, row: number]];
 
 export enum TerrainType {
     Restricted = 0,

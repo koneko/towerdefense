@@ -6,6 +6,8 @@ import { GameScene } from './scenes/Game';
 import { AnimationManager } from './classes/game/AnimationManager';
 import NotificationManager from './classes/game/NotificationManager';
 import GameUIConstants from './classes/GameUIConstants';
+import KeyboardManager from './classes/game/KeyboardManager';
+import { GemType } from './classes/Definitions';
 
 (async () => {
     const app = new PIXI.Application();
@@ -47,6 +49,7 @@ import GameUIConstants from './classes/GameUIConstants';
     resize();
     await Assets.LoadAssets();
     GameUIConstants.init();
+    KeyboardManager.init();
     new GameMaster();
     Engine.AnimationManager = new AnimationManager();
     Engine.NotificationManager = new NotificationManager();
@@ -61,7 +64,7 @@ import GameUIConstants from './classes/GameUIConstants';
     });
     Engine.GameMaster.changeScene(new MainScene());
     let params = new URLSearchParams(location.href);
-    if (params.entries().next().value[1] == 'game') Engine.GameMaster.changeScene(new GameScene('Mission 1'));
+    if (params.entries().next().value[1] == 'game') Engine.GameMaster.changeScene(new GameScene('The Turn'));
 
     if (Engine.latestCommit != 'DEVELOPMENT')
         window.onbeforeunload = () => {

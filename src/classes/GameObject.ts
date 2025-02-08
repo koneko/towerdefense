@@ -24,6 +24,7 @@ export default abstract class GameObject {
     }
 
     public copyContainerToBB() {
+        if (this.container == null) return null;
         this.bb.x = this.container.x;
         this.bb.y = this.container.y;
         this.bb.width = this.container.width;

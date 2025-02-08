@@ -6,6 +6,8 @@ import { Engine } from '../Bastion';
 import Creep from './Creep';
 import { CreepEvents, TowerEvents, GridEvents } from '../Events';
 
+let genPath = [];
+
 export class Cell extends GameObject {
     public type: TerrainType;
     public row: number;
@@ -55,6 +57,7 @@ export class Cell extends GameObject {
             Engine.GameScene.events.emit(GridEvents.CellMouseLeave, this);
             Engine.Grid.rangePreview.clear();
         });
+
         Engine.GameScene.events.on(TowerEvents.TowerPlacedEvent, (_, row, col) => {
             if (row == this.row && col == this.column) {
                 this.hasTowerPlaced = true;
@@ -65,6 +68,44 @@ export class Cell extends GameObject {
             if (row == this.row && col == this.column) {
                 this.hasTowerPlaced = false;
             }
+        });
+
+        // Disable this if you want to add new maps.
+        if (true) return;
+
+        const text = new PIXI.Text({
+            text: `${this.column}|${this.row}`,
+            style: new PIXI.TextStyle({
+                fill: 0xffffff,
+                fontSize: 16,
+                stroke: {
+                    color: 0x000000,
+                    width: 2,
+                },
+            }),
+        });
+        this.container.addChild(text);
+        text.anchor.set(0.5, 0.5);
+        text.x = this.bb.width / 2;
+        text.y = this.bb.height / 2;
+        if (this.type == TerrainType.Path) {
+            text.style.fill = 'green';
+            text.style.fontWeight = 'bold';
+        }
+        if (this.type == TerrainType.Restricted) {
+            text.style.fill = 'gold';
+        }
+        this.clickDetector.on('pointerup', () => {
+            const cellIndex = genPath.findIndex(([col, row]) => col === this.column && row === this.row);
+            if (cellIndex !== -1) {
+                text.style.fill = 0xffffff;
+                genPath.splice(cellIndex, 1);
+            } else {
+                text.style.fill = 0xff0000;
+                genPath.push([this.column, this.row]);
+            }
+            console.log('updated gen path');
+            console.log(JSON.stringify(genPath));
         });
     }
     public showRangePreview(invalid, range) {
@@ -132,8 +173,7 @@ export class Grid extends GameObject {
         for (let y = 0; y < this.gameMap.columns; y++) {
             for (let x = 0; x < this.gameMap.rows; x++) {
                 let type = this.gameMap.cells[x][y];
-                if (!type) type = 1;
-                const isPath = this.gameMap.paths.some((path) => path.some((p) => p[0] === x && p[1] === y));
+                const isPath = this.gameMap.paths.some((path) => path.some((p) => p[1] === x && p[0] === y));
                 if (isPath) type = TerrainType.Path;
                 let cell = new Cell(type, x, y, isPath);
                 this.cells.push(cell);
@@ -143,6 +183,32 @@ export class Grid extends GameObject {
             zIndex: 10,
         });
         this.container.addChild(this.rangePreview);
+    }
+    public generateCells() {
+        const newGrid = Array.from({ length: this.gameMap.rows }, () => Array(this.gameMap.columns).fill(1));
+
+        this.cells.forEach((cell) => {
+            if (cell.isPath) {
+                newGrid[cell.row][cell.column] = 9;
+                for (let i = -1; i <= 1; i++) {
+                    for (let j = -1; j <= 1; j++) {
+                        const newRow = cell.row + i;
+                        const newCol = cell.column + j;
+                        if (
+                            newRow >= 0 &&
+                            newRow < this.gameMap.rows &&
+                            newCol >= 0 &&
+                            newCol < this.gameMap.columns &&
+                            newGrid[newRow][newCol] !== 9
+                        ) {
+                            newGrid[newRow][newCol] = 0;
+                        }
+                    }
+                }
+            }
+        });
+
+        console.log(JSON.stringify(newGrid));
     }
     public toggleGrid(force?: 'hide' | 'show') {
         this.cells.forEach((cell) => {

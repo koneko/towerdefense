@@ -22,6 +22,7 @@ export class Engine {
     public static NotificationManager: NotificationManager;
     public static GameScene: GameScene;
     public static latestCommit: string;
+    public static latestGemId = 0;
 
     public static GridCellSize: number = 64;
     public static GridColumns: number = 25;
@@ -30,9 +31,12 @@ export class Engine {
     public static MouseY: number = 0;
 
     public static TestSuite() {
+        let params = new URLSearchParams(location.href);
+        if (params.entries().next().value[1] != 'game') return;
+
         Engine.NotificationManager.Notify('Loaded testing suite.', 'danger');
         Engine.TowerManager.ToggleChoosingTowerLocation('RESET');
-        Engine.TowerManager.PlaceTower(GameAssets.Towers[1], 8, 10, GameAssets.Towers[0].behaviour, true);
+        Engine.TowerManager.PlaceTower(GameAssets.Towers[1], 6, 10, GameAssets.Towers[1].behaviour, true);
         for (let i = 0; i < 29; i++) {
             this.GameScene.MissionStats.giveGem(new Gem(i % 4), true);
         }
@@ -41,7 +45,6 @@ export class Engine {
 
 export default class GameMaster {
     public currentScene: Scene;
-    private GameObjects: GameObject[] = [];
 
     constructor() {
         Engine.GameMaster = this;
@@ -61,9 +64,6 @@ export default class GameMaster {
         if (this.currentScene) {
             this.currentScene.destroy();
         }
-        this.GameObjects.forEach((element) => {
-            element.destroy();
-        });
         this.currentScene = newScene;
         this.currentScene.init();
     }

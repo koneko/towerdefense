@@ -1,8 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { GemType, GemDefinition, GenericGemImprovement } from '../Definitions';
 import GameAssets from '../Assets';
-
-let latestGemId = 0;
+import { Engine } from '../Bastion';
 
 export default class Gem {
     public texture: PIXI.Texture;
@@ -14,8 +13,8 @@ export default class Gem {
         this.texture = this.definition.textures[0];
 
         if (!doNotIncrement) {
-            this.id = latestGemId + 1;
-            latestGemId++;
+            this.id = Engine.latestGemId + 1;
+            Engine.latestGemId++;
         } else this.id = '';
     }
     public currentGemImprovement() {

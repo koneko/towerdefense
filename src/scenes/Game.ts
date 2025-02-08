@@ -16,6 +16,8 @@ import GameUIConstants from '../classes/GameUIConstants';
 import Tooltip from '../classes/gui/Tooltip';
 import TowerPanel, { VisualGemSlot } from '../classes/gui/TowerPanel';
 import Gem from '../classes/game/Gem';
+import EndGameDialog from '../classes/gui/EndGameDialog';
+import HighScoreDialog, { HighScoreDialogButtons } from '../classes/gui/HighScoreDialog';
 
 enum RoundMode {
     Purchase = 0,
@@ -57,6 +59,7 @@ export class GameScene extends Scene {
         });
     }
     public init() {
+        Engine.latestGemId = 0;
         new Grid(this.mission.gameMap, this.missionIndex);
         new TowerManager();
         new WaveManager(this.mission.rounds, this.mission.gameMap.paths);
@@ -130,6 +133,7 @@ export class GameScene extends Scene {
         });
         this.ticker.start();
     }
+
     public update(elapsedMS) {
         if (this.isGameOver) {
             if (this.destroyTicker) {
@@ -162,10 +166,10 @@ export class GameScene extends Scene {
 
         if (this.MissionStats.getHP() <= 0) {
             this.isGameOver = true;
-            this.ShowScoreScreen(true);
+            this.ShowEndgameDialog(true);
         } else if (this.playerWon) {
             this.isGameOver = true;
-            this.ShowScoreScreen(false);
+            this.ShowEndgameDialog(false);
         }
     }
     public DarkenScreen() {
@@ -241,12 +245,27 @@ export class GameScene extends Scene {
         this.setRoundMode(RoundMode.Purchase);
     }
 
-    private ShowScoreScreen(lost) {
-        // TODO: show to player for real (see how this.OfferPlayerGems() does it)
-        if (lost) {
-            console.log('LOSE!');
-        } else {
-            console.log('WIN!');
+    private async ShowEndgameDialog(lost) {
+        const endGameDialog = new EndGameDialog(this.mission.name, this.MissionStats, lost);
+        await endGameDialog.show();
+        const highScore = new HighScoreDialog(
+            this.mission.name,
+            lost,
+            !lost && this.missionIndex + 1 < GameAssets.Missions.length
+        );
+        const result = await highScore.show();
+        if (result === HighScoreDialogButtons.MainMenu) {
+            this.ReturnToMain();
+        } else if (result === HighScoreDialogButtons.NextMission) {
+            this.destroy();
+            Engine.GameMaster.changeScene(new MissionPickerScene());
+            Engine.GameMaster.changeScene(new GameScene(GameAssets.Missions[this.missionIndex + 1].name));
+            Engine.NotificationManager.Notify('Loading next mission. Good luck.', 'green');
+        } else if (result === HighScoreDialogButtons.Retry) {
+            this.destroy();
+            Engine.GameMaster.changeScene(new MissionPickerScene());
+            Engine.GameMaster.changeScene(new GameScene(this.mission.name));
+            Engine.NotificationManager.Notify('Retrying mission.', 'green');
         }
     }
 
@@ -271,8 +290,6 @@ export class GameScene extends Scene {
     }
 
     private ReturnToMain() {
-        this.destroy();
-        Engine.GameMaster.currentScene.stage.removeChildren();
         Engine.GameMaster.changeScene(new MissionPickerScene());
     }
 }

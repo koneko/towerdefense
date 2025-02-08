@@ -4,6 +4,7 @@ import { Engine } from '../Bastion';
 import Creep from './Creep';
 import { CreepEvents } from '../Events';
 import { Tower } from './Tower';
+import { CreepResistancesDefinition } from '../Definitions';
 
 export function calculateAngleToPoint(x, y, targetX, targetY) {
     const dx = targetX - x;
@@ -19,14 +20,29 @@ export default class Projectile extends GameObject {
     public angle: number;
     public speed: number;
     public damage: number;
-    public timeToLive: number = 1;
+    public pierce: number = 1;
+    public timeToLive: number;
     public parent: Tower;
-    constructor(x, y, textures, angle, damage, tint, tower) {
+    public gemResistanceModifications: CreepResistancesDefinition;
+    public collidedCreepIDs = [];
+    constructor(
+        x,
+        y,
+        textures,
+        angle,
+        damage,
+        tint,
+        timeToLive,
+        pierce,
+        gemResistanceModifications: CreepResistancesDefinition
+    ) {
         super();
         this.x = x;
         this.y = y;
-        this.parent = tower;
+        this.timeToLive = timeToLive;
+        this.pierce = pierce;
         this.damage = damage;
+        this.gemResistanceModifications = gemResistanceModifications;
         this.sprite = new PIXI.AnimatedSprite({ textures: textures, scale: 0.25, rotation: angle });
         this.sprite.anchor.set(0.5, 0.5);
         this.sprite.play();
@@ -46,13 +62,19 @@ export default class Projectile extends GameObject {
 
     public update(elapsedMS) {
         if (this.deleteMe) return;
-        if (this.x > 2000 || this.x < 0 || this.y > 2000 || this.y < 0 || this.timeToLive <= 0) return this.destroy();
+        if (this.x > 2000 || this.x < 0 || this.y > 2000 || this.y < 0 || this.pierce <= 0 || this.timeToLive <= 0)
+            return this.destroy();
+        this.timeToLive--;
         Engine.Grid.creeps.forEach((creep) => {
-            if (this.timeToLive <= 0) return;
-            if (creep.container && this.checkCollision(creep)) {
-                this.timeToLive--;
-                this.onCollide(creep);
-                return;
+            if (this.pierce <= 0) return;
+            if (creep && creep.container && this.checkCollision(creep)) {
+                let exists = this.collidedCreepIDs.find((c) => creep.id == c.id);
+                if (!exists) {
+                    this.collidedCreepIDs.push(creep);
+                    this.pierce--;
+                    this.onCollide(creep);
+                    return;
+                }
             }
         });
         this.x += Math.cos(this.angle) * this.speed * elapsedMS;
@@ -63,11 +85,12 @@ export default class Projectile extends GameObject {
     }
 
     public onCollide(creep) {
-        Engine.GameScene.events.emit(CreepEvents.TakenDamage, creep.id, this.damage);
+        Engine.GameScene.events.emit(CreepEvents.TakenDamage, creep.id, this.damage, this.gemResistanceModifications);
     }
 
     public checkCollision(creep: Creep) {
-        if (creep == null) return;
+        console.debug(creep);
+        if (creep == null || creep.container == null || creep.container._position == null) return;
         let mybb = this.copyContainerToBB();
         let otherbb = creep.copyContainerToBB();
         return mybb.getBounds().intersects(otherbb.getBounds());

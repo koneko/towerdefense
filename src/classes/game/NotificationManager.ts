@@ -3,7 +3,7 @@ import GameObject from '../GameObject';
 import * as PIXI from 'pixi.js';
 import { FadeInOut } from './AnimationManager';
 
-export type NotificationType = 'info' | 'warn' | 'danger' | 'reward' | 'gemaward';
+export type NotificationType = 'info' | 'warn' | 'danger' | 'reward' | 'gemaward' | 'green';
 
 class Notification {
     public textObj: PIXI.Text;
@@ -22,6 +22,8 @@ class Notification {
             fill = 0xd65afc;
         } else if (type == 'gemaward') {
             fill = 0xffffff;
+        } else if (type == 'green') {
+            fill = 0x00ff00;
         }
         this.ticksToFadeAway = ticksToFadeAway;
         this.textObj = new PIXI.Text({

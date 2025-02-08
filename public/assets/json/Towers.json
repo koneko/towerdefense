@@ -9,26 +9,30 @@
         "description": "The building block of society, nothing more basic exists.",
         "stats": {
             "damage": 2,
-            "cooldown": 60,
+            "cooldown": 120,
             "gemSlotsAmount": 2,
             "cost": 100,
-            "range": 3
+            "range": 3,
+            "timeToLive": 120,
+            "pierce": 1
         }
     },
     {
         "name": "Circle Tower",
-        "behaviour": "BasicTowerBehaviour",
+        "behaviour": "CircleTowerBehaviour",
         "sprite": "circle_tower",
         "texture": null,
         "projectileTextures": [],
         "projectileTexturesArrayLength": 4,
         "description": "If you feel a little circular.",
         "stats": {
-            "damage": 6,
-            "cooldown": 180,
+            "damage": 2,
+            "cooldown": 120,
             "gemSlotsAmount": 3,
             "cost": 125,
-            "range": 3
+            "range": 2,
+            "timeToLive": 8,
+            "pierce": 30
         }
     }
 ]

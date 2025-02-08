@@ -1,7 +1,7 @@
 import { Engine } from '../Bastion';
 import * as PIXI from 'pixi.js';
 import GameObject from '../GameObject';
-import { GemType, TowerDefinition } from '../Definitions';
+import { CreepResistancesDefinition, GemType, TowerDefinition } from '../Definitions';
 import { Cell } from './Grid';
 import { TowerBehaviours } from './TowerManager';
 import Projectile, { calculateAngleToPoint } from './Projectile';
@@ -29,6 +29,7 @@ export class Tower extends GameObject {
     public computedRange: number;
     public computedTimeToLive: number;
     public computedPierce: number;
+    public totalGemResistanceModifications: CreepResistancesDefinition;
     public parent: Cell;
 
     constructor(row, column, texture, definition, behaviour) {
@@ -103,14 +104,23 @@ export class Tower extends GameObject {
     public Shoot(angle) {
         let x = this.column * Engine.GridCellSize + Engine.GridCellSize / 2;
         let y = this.row * Engine.GridCellSize + Engine.GridCellSize / 2;
-        let combinedTint = 0xffffff;
-        this.slottedGems.forEach((gem) => {
-            let rgb = new PIXI.Color(gem.definition.color).toRgb();
-            combinedTint =
-                ((combinedTint & 0xff0000) + (rgb.r << 16)) |
-                ((combinedTint & 0x00ff00) + (rgb.g << 8)) |
-                ((combinedTint & 0x0000ff) + rgb.b);
-        });
+        let combinedTint = new PIXI.Color('white');
+        if (this.slottedGems.length > 0) {
+            let color = new PIXI.Color(this.slottedGems[0].definition.color);
+            for (let i = 1; i < this.slottedGems.length; i++) {
+                const element = this.slottedGems[i];
+                color.multiply(element.definition.color);
+            }
+            combinedTint = color;
+        }
+        // this.slottedGems.forEach((gem) => {
+        //     let rgb = new PIXI.Color(gem.definition.color).toRgb();
+        //     combinedTint =
+        //         ((combinedTint & 0xff0000) + (rgb.r << 16)) |
+        //         ((combinedTint & 0x00ff00) + (rgb.g << 8)) |
+        //         ((combinedTint & 0x0000ff) + rgb.b);
+        // });
+        // combinedTint = new PIXI.Color(this.slottedGems[0].definition.color).
         let proj = new Projectile(
             x,
             y,
@@ -118,7 +128,9 @@ export class Tower extends GameObject {
             angle,
             this.computedDamageToDeal,
             combinedTint,
-            this
+            this.computedTimeToLive,
+            this.computedPierce,
+            this.totalGemResistanceModifications
         );
         this.projectiles.push(proj);
         return proj;

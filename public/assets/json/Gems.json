@@ -31,14 +31,14 @@
             {
                 "physical": 0,
                 "divine": 0,
-                "fire": 0.5,
+                "fire": 0.25,
                 "ice": 0,
                 "frostfire": 0
             },
             {
                 "physical": 0,
                 "divine": 0,
-                "fire": 0.5,
+                "fire": 0.25,
                 "ice": 0,
                 "frostfire": 0
             }
@@ -47,7 +47,7 @@
     {
         "name": "Yeti Gem",
         "description": "Yeti gem description. Something something, write this while drunk or something.",
-        "color": "dodgerblue",
+        "color": "#32e4fc",
         "type": "Yeti",
         "totalLevels": 2,
         "textures": [],

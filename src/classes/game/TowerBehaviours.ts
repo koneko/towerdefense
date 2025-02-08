@@ -13,7 +13,9 @@ import { Tower } from './Tower';
 function projectileCheck(tower: Tower, elapsedMS: number) {
     tower.projectiles.forEach((proj) => {
         if (proj.deleteMe) {
-            tower.damageDealt += tower.computedDamageToDeal;
+            proj.collidedCreepIDs.forEach(() => {
+                tower.damageDealt += tower.computedDamageToDeal;
+            });
             tower.projectiles.splice(tower.projectiles.indexOf(proj), 1);
             proj = null;
         } else proj.update(elapsedMS);
@@ -32,7 +34,13 @@ export function computeGemImprovements(tower: Tower) {
     let gemRangeUp = 0;
     let gemTimeToLiveUp = 0;
     let gemPierceUp = 0;
-
+    tower.totalGemResistanceModifications = {
+        fire: 0,
+        frostfire: 0,
+        divine: 0,
+        ice: 0,
+        physical: 0,
+    };
     tower.slottedGems.forEach((gem) => {
         let ccurrentGemImprovements = gem.currentGemImprovement();
         gemDamage += ccurrentGemImprovements.damageUp;
@@ -40,6 +48,13 @@ export function computeGemImprovements(tower: Tower) {
         gemRangeUp += ccurrentGemImprovements.rangeUp;
         gemTimeToLiveUp += ccurrentGemImprovements.timeToLiveUp;
         gemPierceUp += ccurrentGemImprovements.pierceUp;
+
+        let gemResMod = gem.currentGemResistanceModifications();
+        tower.totalGemResistanceModifications.physical += gemResMod.physical;
+        tower.totalGemResistanceModifications.ice += gemResMod.ice;
+        tower.totalGemResistanceModifications.fire += gemResMod.fire;
+        tower.totalGemResistanceModifications.divine += gemResMod.divine;
+        tower.totalGemResistanceModifications.frostfire += gemResMod.frostfire;
     });
     tower.computedDamageToDeal = tower.definition.stats.damage + gemDamage;
     tower.computedAttackSpeed = tower.definition.stats.cooldown - gemAttackSpeedUp;

@@ -4,7 +4,7 @@ List of things to implement following the "release" of the minimum viable produc
 
 ## Creeps
 
--   [ ] Elemental resistances/attunement
+-   [x] Elemental resistances/attunement
 -   [x] Proper animation via PNG sequence
 -   [x] More variety in Creeps
 -   [x] Health bar
@@ -29,4 +29,4 @@ List of things to implement following the "release" of the minimum viable produc
 -   [ ] Add sound effects
 -   [ ] Tutorial image/mission
 -   [ ] Pause menu
--   [ ] Score screen when winning/losing map
+-   [x] Score screen when winning/losing map

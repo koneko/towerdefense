@@ -109,6 +109,11 @@ export default class TowerPanel extends GuiObject {
     public damageText: PIXI.Text;
     public totalDamage: PIXI.Text;
     public attackSpeedText: PIXI.Text;
+    public fireResDamage: PIXI.Text;
+    public iceResDamage: PIXI.Text;
+    public frostFireResDamage: PIXI.Text;
+    public divineResDamage: PIXI.Text;
+    public physicalResDamage: PIXI.Text;
 
     constructor(bounds: PIXI.Rectangle) {
         super(false);
@@ -202,6 +207,79 @@ export default class TowerPanel extends GuiObject {
             }),
         });
         this.container.addChild(this.totalDamage);
+
+        this.fireResDamage = new PIXI.Text({
+            x: 10,
+            y: 170,
+            zIndex: 5,
+            style: new PIXI.TextStyle({
+                fill: 0xfc5353,
+                fontSize: 18,
+                stroke: {
+                    color: 0x000000,
+                    width: 2,
+                },
+            }),
+        });
+        this.container.addChild(this.fireResDamage);
+
+        this.iceResDamage = new PIXI.Text({
+            x: 10,
+            y: 190,
+            zIndex: 5,
+            style: new PIXI.TextStyle({
+                fill: 0x32e4fc,
+                fontSize: 18,
+                stroke: {
+                    color: 0x000000,
+                    width: 2,
+                },
+            }),
+        });
+        this.container.addChild(this.iceResDamage);
+
+        this.frostFireResDamage = new PIXI.Text({
+            x: 10,
+            y: 210,
+            zIndex: 5,
+            style: new PIXI.TextStyle({
+                fill: 0xd753fc,
+                fontSize: 18,
+                stroke: {
+                    color: 0x000000,
+                    width: 2,
+                },
+            }),
+        });
+        this.container.addChild(this.frostFireResDamage);
+        this.divineResDamage = new PIXI.Text({
+            x: 10,
+            y: 230,
+            zIndex: 5,
+            style: new PIXI.TextStyle({
+                fill: 0xfcee53,
+                fontSize: 18,
+                stroke: {
+                    color: 0x000000,
+                    width: 2,
+                },
+            }),
+        });
+        this.container.addChild(this.divineResDamage);
+        this.physicalResDamage = new PIXI.Text({
+            x: 10,
+            y: 250,
+            zIndex: 5,
+            style: new PIXI.TextStyle({
+                fill: 0xffffff,
+                fontSize: 18,
+                stroke: {
+                    color: 0x000000,
+                    width: 2,
+                },
+            }),
+        });
+        this.container.addChild(this.physicalResDamage);
     }
     private MakeSlots(tower: Tower) {
         this.vGems.forEach((vGem) => {
@@ -254,6 +332,12 @@ export default class TowerPanel extends GuiObject {
         this.totalDamage.text = 'Damage dealt: ' + tower.damageDealt + ' damage';
         this.attackSpeedText.x = this.damageText.width + 10;
         this.attackSpeedText.text = ` every ${Math.floor((tower.computedAttackSpeed / 60) * 100) / 100}s`;
+
+        this.fireResDamage.text = `+${tower.totalGemResistanceModifications.fire * 100}% Fire damage`;
+        this.iceResDamage.text = `+${tower.totalGemResistanceModifications.ice * 100}% Ice damage`;
+        this.frostFireResDamage.text = `+${tower.totalGemResistanceModifications.frostfire * 100}% FrostFire damage`;
+        this.divineResDamage.text = `+${tower.totalGemResistanceModifications.divine * 100}% Divine damage`;
+        this.physicalResDamage.text = `+${tower.totalGemResistanceModifications.physical * 100}% Physical damage`;
     }
     private ShowLeft() {
         this.towerPanel.x = -100;

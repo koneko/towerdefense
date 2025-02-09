@@ -12,3 +12,7 @@ The [design document](/docs/design.md) contains the starting idea which was init
 ## Todos
 
 Todos are available [here](/docs/todos.md) which contain self-made tasks which should get done or are already done.
+
+## Extra documentation
+
+Extra documentation is available [here](/docs)

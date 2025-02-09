@@ -114,6 +114,7 @@ export default class TowerPanel extends GuiObject {
     public frostFireResDamage: PIXI.Text;
     public divineResDamage: PIXI.Text;
     public physicalResDamage: PIXI.Text;
+    private sellButton: Button;
 
     constructor(bounds: PIXI.Rectangle) {
         super(false);
@@ -281,6 +282,14 @@ export default class TowerPanel extends GuiObject {
             }),
         });
         this.container.addChild(this.physicalResDamage);
+        this.sellButton = new Button(
+            new PIXI.Rectangle(5, this.towerPanel.height - 70, this.towerPanel.width - 115, 60),
+            'Sell',
+            ButtonTexture.Button02,
+            true
+        );
+        this.sellButton.container.removeFromParent();
+        this.container.addChild(this.sellButton.container);
     }
     private MakeSlots(tower: Tower) {
         this.vGems.forEach((vGem) => {
@@ -320,7 +329,7 @@ export default class TowerPanel extends GuiObject {
         this.MakeSlots(tower);
         this.showingTower = tower;
         Engine.GameScene.sidebar.gemTab.selectingGemTowerObject = tower;
-        if (tower.container.parent.x < 900) {
+        if (tower.container.parent.x < 1270) {
             this.ShowRight();
         } else {
             this.ShowLeft();
@@ -339,6 +348,11 @@ export default class TowerPanel extends GuiObject {
         this.frostFireResDamage.text = `+${tower.totalGemResistanceModifications.frostfire * 100}% FrostFire damage`;
         this.divineResDamage.text = `+${tower.totalGemResistanceModifications.divine * 100}% Divine damage`;
         this.physicalResDamage.text = `+${tower.totalGemResistanceModifications.physical * 100}% Physical damage`;
+        this.sellButton.setCaption('Sell for ' + tower.definition.stats.cost + ' gold');
+        this.sellButton.onClick = () => {
+            tower.Sell();
+            this.Hide();
+        };
     }
     private ShowLeft() {
         this.towerPanel.x = -100;

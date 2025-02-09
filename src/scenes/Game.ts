@@ -22,7 +22,7 @@ import HighScoreDialog, { HighScoreDialogButtons } from '../classes/gui/HighScor
 enum RoundMode {
     Purchase = 0,
     Combat = 1,
-    OfferingGems = 2,
+    Misc = 2,
 }
 
 export class GameScene extends Scene {
@@ -36,6 +36,8 @@ export class GameScene extends Scene {
     public sidebar: Sidebar;
     public tooltip: Tooltip;
     public towerPanel: TowerPanel;
+    public isPaused: boolean = false;
+    private pauseButton: Button;
     private visualGems: VisualGemSlot[] = [];
     private currentRound: number = 0;
     private isWaveManagerFinished: boolean = false;
@@ -104,12 +106,12 @@ export class GameScene extends Scene {
             if (this.roundMode == RoundMode.Combat)
                 return Engine.NotificationManager.Notify('Wave is already in progress.', 'warn');
             if (this.isGameOver) return Engine.NotificationManager.Notify('No more waves.', 'danger');
-            if (this.roundMode == RoundMode.OfferingGems) return;
+            if (this.roundMode == RoundMode.Misc) return;
             this.setRoundMode(RoundMode.Combat);
             this.changeRoundButton.buttonIcon.texture = GameAssets.ExclamationIconTexture;
             this.events.emit(WaveManagerEvents.NewWave, `${this.currentRound + 1}`);
         };
-        this.MissionStats = new MissionStats(100, 200);
+        this.MissionStats = new MissionStats(125, 450);
         this.events.on(GemEvents.TowerPanelSelectGem, (gem, index, tower) => {
             if (gem == null) {
                 if (!this.MissionStats.checkIfPlayerHasAnyGems())
@@ -120,6 +122,30 @@ export class GameScene extends Scene {
             }
             this.sidebar.gemTab.TowerPanelSelectingGem(gem, index, tower);
         });
+
+        this.pauseButton = new Button(new PIXI.Rectangle(5, 5, 120, 80), '', ButtonTexture.Button01, true);
+        this.pauseButton.container.removeFromParent();
+        this.stage.addChild(this.pauseButton.container);
+        this.pauseButton.CustomButtonLogic = () => {
+            this.pauseButton.buttonIcon = new PIXI.Sprite({
+                texture: GameAssets.PauseIconTexture,
+                x: this.pauseButton.container.width / 2,
+                y: this.pauseButton.container.height / 2,
+                scale: 0.2,
+            });
+            this.pauseButton.buttonIcon.anchor.set(0.5, 0.5);
+            this.pauseButton.container.addChild(this.pauseButton.buttonIcon);
+        };
+        this.pauseButton.CustomButtonLogic();
+        this.pauseButton.onClick = () => {
+            if (this.isPaused) {
+                this.UnpauseGame();
+            } else {
+                this.ShowPauseDialog();
+                this.PauseGame();
+            }
+        };
+
         this.ticker = new PIXI.Ticker();
         this.ticker.maxFPS = 60;
         this.ticker.minFPS = 30;
@@ -183,7 +209,7 @@ export class GameScene extends Scene {
         Engine.Grid.gridInteractionEnabled = false;
         Engine.GameScene.sidebar.towerTab.resetTint();
         Engine.TowerManager.ResetChooseTower();
-        this.setRoundMode(RoundMode.OfferingGems);
+        this.setRoundMode(RoundMode.Misc);
         let gemsToOffer = this.mission.rounds[this.currentRound].offeredGems;
         this.DarkenScreen();
         this.offerGemsSprite = new PIXI.NineSliceSprite({
@@ -243,6 +269,18 @@ export class GameScene extends Scene {
         Engine.Grid.gridInteractionEnabled = true;
         this.MissionStats.giveGem(gem);
         this.setRoundMode(RoundMode.Purchase);
+    }
+
+    public PauseGame() {
+        this.isPaused = true;
+        this.ticker.stop();
+    }
+    public UnpauseGame() {
+        this.isPaused = false;
+        this.ticker.start();
+    }
+    public ShowPauseDialog() {
+        console.warn("Pause dialog doesn't exist.");
     }
 
     private async ShowEndgameDialog(lost) {

@@ -17,7 +17,7 @@ List of things to implement following the "release" of the minimum viable produc
 -   [x] Tower info on click
 -   [x] Animate projectiles
 -   [x] Better mouseover tracking when placing tower and showing radius
--   [ ] Sell tower button
+-   [x] Sell tower button
 
 ## Gems
 

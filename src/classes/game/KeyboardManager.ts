@@ -1,7 +1,7 @@
 /**
  * Handles keyboard events.
  */
-class KeyboardManager {
+export default class KeyboardManager {
     private static listeners: ((event: KeyboardEvent) => void)[] = [];
 
     public static init() {
@@ -35,7 +35,7 @@ class KeyboardManager {
 
     private static handleKeyDown(event: KeyboardEvent) {
         if (KeyboardManager.listeners.length > 0) {
-            console.log(`Key down: ${event.key}`);
+            // console.log(`Key down: ${event.key}`);
             for (let i = KeyboardManager.listeners.length - 1; i >= 0; i--) {
                 KeyboardManager.listeners[i](event);
                 if (event.defaultPrevented) {
@@ -45,5 +45,3 @@ class KeyboardManager {
         }
     }
 }
-
-export default KeyboardManager;

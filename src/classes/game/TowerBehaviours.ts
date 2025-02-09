@@ -12,12 +12,13 @@ import { Tower } from './Tower';
  */
 function projectileCheck(tower: Tower, elapsedMS: number) {
     tower.projectiles.forEach((proj) => {
-        if (proj.deleteMe) {
+        if (proj.deleteMe || tower.sold) {
             proj.collidedCreepIDs.forEach(() => {
                 tower.damageDealt += tower.computedDamageToDeal;
             });
             proj.collidedCreepIDs = [];
             tower.projectiles.splice(tower.projectiles.indexOf(proj), 1);
+            proj.destroy();
             proj = null;
         } else proj.update(elapsedMS);
     });

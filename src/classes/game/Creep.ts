@@ -131,8 +131,8 @@ export default class Creep extends GameObject {
                 this.sprite.scale.x *= -1;
             }
         }
-        let deltaX = this.speed * elapsedMS * directionX;
-        let deltaY = this.speed * elapsedMS * directionY;
+        let deltaX = this.speed * elapsedMS * directionX * Engine.GameScene.gameSpeedMultiplier;
+        let deltaY = this.speed * elapsedMS * directionY * Engine.GameScene.gameSpeedMultiplier;
         let increaseIndex = false;
 
         if (deltaX > 0 && this.x + deltaX > targetX) {

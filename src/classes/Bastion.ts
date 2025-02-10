@@ -1,5 +1,4 @@
 import * as PIXI from 'pixi.js';
-import GameObject from './GameObject';
 import GuiObject from './GuiObject';
 import Scene from '../scenes/Scene';
 import { Grid } from './game/Grid';
@@ -10,7 +9,6 @@ import { AnimationManager } from './game/AnimationManager';
 import NotificationManager from './game/NotificationManager';
 import Gem from './game/Gem';
 import GameAssets from './Assets';
-import { GemType } from './Definitions';
 
 export class Engine {
     public static app: PIXI.Application;
@@ -33,10 +31,10 @@ export class Engine {
     public static TestSuite() {
         let params = new URLSearchParams(location.href);
         if (params.entries().next().value[1] != 'game') return;
-
         Engine.NotificationManager.Notify('Loaded testing suite.', 'danger');
+        let tower = GameAssets.Towers[0];
         Engine.TowerManager.ToggleChoosingTowerLocation('RESET');
-        Engine.TowerManager.PlaceTower(GameAssets.Towers[1], 6, 10, GameAssets.Towers[1].behaviour, true);
+        Engine.TowerManager.PlaceTower(tower, 6, 10, tower.behaviour, true);
         for (let i = 0; i < 29; i++) {
             this.GameScene.MissionStats.giveGem(new Gem(i % 4), true);
         }

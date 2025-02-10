@@ -12,11 +12,13 @@ import { Tower } from './Tower';
  */
 function projectileCheck(tower: Tower, elapsedMS: number) {
     tower.projectiles.forEach((proj) => {
-        if (proj.deleteMe) {
+        if (proj.deleteMe || tower.sold) {
             proj.collidedCreepIDs.forEach(() => {
                 tower.damageDealt += tower.computedDamageToDeal;
             });
+            proj.collidedCreepIDs = [];
             tower.projectiles.splice(tower.projectiles.indexOf(proj), 1);
+            proj.destroy();
             proj = null;
         } else proj.update(elapsedMS);
     });
@@ -57,7 +59,7 @@ export function computeGemImprovements(tower: Tower) {
         tower.totalGemResistanceModifications.frostfire += gemResMod.frostfire;
     });
     tower.computedDamageToDeal = tower.definition.stats.damage + gemDamage;
-    tower.computedAttackSpeed = tower.definition.stats.cooldown - gemAttackSpeedUp;
+    tower.computedCooldown = tower.definition.stats.cooldown - gemAttackSpeedUp;
     tower.computedRange = tower.definition.stats.range + gemRangeUp;
     tower.computedTimeToLive = tower.definition.stats.timeToLive + gemTimeToLiveUp;
     tower.computedPierce = tower.definition.stats.pierce + gemPierceUp;
@@ -71,30 +73,32 @@ export function computeGemImprovements(tower: Tower) {
  * @param elapsedMS - The elapsed time in milliseconds since the last update.
  */
 export function BasicTowerBehaviour(tower: Tower, elapsedMS: number) {
-    if (tower.ticksUntilNextShot % 2 == 0) computeGemImprovements(tower);
+    computeGemImprovements(tower);
     projectileCheck(tower, elapsedMS);
-    if (tower.ticksUntilNextShot > 0) tower.ticksUntilNextShot--;
+    if (tower.millisecondsUntilNextShot > 0)
+        tower.millisecondsUntilNextShot -= elapsedMS * Engine.GameScene.gameSpeedMultiplier;
     let creepsInRange = tower.GetCreepsInRange();
     if (creepsInRange.length > 0) {
         let focus = creepsInRange[0];
-        if (tower.ticksUntilNextShot <= 0) {
+        if (tower.millisecondsUntilNextShot <= 0) {
             let x = tower.column * Engine.GridCellSize + Engine.GridCellSize / 2;
             let y = tower.row * Engine.GridCellSize + Engine.GridCellSize / 2;
-            tower.ticksUntilNextShot = tower.computedAttackSpeed;
+            tower.millisecondsUntilNextShot = tower.computedCooldown;
             tower.Shoot(calculateAngleToPoint(x, y, focus.x, focus.y));
         }
     }
 }
 
 export function CircleTowerBehaviour(tower: Tower, elapsedMS: number) {
-    if (tower.ticksUntilNextShot % 2 == 0) computeGemImprovements(tower);
+    computeGemImprovements(tower);
     projectileCheck(tower, elapsedMS);
-    if (tower.ticksUntilNextShot > 0) tower.ticksUntilNextShot--;
+    if (tower.millisecondsUntilNextShot > 0)
+        tower.millisecondsUntilNextShot -= elapsedMS * Engine.GameScene.gameSpeedMultiplier;
     let creepsInRange = tower.GetCreepsInRange();
     if (creepsInRange.length > 0) {
         let focus = creepsInRange[0];
-        if (tower.ticksUntilNextShot <= 0) {
-            tower.ticksUntilNextShot = tower.computedAttackSpeed;
+        if (tower.millisecondsUntilNextShot <= 0) {
+            tower.millisecondsUntilNextShot = tower.computedCooldown;
             let x = tower.column * Engine.GridCellSize + Engine.GridCellSize / 2;
             let y = tower.row * Engine.GridCellSize + Engine.GridCellSize / 2;
             tower.Shoot(calculateAngleToPoint(x, y, x, y + 10)); // Up

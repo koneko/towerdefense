@@ -1,3 +1,4 @@
+import GameAssets from '../classes/Assets';
 import { Engine } from '../classes/Bastion';
 import GuiObject from '../classes/GuiObject';
 import * as PIXI from 'pixi.js';
@@ -16,6 +17,14 @@ export default class Scene {
         this.gui.forEach((element) => {
             element.destroy();
         });
+    }
+
+    public addMainBackground() {
+        // Background
+        const sprite = new PIXI.Sprite(GameAssets.MainBackground);
+        sprite.width = Engine.app.canvas.width;
+        sprite.height = Engine.app.canvas.height;
+        this.stage.addChild(sprite);
     }
 
     public get events(): PIXI.EventEmitter {

@@ -73,7 +73,7 @@ export class VisualGemSlot extends GuiObject {
         this.container.addChild(this.background);
         this.container.addChild(this.iconSprite);
         this.container.addChild(this.frame);
-        let txt = gem ? gem.id : '';
+        let txt = gem ? gem.level : '';
         let dbgText = new PIXI.Text({
             text: txt,
             zIndex: 11,
@@ -114,6 +114,7 @@ export default class TowerPanel extends GuiObject {
     public frostFireResDamage: PIXI.Text;
     public divineResDamage: PIXI.Text;
     public physicalResDamage: PIXI.Text;
+    private sellButton: Button;
 
     constructor(bounds: PIXI.Rectangle) {
         super(false);
@@ -156,6 +157,7 @@ export default class TowerPanel extends GuiObject {
             zIndex: 5,
             style: new PIXI.TextStyle({
                 fill: 0xffffff,
+                fontSize: 25,
                 stroke: {
                     color: 0x000000,
                     width: 2,
@@ -280,6 +282,14 @@ export default class TowerPanel extends GuiObject {
             }),
         });
         this.container.addChild(this.physicalResDamage);
+        this.sellButton = new Button(
+            new PIXI.Rectangle(5, this.towerPanel.height - 70, this.towerPanel.width - 115, 60),
+            'Sell',
+            ButtonTexture.Button02,
+            true
+        );
+        this.sellButton.container.removeFromParent();
+        this.container.addChild(this.sellButton.container);
     }
     private MakeSlots(tower: Tower) {
         this.vGems.forEach((vGem) => {
@@ -319,7 +329,7 @@ export default class TowerPanel extends GuiObject {
         this.MakeSlots(tower);
         this.showingTower = tower;
         Engine.GameScene.sidebar.gemTab.selectingGemTowerObject = tower;
-        if (tower.container.parent.x < 900) {
+        if (tower.container.parent.x < 1270) {
             this.ShowRight();
         } else {
             this.ShowLeft();
@@ -331,13 +341,18 @@ export default class TowerPanel extends GuiObject {
         this.damageText.text = 'Deals ' + tower.computedDamageToDeal + ' damage';
         this.totalDamage.text = 'Damage dealt: ' + tower.damageDealt + ' damage';
         this.attackSpeedText.x = this.damageText.width + 10;
-        this.attackSpeedText.text = ` every ${Math.floor((tower.computedAttackSpeed / 60) * 100) / 100}s`;
+        this.attackSpeedText.text = ` every ${Math.floor((tower.computedCooldown / 60) * 100) / 100}s`;
 
         this.fireResDamage.text = `+${tower.totalGemResistanceModifications.fire * 100}% Fire damage`;
         this.iceResDamage.text = `+${tower.totalGemResistanceModifications.ice * 100}% Ice damage`;
         this.frostFireResDamage.text = `+${tower.totalGemResistanceModifications.frostfire * 100}% FrostFire damage`;
         this.divineResDamage.text = `+${tower.totalGemResistanceModifications.divine * 100}% Divine damage`;
         this.physicalResDamage.text = `+${tower.totalGemResistanceModifications.physical * 100}% Physical damage`;
+        this.sellButton.setCaption('Sell for ' + tower.definition.stats.cost + ' gold');
+        this.sellButton.onClick = () => {
+            tower.Sell();
+            this.Hide();
+        };
     }
     private ShowLeft() {
         this.towerPanel.x = -100;

@@ -1,6 +1,5 @@
 import * as PIXI from 'pixi.js';
 import GuiObject from '../GuiObject';
-import Assets from '../Assets';
 import { Engine } from '../Bastion';
 import GameAssets from '../Assets';
 import Button, { ButtonTexture } from './Button';
@@ -46,9 +45,9 @@ export default abstract class ModalDialogBase extends GuiObject {
         const contentBounds = `x: ${Math.round(this.dialogContent.x)}, y: ${Math.round(
             this.dialogContent.y
         )}, width: ${Math.round(this.dialogContent.width)}, height: ${Math.round(this.dialogContent.height)}`;
-        console.debug(
-            `ModalDialogBase.show(dialog: ${dialogBounds}, content: ${contentBounds}, buttons: ${this.buttonCaptions})`
-        );
+        // console.debug(
+        //     `ModalDialogBase.show(dialog: ${dialogBounds}, content: ${contentBounds}, buttons: ${this.buttonCaptions})`
+        // );
         return new Promise((resolve, reject) => {
             Engine.app.stage.addChild(this.container);
             this.onClosed = (button) => {

@@ -108,6 +108,9 @@ export enum CreepType {
     Basic = 0,
     Quick = 1,
     Tank = 2,
+    Cloaker = 3,
+    Demon = 4,
+    Maker = 5,
 }
 
 export enum GemType {

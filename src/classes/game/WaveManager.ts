@@ -60,7 +60,7 @@ export default class WaveManager extends GameObject {
     }
     public update(elapsedMS: number): void {
         if (this.started == false) return;
-        this.ticks += elapsedMS;
+        this.ticks += elapsedMS * Engine.GameScene.gameSpeedMultiplier;
         this.creeps.forEach((creep) => {
             if (!creep.spawned && creep.tickToSpawnAt <= this.ticks) {
                 creep.spawned = true;

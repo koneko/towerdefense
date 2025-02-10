@@ -16,16 +16,18 @@ export function distance(x1, y1, x2, y2) {
 export class Tower extends GameObject {
     public row: number;
     public column: number;
+    public setAsSold: boolean = false;
+    public sold: boolean = false;
     public definition: TowerDefinition;
     public slottedGems: Array<Gem> = [];
     public damageDealt: number = 0;
     public projectiles: Projectile[] = [];
     public behaviour: string;
     public sprite: PIXI.Sprite;
-    public ticksUntilNextShot: number;
+    public millisecondsUntilNextShot: number;
     public graphics: PIXI.Graphics = new PIXI.Graphics();
     public computedDamageToDeal: number;
-    public computedAttackSpeed: number;
+    public computedCooldown: number;
     public computedRange: number;
     public computedTimeToLive: number;
     public computedPierce: number;
@@ -38,7 +40,7 @@ export class Tower extends GameObject {
         this.column = column;
         this.behaviour = behaviour;
         this.definition = definition;
-        this.ticksUntilNextShot = 0;
+        this.millisecondsUntilNextShot = 0;
         this.parent = Engine.Grid.getCellByRowAndCol(row, column);
         this.sprite = new PIXI.Sprite({
             texture: texture,
@@ -74,6 +76,7 @@ export class Tower extends GameObject {
     }
     public UnslotGem(index) {
         const gem = this.slottedGems.splice(index, 1)[0];
+        if (gem == null || !gem) return console.warn('UnslotGem: Gem is null.');
         Engine.GameScene.MissionStats.giveGem(gem, true);
         for (let i = index; i < this.slottedGems.length - 1; i++) {
             if (this.slottedGems[i] == null) {
@@ -113,14 +116,6 @@ export class Tower extends GameObject {
             }
             combinedTint = color;
         }
-        // this.slottedGems.forEach((gem) => {
-        //     let rgb = new PIXI.Color(gem.definition.color).toRgb();
-        //     combinedTint =
-        //         ((combinedTint & 0xff0000) + (rgb.r << 16)) |
-        //         ((combinedTint & 0x00ff00) + (rgb.g << 8)) |
-        //         ((combinedTint & 0x0000ff) + rgb.b);
-        // });
-        // combinedTint = new PIXI.Color(this.slottedGems[0].definition.color).
         let proj = new Projectile(
             x,
             y,
@@ -132,10 +127,20 @@ export class Tower extends GameObject {
             this.computedPierce,
             this.totalGemResistanceModifications
         );
+        const time = new Date().toISOString();
+        console.log(`${time} ${this.definition.name} shot at ${angle} degrees`);
         this.projectiles.push(proj);
         return proj;
     }
+    public Sell() {
+        this.setAsSold = true;
+        // Selling logic is handled in TowerManager.update()
+    }
     public update(elapsedMS: any): void {
+        if (this.sold) return;
+        if (this.setAsSold) {
+            this.sold = true;
+        }
         if (this.behaviour == TowerBehaviours.BasicTowerBehaviour) BasicTowerBehaviour(this, elapsedMS);
         if (this.behaviour == TowerBehaviours.CircleTowerBehaviour) CircleTowerBehaviour(this, elapsedMS);
     }

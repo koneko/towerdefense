@@ -46,6 +46,7 @@ import { GemType } from './classes/Definitions';
     }
     Engine.latestCommit = await fetch('/latest_commit').then((res) => res.text());
     window.addEventListener('resize', resize);
+
     resize();
     await Assets.LoadAssets();
     GameUIConstants.init();
@@ -71,4 +72,21 @@ import { GemType } from './classes/Definitions';
             return 'You are about to leave.';
         };
     else Engine.TestSuite();
+
+    let gamePausedDueToBlur = false;
+
+    window.addEventListener('blur', () => {
+        console.log('blur');
+        if (Engine.GameScene && !Engine.GameScene.isPaused) {
+            Engine.GameScene.PauseGame();
+            gamePausedDueToBlur = true;
+        }
+    });
+    window.addEventListener('focus', () => {
+        console.log('focus');
+        if (Engine.GameScene && gamePausedDueToBlur && Engine.GameScene.isPaused) {
+            gamePausedDueToBlur = false;
+            Engine.GameScene.UnpauseGame();
+        }
+    });
 })();

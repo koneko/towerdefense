@@ -18,11 +18,12 @@ import TowerPanel, { VisualGemSlot } from '../classes/gui/TowerPanel';
 import Gem from '../classes/game/Gem';
 import EndGameDialog from '../classes/gui/EndGameDialog';
 import HighScoreDialog, { HighScoreDialogButtons } from '../classes/gui/HighScoreDialog';
+import GamePausedDialog from '../classes/gui/GamePausedDialog';
 
 enum RoundMode {
     Purchase = 0,
     Combat = 1,
-    OfferingGems = 2,
+    Misc = 2,
 }
 
 export class GameScene extends Scene {
@@ -36,6 +37,10 @@ export class GameScene extends Scene {
     public sidebar: Sidebar;
     public tooltip: Tooltip;
     public towerPanel: TowerPanel;
+    public isPaused: boolean = false;
+    public gameSpeedMultiplier: number = 1;
+
+    private pauseButton: Button;
     private visualGems: VisualGemSlot[] = [];
     private currentRound: number = 0;
     private isWaveManagerFinished: boolean = false;
@@ -47,10 +52,12 @@ export class GameScene extends Scene {
         y: 0,
         zIndex: 120,
     });
+    private windowTitle: string;
 
     constructor(name: string) {
         super();
         Engine.GameScene = this;
+        this.windowTitle = document.title;
         GameAssets.Missions.forEach((mission, index) => {
             if (mission.name == name) {
                 this.mission = mission;
@@ -101,15 +108,21 @@ export class GameScene extends Scene {
         this.changeRoundButton.CustomButtonLogic();
         this.changeRoundButton.onClick = () => {
             if (this.playerWon) return this.ReturnToMain();
-            if (this.roundMode == RoundMode.Combat)
-                return Engine.NotificationManager.Notify('Wave is already in progress.', 'warn');
+            if (this.roundMode == RoundMode.Combat) {
+                if (this.gameSpeedMultiplier !== 1) {
+                    this.UpdateGameSpeedMultiplier(1);
+                } else {
+                    this.UpdateGameSpeedMultiplier(2);
+                }
+                return;
+            }
             if (this.isGameOver) return Engine.NotificationManager.Notify('No more waves.', 'danger');
-            if (this.roundMode == RoundMode.OfferingGems) return;
+            if (this.roundMode == RoundMode.Misc) return;
             this.setRoundMode(RoundMode.Combat);
-            this.changeRoundButton.buttonIcon.texture = GameAssets.ExclamationIconTexture;
+            this.changeRoundButton.buttonIcon.texture = GameAssets.FastForwardIconTexture;
             this.events.emit(WaveManagerEvents.NewWave, `${this.currentRound + 1}`);
         };
-        this.MissionStats = new MissionStats(100, 200);
+        this.MissionStats = new MissionStats(125, 450);
         this.events.on(GemEvents.TowerPanelSelectGem, (gem, index, tower) => {
             if (gem == null) {
                 if (!this.MissionStats.checkIfPlayerHasAnyGems())
@@ -120,6 +133,30 @@ export class GameScene extends Scene {
             }
             this.sidebar.gemTab.TowerPanelSelectingGem(gem, index, tower);
         });
+
+        this.pauseButton = new Button(new PIXI.Rectangle(5, 5, 120, 80), '', ButtonTexture.Button01, true);
+        this.pauseButton.container.removeFromParent();
+        this.stage.addChild(this.pauseButton.container);
+        this.pauseButton.CustomButtonLogic = () => {
+            this.pauseButton.buttonIcon = new PIXI.Sprite({
+                texture: GameAssets.PauseIconTexture,
+                x: this.pauseButton.container.width / 2,
+                y: this.pauseButton.container.height / 2,
+                scale: 0.2,
+            });
+            this.pauseButton.buttonIcon.anchor.set(0.5, 0.5);
+            this.pauseButton.container.addChild(this.pauseButton.buttonIcon);
+        };
+        this.pauseButton.CustomButtonLogic();
+        this.pauseButton.onClick = () => {
+            if (this.isPaused) {
+                this.UnpauseGame();
+            } else {
+                this.ShowPauseDialog();
+                this.PauseGame();
+            }
+        };
+
         this.ticker = new PIXI.Ticker();
         this.ticker.maxFPS = 60;
         this.ticker.minFPS = 30;
@@ -130,10 +167,10 @@ export class GameScene extends Scene {
 
         this.ticker.add(() => {
             if (this.update) this.update(this.ticker.elapsedMS);
+            // if (this.isFastForwarded) this.update(this.ticker.elapsedMS);
         });
         this.ticker.start();
     }
-
     public update(elapsedMS) {
         if (this.isGameOver) {
             if (this.destroyTicker) {
@@ -183,7 +220,7 @@ export class GameScene extends Scene {
         Engine.Grid.gridInteractionEnabled = false;
         Engine.GameScene.sidebar.towerTab.resetTint();
         Engine.TowerManager.ResetChooseTower();
-        this.setRoundMode(RoundMode.OfferingGems);
+        this.setRoundMode(RoundMode.Misc);
         let gemsToOffer = this.mission.rounds[this.currentRound].offeredGems;
         this.DarkenScreen();
         this.offerGemsSprite = new PIXI.NineSliceSprite({
@@ -245,6 +282,21 @@ export class GameScene extends Scene {
         this.setRoundMode(RoundMode.Purchase);
     }
 
+    public PauseGame() {
+        this.isPaused = true;
+        this.ticker.stop();
+        document.title = '[PAUSED] ' + this.windowTitle;
+    }
+    public UnpauseGame() {
+        this.isPaused = false;
+        this.ticker.start();
+        document.title = this.windowTitle;
+    }
+    public ShowPauseDialog() {
+        const gamePausedDialog = new GamePausedDialog();
+        gamePausedDialog.show();
+    }
+
     private async ShowEndgameDialog(lost) {
         const endGameDialog = new EndGameDialog(this.mission.name, this.MissionStats, lost);
         await endGameDialog.show();
@@ -291,5 +343,11 @@ export class GameScene extends Scene {
 
     private ReturnToMain() {
         Engine.GameMaster.changeScene(new MissionPickerScene());
+    }
+
+    private UpdateGameSpeedMultiplier(newMultiplier: number) {
+        this.gameSpeedMultiplier = newMultiplier;
+        if (newMultiplier === 1) Engine.NotificationManager.Notify('Regular speed.', 'info');
+        else Engine.NotificationManager.Notify('Fast forward activated.', 'info');
     }
 }

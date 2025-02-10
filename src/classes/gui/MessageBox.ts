@@ -1,6 +1,5 @@
 import * as PIXI from 'pixi.js';
 import ModalDialogBase from './ModalDialog';
-import GuiObject from '../GuiObject';
 
 export default class MessageBox extends ModalDialogBase {
     private caption: string;

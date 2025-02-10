@@ -114,8 +114,17 @@ export default class TowerManager {
         }
     }
     public update(elapsedMS) {
-        this.towers.forEach((twr) => {
-            twr.update(elapsedMS);
+        this.towers.forEach((twr, idx) => {
+            if (twr.sold) {
+                twr.slottedGems = twr.slottedGems.filter((gem) => gem != null);
+                while (twr.slottedGems.length > 0) {
+                    twr.UnslotGem(0);
+                }
+                Engine.GameScene.MissionStats.earnGold(twr.definition.stats.cost);
+                twr.destroy();
+                this.towers.splice(idx, 1);
+                Engine.GameScene.events.emit(TowerEvents.TowerSoldEvent, twr.name, twr.row, twr.column);
+            } else twr.update(elapsedMS);
         });
     }
 }

@@ -3,6 +3,8 @@ import { CreepDefinition, GemDefinition, MissionDefinition, TowerDefinition } fr
 import { Engine } from './Bastion';
 
 export default class GameAssets {
+    public static MainBackground: PIXI.Texture;
+
     public static Frame01Texture: PIXI.Texture;
     public static Frame02Texture: PIXI.Texture;
     public static Frame03Texture: PIXI.Texture;
@@ -26,9 +28,16 @@ export default class GameAssets {
     public static BannerGemsmith: PIXI.Texture;
     public static EndScreenDialog: PIXI.Texture;
 
+    public static Tutorial01: PIXI.Texture;
+    public static Tutorial02: PIXI.Texture;
+    public static Tutorial03: PIXI.Texture;
+    public static Tutorial04: PIXI.Texture;
+    public static Tutorial05: PIXI.Texture;
+
     public static PlayIconTexture: PIXI.Texture;
     public static PauseIconTexture: PIXI.Texture;
     public static ExclamationIconTexture: PIXI.Texture;
+    public static FastForwardIconTexture: PIXI.Texture;
     public static HomeIconTexture: PIXI.Texture;
     public static HammerIconTexture: PIXI.Texture;
     public static XIconTexture: PIXI.Texture;
@@ -98,6 +107,14 @@ export default class GameAssets {
             this.Load('./assets/gui/frame_blue.png').then((texture) => (this.BlueBackground = texture)),
             this.Load('./assets/gui/banner_01.png').then((texture) => (this.BannerGemsmith = texture)),
             this.Load('./assets/gui/note.png').then((texture) => (this.EndScreenDialog = texture)),
+            this.Load('./assets/gui/main_background.jpg').then((texture) => (this.MainBackground = texture)),
+
+            this.Load('./assets/tutorial/tutorial01.jpg').then((texture) => (this.Tutorial01 = texture)),
+            this.Load('./assets/tutorial/tutorial02.jpg').then((texture) => (this.Tutorial02 = texture)),
+            this.Load('./assets/tutorial/tutorial03.jpg').then((texture) => (this.Tutorial03 = texture)),
+            this.Load('./assets/tutorial/tutorial04.jpg').then((texture) => (this.Tutorial04 = texture)),
+            this.Load('./assets/tutorial/tutorial05.jpg').then((texture) => (this.Tutorial05 = texture)),
+
             this.Load('./assets/gui/heart.png').then((texture) => (this.HealthTexture = texture)),
             this.Load('./assets/gui/money.png').then((texture) => (this.GoldTexture = texture)),
             this.Load('./assets/gui/wave.png').then((texture) => (this.WaveTexture = texture)),
@@ -105,7 +122,8 @@ export default class GameAssets {
             this.Load('./assets/gui/title01.png').then((texture) => (this.TitleTexture = texture)),
             this.Load('./assets/gui/icons/play.png').then((texture) => (this.PlayIconTexture = texture)),
             this.Load('./assets/gui/icons/pause.png').then((texture) => (this.PauseIconTexture = texture)),
-            this.Load('./assets/gui/icons/exclamation.png').then((texture) => (this.ExclamationIconTexture = texture)),
+            this.Load('./assets/gui/icons/pause.png').then((texture) => (this.PauseIconTexture = texture)),
+            this.Load('./assets/gui/icons/fastforward.png').then((texture) => (this.FastForwardIconTexture = texture)),
             this.Load('./assets/gui/icons/home.png').then((texture) => (this.HomeIconTexture = texture)),
             this.Load('./assets/gui/icons/hammer.png').then((texture) => (this.HammerIconTexture = texture)),
             this.Load('./assets/gui/icons/cross.png').then((texture) => (this.XIconTexture = texture)),

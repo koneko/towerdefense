@@ -67,6 +67,7 @@ export class Cell extends GameObject {
         Engine.GameScene.events.on(TowerEvents.TowerSoldEvent, (_, row, col) => {
             if (row == this.row && col == this.column) {
                 this.hasTowerPlaced = false;
+                Engine.Grid.rangePreview.clear();
             }
         });
 

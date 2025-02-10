@@ -52,10 +52,12 @@ export class GameScene extends Scene {
         y: 0,
         zIndex: 120,
     });
+    private windowTitle: string;
 
     constructor(name: string) {
         super();
         Engine.GameScene = this;
+        this.windowTitle = document.title;
         GameAssets.Missions.forEach((mission, index) => {
             if (mission.name == name) {
                 this.mission = mission;
@@ -283,10 +285,12 @@ export class GameScene extends Scene {
     public PauseGame() {
         this.isPaused = true;
         this.ticker.stop();
+        document.title = '[PAUSED] ' + this.windowTitle;
     }
     public UnpauseGame() {
         this.isPaused = false;
         this.ticker.start();
+        document.title = this.windowTitle;
     }
     public ShowPauseDialog() {
         const gamePausedDialog = new GamePausedDialog();

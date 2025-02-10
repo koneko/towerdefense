@@ -18,6 +18,7 @@ import TowerPanel, { VisualGemSlot } from '../classes/gui/TowerPanel';
 import Gem from '../classes/game/Gem';
 import EndGameDialog from '../classes/gui/EndGameDialog';
 import HighScoreDialog, { HighScoreDialogButtons } from '../classes/gui/HighScoreDialog';
+import GamePausedDialog from '../classes/gui/GamePausedDialog';
 
 enum RoundMode {
     Purchase = 0,
@@ -289,7 +290,8 @@ export class GameScene extends Scene {
         this.ticker.start();
     }
     public ShowPauseDialog() {
-        console.warn("Pause dialog doesn't exist.");
+        const gamePausedDialog = new GamePausedDialog();
+        gamePausedDialog.show();
     }
 
     private async ShowEndgameDialog(lost) {

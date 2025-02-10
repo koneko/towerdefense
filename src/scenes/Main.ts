@@ -1,3 +1,4 @@
+import GameAssets from '../classes/Assets';
 import { Engine } from '../classes/Bastion';
 import { FadeInOut, Tween } from '../classes/game/AnimationManager';
 import Button, { ButtonTexture } from '../classes/gui/Button';
@@ -8,50 +9,27 @@ import * as PIXI from 'pixi.js';
 
 export class MainScene extends Scene {
     public init() {
+        // Background
+        this.addMainBackground();
+
         const NewGameButton = {
             caption: 'New Game',
-            rect: new PIXI.Rectangle(
-                Engine.app.canvas.width / 2 - 300 / 2,
-                Engine.app.canvas.height / 5 + 2 * 80,
-                300,
-                60
-            ),
+            rect: new PIXI.Rectangle(Engine.app.canvas.width / 2 - 300 / 2, 400 + 0 * 70, 300, 60),
 
-            texture: ButtonTexture.Button02,
+            texture: ButtonTexture.Button01,
+        };
+        const TutorialButton = {
+            caption: 'How to play',
+            rect: new PIXI.Rectangle(Engine.app.canvas.width / 2 - 300 / 2, 400 + 1 * 70, 300, 60),
+            texture: ButtonTexture.Button01,
         };
 
         const SettingsButton = {
             caption: 'Settings',
-            rect: new PIXI.Rectangle(
-                Engine.app.canvas.width / 2 - 300 / 2,
-                Engine.app.canvas.height / 5 + 4 * 80,
-                300,
-                60
-            ),
-            texture: ButtonTexture.Button02,
+            rect: new PIXI.Rectangle(Engine.app.canvas.width / 2 - 300 / 2, 400 + 2 * 70, 300, 60),
+            texture: ButtonTexture.Button01,
         };
-        const TutorialButton = {
-            caption: 'How to play',
-            rect: new PIXI.Rectangle(
-                Engine.app.canvas.width / 2 - 300 / 2,
-                Engine.app.canvas.height / 5 + 3 * 80,
-                300,
-                60
-            ),
-            texture: ButtonTexture.Button02,
-        };
-        let text = new PIXI.Text({
-            x: Engine.app.canvas.width / 2 - 300 / 2,
-            y: Engine.app.canvas.height / 5 + 20,
-            text: 'BASTION',
-            style: {
-                fill: 0xffaa00,
-                fontFamily: 'Aclonica',
-                fontSize: 100,
-            },
-        });
-        text.x = text.x - text.width / 5;
-        Engine.GameMaster.currentScene.stage.addChild(text);
+
         let text2 = new PIXI.Text({
             x: 0,
             y: 0,
@@ -62,11 +40,9 @@ export class MainScene extends Scene {
                 fontWeight: 'bold',
             },
         });
-        Engine.GameMaster.currentScene.stage.addChild(text2);
+        this.stage.addChild(text2);
         const button01 = new Button(NewGameButton.rect, NewGameButton.caption, NewGameButton.texture, true);
         button01.onClick = (e) => {
-            Engine.GameMaster.currentScene.stage.removeChild(text);
-            Engine.GameMaster.currentScene.stage.removeChild(text2);
             Engine.GameMaster.changeScene(new MissionPickerScene());
         };
 
@@ -76,8 +52,6 @@ export class MainScene extends Scene {
         };
         let b3 = new Button(TutorialButton.rect, TutorialButton.caption, TutorialButton.texture, true);
         b3.onClick = (e) => {
-            Engine.GameMaster.currentScene.stage.removeChild(text);
-            Engine.GameMaster.currentScene.stage.removeChild(text2);
             Engine.GameMaster.changeScene(new HowToPlay());
         };
     }

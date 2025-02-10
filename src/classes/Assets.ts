@@ -3,6 +3,8 @@ import { CreepDefinition, GemDefinition, MissionDefinition, TowerDefinition } fr
 import { Engine } from './Bastion';
 
 export default class GameAssets {
+    public static MainBackground: PIXI.Texture;
+
     public static Frame01Texture: PIXI.Texture;
     public static Frame02Texture: PIXI.Texture;
     public static Frame03Texture: PIXI.Texture;
@@ -105,6 +107,7 @@ export default class GameAssets {
             this.Load('./assets/gui/frame_blue.png').then((texture) => (this.BlueBackground = texture)),
             this.Load('./assets/gui/banner_01.png').then((texture) => (this.BannerGemsmith = texture)),
             this.Load('./assets/gui/note.png').then((texture) => (this.EndScreenDialog = texture)),
+            this.Load('./assets/gui/main_background.jpg').then((texture) => (this.MainBackground = texture)),
 
             this.Load('./assets/tutorial/tutorial01.jpg').then((texture) => (this.Tutorial01 = texture)),
             this.Load('./assets/tutorial/tutorial02.jpg').then((texture) => (this.Tutorial02 = texture)),

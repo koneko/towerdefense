@@ -113,6 +113,11 @@ export class Cell extends GameObject {
         let color = 0xffffff;
         if (invalid) color = 0xff0000;
         Engine.Grid.rangePreview.clear();
+        console.log(
+            `Showing range preview ${this.column * Engine.GridCellSize + Engine.GridCellSize / 2}x - ${
+                this.row * Engine.GridCellSize + Engine.GridCellSize / 2
+            }y`
+        );
         Engine.Grid.rangePreview.circle(
             this.column * Engine.GridCellSize + Engine.GridCellSize / 2,
             this.row * Engine.GridCellSize + Engine.GridCellSize / 2,

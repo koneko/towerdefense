@@ -39,7 +39,7 @@ export default class Projectile extends GameObject {
         super();
         this.x = x;
         this.y = y;
-        this.timeToLive = timeToLive;
+        this.timeToLive = timeToLive * (0.9 / 0.1);
         this.pierce = pierce;
         this.damage = damage;
         this.gemResistanceModifications = gemResistanceModifications;
@@ -53,7 +53,7 @@ export default class Projectile extends GameObject {
         Engine.GameMaster.currentScene.stage.addChild(this.container);
 
         this.angle = angle;
-        this.speed = 0.9;
+        this.speed = 0.1;
     }
     public destroy(): void {
         super.destroy();
@@ -64,7 +64,7 @@ export default class Projectile extends GameObject {
         if (this.deleteMe) return;
         if (this.x > 2000 || this.x < 0 || this.y > 2000 || this.y < 0 || this.pierce <= 0 || this.timeToLive <= 0)
             return this.destroy();
-        this.timeToLive--;
+        this.timeToLive -= Engine.GameScene.gameSpeedMultiplier;
         Engine.Grid.creeps.forEach((creep) => {
             if (this.pierce <= 0) return;
             if (creep && creep.container && this.checkCollision(creep)) {
@@ -77,14 +77,20 @@ export default class Projectile extends GameObject {
                 }
             }
         });
-        this.x += Math.cos(this.angle) * this.speed * elapsedMS;
-        this.y += Math.sin(this.angle) * this.speed * elapsedMS;
+        this.x += Math.cos(this.angle) * this.speed * elapsedMS * Engine.GameScene.gameSpeedMultiplier;
+        this.y += Math.sin(this.angle) * this.speed * elapsedMS * Engine.GameScene.gameSpeedMultiplier;
 
         this.container.x = this.x;
         this.container.y = this.y;
     }
 
     public onCollide(creep) {
+        /*
+        Note:
+        Right now it is possible for the bullet to 'overshoot' the creep if the bullet speed is too fast and the position is updated so that the 
+        new position is beyond the creep (i.e. the bullet is never 'in the creep').
+        This should be fixed so that we calculate the hit if the creep is in a line from the previous position to the new position.
+        */
         Engine.GameScene.events.emit(CreepEvents.TakenDamage, creep.id, this.damage, this.gemResistanceModifications);
     }
 

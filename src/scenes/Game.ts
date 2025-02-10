@@ -38,7 +38,8 @@ export class GameScene extends Scene {
     public tooltip: Tooltip;
     public towerPanel: TowerPanel;
     public isPaused: boolean = false;
-    private isFastForwarded: boolean = false;
+    public gameSpeedMultiplier: number = 1;
+
     private pauseButton: Button;
     private visualGems: VisualGemSlot[] = [];
     private currentRound: number = 0;
@@ -106,14 +107,12 @@ export class GameScene extends Scene {
         this.changeRoundButton.onClick = () => {
             if (this.playerWon) return this.ReturnToMain();
             if (this.roundMode == RoundMode.Combat) {
-                // TODO: figure out how to actually double speed without causing bugs.
-                if (this.isFastForwarded) {
-                    this.isFastForwarded = false;
-                    Engine.NotificationManager.Notify('Regular speed.', 'info');
+                if (this.gameSpeedMultiplier !== 1) {
+                    this.UpdateGameSpeedMultiplier(1);
                 } else {
-                    this.isFastForwarded = true;
-                    Engine.NotificationManager.Notify('Fast forward activated.', 'info');
+                    this.UpdateGameSpeedMultiplier(2);
                 }
+                return;
             }
             if (this.isGameOver) return Engine.NotificationManager.Notify('No more waves.', 'danger');
             if (this.roundMode == RoundMode.Misc) return;
@@ -340,5 +339,11 @@ export class GameScene extends Scene {
 
     private ReturnToMain() {
         Engine.GameMaster.changeScene(new MissionPickerScene());
+    }
+
+    private UpdateGameSpeedMultiplier(newMultiplier: number) {
+        this.gameSpeedMultiplier = newMultiplier;
+        if (newMultiplier === 1) Engine.NotificationManager.Notify('Regular speed.', 'info');
+        else Engine.NotificationManager.Notify('Fast forward activated.', 'info');
     }
 }

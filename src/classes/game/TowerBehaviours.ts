@@ -75,14 +75,14 @@ export function computeGemImprovements(tower: Tower) {
 export function BasicTowerBehaviour(tower: Tower, elapsedMS: number) {
     if (tower.ticksUntilNextShot % 2 == 0) computeGemImprovements(tower);
     projectileCheck(tower, elapsedMS);
-    if (tower.ticksUntilNextShot > 0) tower.ticksUntilNextShot--;
+    if (tower.ticksUntilNextShot > 0) tower.ticksUntilNextShot -= Engine.GameScene.gameSpeedMultiplier;
     let creepsInRange = tower.GetCreepsInRange();
     if (creepsInRange.length > 0) {
         let focus = creepsInRange[0];
         if (tower.ticksUntilNextShot <= 0) {
             let x = tower.column * Engine.GridCellSize + Engine.GridCellSize / 2;
             let y = tower.row * Engine.GridCellSize + Engine.GridCellSize / 2;
-            tower.ticksUntilNextShot = tower.computedAttackSpeed;
+            tower.ticksUntilNextShot = tower.computedAttackSpeed / Engine.GameScene.gameSpeedMultiplier;
             tower.Shoot(calculateAngleToPoint(x, y, focus.x, focus.y));
         }
     }
@@ -91,12 +91,12 @@ export function BasicTowerBehaviour(tower: Tower, elapsedMS: number) {
 export function CircleTowerBehaviour(tower: Tower, elapsedMS: number) {
     if (tower.ticksUntilNextShot % 2 == 0) computeGemImprovements(tower);
     projectileCheck(tower, elapsedMS);
-    if (tower.ticksUntilNextShot > 0) tower.ticksUntilNextShot--;
+    if (tower.ticksUntilNextShot > 0) tower.ticksUntilNextShot -= Engine.GameScene.gameSpeedMultiplier;
     let creepsInRange = tower.GetCreepsInRange();
     if (creepsInRange.length > 0) {
         let focus = creepsInRange[0];
         if (tower.ticksUntilNextShot <= 0) {
-            tower.ticksUntilNextShot = tower.computedAttackSpeed;
+            tower.ticksUntilNextShot = tower.computedAttackSpeed / Engine.GameScene.gameSpeedMultiplier;
             let x = tower.column * Engine.GridCellSize + Engine.GridCellSize / 2;
             let y = tower.row * Engine.GridCellSize + Engine.GridCellSize / 2;
             tower.Shoot(calculateAngleToPoint(x, y, x, y + 10)); // Up

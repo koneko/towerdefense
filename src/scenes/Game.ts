@@ -37,6 +37,7 @@ export class GameScene extends Scene {
     public tooltip: Tooltip;
     public towerPanel: TowerPanel;
     public isPaused: boolean = false;
+    private isFastForwarded: boolean = false;
     private pauseButton: Button;
     private visualGems: VisualGemSlot[] = [];
     private currentRound: number = 0;
@@ -103,12 +104,20 @@ export class GameScene extends Scene {
         this.changeRoundButton.CustomButtonLogic();
         this.changeRoundButton.onClick = () => {
             if (this.playerWon) return this.ReturnToMain();
-            if (this.roundMode == RoundMode.Combat)
-                return Engine.NotificationManager.Notify('Wave is already in progress.', 'warn');
+            if (this.roundMode == RoundMode.Combat) {
+                // TODO: figure out how to actually double speed without causing bugs.
+                if (this.isFastForwarded) {
+                    this.isFastForwarded = false;
+                    Engine.NotificationManager.Notify('Regular speed.', 'info');
+                } else {
+                    this.isFastForwarded = true;
+                    Engine.NotificationManager.Notify('Fast forward activated.', 'info');
+                }
+            }
             if (this.isGameOver) return Engine.NotificationManager.Notify('No more waves.', 'danger');
             if (this.roundMode == RoundMode.Misc) return;
             this.setRoundMode(RoundMode.Combat);
-            this.changeRoundButton.buttonIcon.texture = GameAssets.ExclamationIconTexture;
+            this.changeRoundButton.buttonIcon.texture = GameAssets.FastForwardIconTexture;
             this.events.emit(WaveManagerEvents.NewWave, `${this.currentRound + 1}`);
         };
         this.MissionStats = new MissionStats(125, 450);
@@ -156,10 +165,10 @@ export class GameScene extends Scene {
 
         this.ticker.add(() => {
             if (this.update) this.update(this.ticker.elapsedMS);
+            // if (this.isFastForwarded) this.update(this.ticker.elapsedMS);
         });
         this.ticker.start();
     }
-
     public update(elapsedMS) {
         if (this.isGameOver) {
             if (this.destroyTicker) {

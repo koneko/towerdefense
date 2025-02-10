@@ -35,6 +35,7 @@ export default class GameAssets {
     public static PlayIconTexture: PIXI.Texture;
     public static PauseIconTexture: PIXI.Texture;
     public static ExclamationIconTexture: PIXI.Texture;
+    public static FastForwardIconTexture: PIXI.Texture;
     public static HomeIconTexture: PIXI.Texture;
     public static HammerIconTexture: PIXI.Texture;
     public static XIconTexture: PIXI.Texture;
@@ -118,7 +119,8 @@ export default class GameAssets {
             this.Load('./assets/gui/title01.png').then((texture) => (this.TitleTexture = texture)),
             this.Load('./assets/gui/icons/play.png').then((texture) => (this.PlayIconTexture = texture)),
             this.Load('./assets/gui/icons/pause.png').then((texture) => (this.PauseIconTexture = texture)),
-            this.Load('./assets/gui/icons/exclamation.png').then((texture) => (this.ExclamationIconTexture = texture)),
+            this.Load('./assets/gui/icons/pause.png').then((texture) => (this.PauseIconTexture = texture)),
+            this.Load('./assets/gui/icons/fastforward.png').then((texture) => (this.FastForwardIconTexture = texture)),
             this.Load('./assets/gui/icons/home.png').then((texture) => (this.HomeIconTexture = texture)),
             this.Load('./assets/gui/icons/hammer.png').then((texture) => (this.HammerIconTexture = texture)),
             this.Load('./assets/gui/icons/cross.png').then((texture) => (this.XIconTexture = texture)),

@@ -36,6 +36,7 @@ export default class GamePausedDialog extends ModalDialogBase {
     private onMainMenuClick(): void {
         this.close();
         this._unsubKeypress();
+        Engine.GameScene.UnpauseGame();
         Engine.GameScene.destroy();
         Engine.GameMaster.changeScene(new MissionPickerScene());
     }
@@ -44,6 +45,7 @@ export default class GamePausedDialog extends ModalDialogBase {
         const missionName = Engine.GameScene.mission.name;
         this.close();
         this._unsubKeypress();
+        Engine.GameScene.UnpauseGame();
         Engine.GameScene.destroy();
         Engine.GameMaster.changeScene(new MissionPickerScene());
         Engine.GameMaster.changeScene(new GameScene(missionName));

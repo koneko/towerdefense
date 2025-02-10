@@ -6,6 +6,7 @@ import { HowToPlay } from './HowToPlay';
 import { MissionPickerScene } from './MissionPicker';
 import Scene from './Scene';
 import * as PIXI from 'pixi.js';
+import { SettingsScene } from './Settings';
 
 export class MainScene extends Scene {
     public init() {
@@ -35,7 +36,7 @@ export class MainScene extends Scene {
             y: 0,
             text: 'Latest commit: ' + Engine.latestCommit,
             style: {
-                fill: 0x000000,
+                fill: 0xffffff,
                 fontSize: 10,
                 fontWeight: 'bold',
             },
@@ -46,10 +47,10 @@ export class MainScene extends Scene {
             Engine.GameMaster.changeScene(new MissionPickerScene());
         };
 
-        let b2 = new Button(SettingsButton.rect, SettingsButton.caption, SettingsButton.texture, true);
-        b2.onClick = (e) => {
-            Engine.NotificationManager.Notify('Not finished.', 'info');
-        };
+        // let b2 = new Button(SettingsButton.rect, SettingsButton.caption, SettingsButton.texture, true);
+        // b2.onClick = (e) => {
+        //     Engine.GameMaster.changeScene(new SettingsScene());
+        // };
         let b3 = new Button(TutorialButton.rect, TutorialButton.caption, TutorialButton.texture, true);
         b3.onClick = (e) => {
             Engine.GameMaster.changeScene(new HowToPlay());

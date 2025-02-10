@@ -24,10 +24,10 @@ export class Tower extends GameObject {
     public projectiles: Projectile[] = [];
     public behaviour: string;
     public sprite: PIXI.Sprite;
-    public ticksUntilNextShot: number;
+    public millisecondsUntilNextShot: number;
     public graphics: PIXI.Graphics = new PIXI.Graphics();
     public computedDamageToDeal: number;
-    public computedAttackSpeed: number;
+    public computedCooldown: number;
     public computedRange: number;
     public computedTimeToLive: number;
     public computedPierce: number;
@@ -40,7 +40,7 @@ export class Tower extends GameObject {
         this.column = column;
         this.behaviour = behaviour;
         this.definition = definition;
-        this.ticksUntilNextShot = 0;
+        this.millisecondsUntilNextShot = 0;
         this.parent = Engine.Grid.getCellByRowAndCol(row, column);
         this.sprite = new PIXI.Sprite({
             texture: texture,
@@ -127,6 +127,8 @@ export class Tower extends GameObject {
             this.computedPierce,
             this.totalGemResistanceModifications
         );
+        const time = new Date().toISOString();
+        console.log(`${time} ${this.definition.name} shot at ${angle} degrees`);
         this.projectiles.push(proj);
         return proj;
     }

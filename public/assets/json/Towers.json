@@ -9,7 +9,7 @@
         "description": "The building block of society, nothing more basic exists.",
         "stats": {
             "damage": 2,
-            "cooldown": 120,
+            "cooldown": 2000,
             "gemSlotsAmount": 2,
             "cost": 100,
             "range": 4,
@@ -27,7 +27,7 @@
         "description": "If you feel a little circular.",
         "stats": {
             "damage": 2,
-            "cooldown": 120,
+            "cooldown": 2000,
             "gemSlotsAmount": 3,
             "cost": 125,
             "range": 2.5,

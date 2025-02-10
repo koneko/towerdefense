@@ -39,7 +39,7 @@ export default class Projectile extends GameObject {
         super();
         this.x = x;
         this.y = y;
-        this.timeToLive = timeToLive * (0.9 / 0.1);
+        this.timeToLive = timeToLive;
         this.pierce = pierce;
         this.damage = damage;
         this.gemResistanceModifications = gemResistanceModifications;
@@ -53,7 +53,7 @@ export default class Projectile extends GameObject {
         Engine.GameMaster.currentScene.stage.addChild(this.container);
 
         this.angle = angle;
-        this.speed = 0.1;
+        this.speed = 0.9;
     }
     public destroy(): void {
         super.destroy();
@@ -95,7 +95,7 @@ export default class Projectile extends GameObject {
     }
 
     public checkCollision(creep: Creep) {
-        console.debug(creep);
+        //console.debug(creep);
         if (creep == null || creep.container == null || creep.container._position == null) return;
         let mybb = this.copyContainerToBB();
         let otherbb = creep.copyContainerToBB();

@@ -341,7 +341,7 @@ export default class TowerPanel extends GuiObject {
         this.damageText.text = 'Deals ' + tower.computedDamageToDeal + ' damage';
         this.totalDamage.text = 'Damage dealt: ' + tower.damageDealt + ' damage';
         this.attackSpeedText.x = this.damageText.width + 10;
-        this.attackSpeedText.text = ` every ${Math.floor((tower.computedAttackSpeed / 60) * 100) / 100}s`;
+        this.attackSpeedText.text = ` every ${Math.floor((tower.computedCooldown / 60) * 100) / 100}s`;
 
         this.fireResDamage.text = `+${tower.totalGemResistanceModifications.fire * 100}% Fire damage`;
         this.iceResDamage.text = `+${tower.totalGemResistanceModifications.ice * 100}% Ice damage`;

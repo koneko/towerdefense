@@ -49,5 +49,56 @@
                 "frostfire": 0
             }
         }
+    },
+    {
+        "name": "cloaker",
+        "textures": [],
+        "textureArrayLength": 12,
+        "stats": {
+            "health": 12,
+            "speed": 2,
+            "special": null,
+            "resistance": {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0,
+                "frostfire": 0
+            }
+        }
+    },
+    {
+        "name": "demon",
+        "textures": [],
+        "textureArrayLength": 8,
+        "stats": {
+            "health": 12,
+            "speed": 2,
+            "special": null,
+            "resistance": {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0,
+                "frostfire": 0
+            }
+        }
+    },
+    {
+        "name": "maker",
+        "textures": [],
+        "textureArrayLength": 11,
+        "stats": {
+            "health": 11,
+            "speed": 2,
+            "special": null,
+            "resistance": {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0,
+                "frostfire": 0
+            }
+        }
     }
 ]

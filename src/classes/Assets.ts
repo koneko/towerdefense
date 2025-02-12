@@ -17,6 +17,7 @@ export default class GameAssets {
     public static RedBackground: PIXI.Texture;
     public static GreenBackground: PIXI.Texture;
     public static BlueBackground: PIXI.Texture;
+    public static YellowBackground: PIXI.Texture;
     public static Button01Texture: PIXI.Texture;
     public static Button02Texture: PIXI.Texture;
     public static ButtonSmallTexture: PIXI.Texture;
@@ -105,6 +106,7 @@ export default class GameAssets {
             this.Load('./assets/gui/frame_red.png').then((texture) => (this.RedBackground = texture)),
             this.Load('./assets/gui/frame_green.png').then((texture) => (this.GreenBackground = texture)),
             this.Load('./assets/gui/frame_blue.png').then((texture) => (this.BlueBackground = texture)),
+            this.Load('./assets/gui/frame_yellow.png').then((texture) => (this.YellowBackground = texture)),
             this.Load('./assets/gui/banner_01.png').then((texture) => (this.BannerGemsmith = texture)),
             this.Load('./assets/gui/note.png').then((texture) => (this.EndScreenDialog = texture)),
             this.Load('./assets/gui/main_background.jpg').then((texture) => (this.MainBackground = texture)),
@@ -186,7 +188,7 @@ export default class GameAssets {
         for (let idx = 0; idx < this.Towers.length; idx++) {
             const tower = this.Towers[idx];
             for (let i = 0; i < tower.projectileTexturesArrayLength; i++) {
-                const projTexture = await this.Load(`./assets/projectiles/${tower.sprite}/${i}.png`);
+                const projTexture = await this.Load(`./assets/projectiles/${tower.projectile}/${i}.png`);
                 tower.projectileTextures[i] = projTexture;
             }
             tower.texture = await this.Load(`./assets/towers/${tower.sprite}.png`);

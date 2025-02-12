@@ -112,3 +112,111 @@ export function CircleTowerBehaviour(tower: Tower, elapsedMS: number) {
         }
     }
 }
+
+export function ElectricTowerBehaviour(tower: Tower, elapsedMS: number) {
+    computeGemImprovements(tower);
+    projectileCheck(tower, elapsedMS);
+
+    if (tower.millisecondsUntilNextShot > 0)
+        tower.millisecondsUntilNextShot -= elapsedMS * Engine.GameScene.gameSpeedMultiplier;
+    let creepsInRange = tower.GetCreepsInRange();
+    if (creepsInRange.length > 0) {
+        let focus = creepsInRange[0];
+        if (tower.millisecondsUntilNextShot <= 0) {
+            let x = tower.column * Engine.GridCellSize + Engine.GridCellSize / 2;
+            let y = tower.row * Engine.GridCellSize + Engine.GridCellSize / 2;
+            tower.millisecondsUntilNextShot = tower.computedCooldown;
+            tower.Shoot(calculateAngleToPoint(x, y, focus.x, focus.y));
+        }
+    }
+}
+
+export function QuickTowerBehaviour(tower: Tower, elapsedMS: number) {
+    computeGemImprovements(tower);
+    projectileCheck(tower, elapsedMS);
+
+    if (tower.millisecondsUntilNextShot > 0)
+        tower.millisecondsUntilNextShot -= elapsedMS * Engine.GameScene.gameSpeedMultiplier;
+    let creepsInRange = tower.GetCreepsInRange();
+    if (creepsInRange.length > 0) {
+        let focus = creepsInRange[0];
+        if (tower.millisecondsUntilNextShot <= 0) {
+            let x = tower.column * Engine.GridCellSize + Engine.GridCellSize / 2;
+            let y = tower.row * Engine.GridCellSize + Engine.GridCellSize / 2;
+            tower.millisecondsUntilNextShot = tower.computedCooldown;
+            tower.Shoot(calculateAngleToPoint(x, y, focus.x, focus.y));
+        }
+    }
+}
+
+export function StrongTowerBehaviour(tower: Tower, elapsedMS: number) {
+    computeGemImprovements(tower);
+    projectileCheck(tower, elapsedMS);
+
+    if (tower.millisecondsUntilNextShot > 0)
+        tower.millisecondsUntilNextShot -= elapsedMS * Engine.GameScene.gameSpeedMultiplier;
+    let creepsInRange = tower.GetCreepsInRange();
+    if (creepsInRange.length > 0) {
+        let focus = creepsInRange[0];
+        if (tower.millisecondsUntilNextShot <= 0) {
+            let x = tower.column * Engine.GridCellSize + Engine.GridCellSize / 2;
+            let y = tower.row * Engine.GridCellSize + Engine.GridCellSize / 2;
+            tower.millisecondsUntilNextShot = tower.computedCooldown;
+            tower.Shoot(calculateAngleToPoint(x, y, focus.x, focus.y));
+        }
+    }
+}
+
+export function RailTowerBehaviour(tower: Tower, elapsedMS: number) {
+    computeGemImprovements(tower);
+    projectileCheck(tower, elapsedMS);
+
+    if (tower.millisecondsUntilNextShot > 0)
+        tower.millisecondsUntilNextShot -= elapsedMS * Engine.GameScene.gameSpeedMultiplier;
+    let creepsInRange = tower.GetCreepsInRange();
+    if (creepsInRange.length > 0) {
+        let focus = creepsInRange[0];
+        if (tower.millisecondsUntilNextShot <= 0) {
+            let x = tower.column * Engine.GridCellSize + Engine.GridCellSize / 2;
+            let y = tower.row * Engine.GridCellSize + Engine.GridCellSize / 2;
+            tower.millisecondsUntilNextShot = tower.computedCooldown;
+            tower.Shoot(calculateAngleToPoint(x, y, focus.x, focus.y));
+        }
+    }
+}
+
+export function TrapperTowerBehaviour(tower: Tower, elapsedMS: number) {
+    computeGemImprovements(tower);
+    projectileCheck(tower, elapsedMS);
+
+    if (tower.millisecondsUntilNextShot > 0)
+        tower.millisecondsUntilNextShot -= elapsedMS * Engine.GameScene.gameSpeedMultiplier;
+    let creepsInRange = tower.GetCreepsInRange();
+    if (creepsInRange.length > 0) {
+        let focus = creepsInRange[0];
+        if (tower.millisecondsUntilNextShot <= 0) {
+            let x = tower.column * Engine.GridCellSize + Engine.GridCellSize / 2;
+            let y = tower.row * Engine.GridCellSize + Engine.GridCellSize / 2;
+            tower.millisecondsUntilNextShot = tower.computedCooldown;
+            tower.Shoot(calculateAngleToPoint(x, y, focus.x, focus.y));
+        }
+    }
+}
+
+export function AdvancedTowerBehaviour(tower: Tower, elapsedMS: number) {
+    computeGemImprovements(tower);
+    projectileCheck(tower, elapsedMS);
+
+    if (tower.millisecondsUntilNextShot > 0)
+        tower.millisecondsUntilNextShot -= elapsedMS * Engine.GameScene.gameSpeedMultiplier;
+    let creepsInRange = tower.GetCreepsInRange();
+    if (creepsInRange.length > 0) {
+        let focus = creepsInRange[0];
+        if (tower.millisecondsUntilNextShot <= 0) {
+            let x = tower.column * Engine.GridCellSize + Engine.GridCellSize / 2;
+            let y = tower.row * Engine.GridCellSize + Engine.GridCellSize / 2;
+            tower.millisecondsUntilNextShot = tower.computedCooldown;
+            tower.Shoot(calculateAngleToPoint(x, y, focus.x, focus.y));
+        }
+    }
+}

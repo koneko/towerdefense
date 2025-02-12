@@ -4,6 +4,7 @@
         "behaviour": "BasicTowerBehaviour",
         "sprite": "basic_tower",
         "texture": null,
+        "projectile": "white",
         "projectileTextures": [],
         "projectileTexturesArrayLength": 5,
         "description": "The building block of society, nothing more basic exists.",
@@ -22,6 +23,121 @@
         "behaviour": "CircleTowerBehaviour",
         "sprite": "circle_tower",
         "texture": null,
+        "projectile": "blue",
+        "projectileTextures": [],
+        "projectileTexturesArrayLength": 4,
+        "description": "If you feel a little circular.",
+        "stats": {
+            "damage": 2,
+            "cooldown": 2000,
+            "gemSlotsAmount": 3,
+            "cost": 125,
+            "range": 2.5,
+            "timeToLive": 12,
+            "pierce": 30
+        }
+    },
+    {
+        "name": "Electric Tower",
+        "behaviour": "ElectricTowerBehaviour",
+        "sprite": "electric_tower",
+        "texture": null,
+        "projectile": "yellow",
+        "projectileTextures": [],
+        "projectileTexturesArrayLength": 4,
+        "description": "Think of something",
+        "stats": {
+            "damage": 2,
+            "cooldown": 2000,
+            "gemSlotsAmount": 3,
+            "cost": 125,
+            "range": 2.5,
+            "timeToLive": 12,
+            "pierce": 30
+        }
+    },
+    {
+        "name": "Quick Tower",
+        "behaviour": "QuickTowerBehaviour",
+        "sprite": "quick_tower",
+        "texture": null,
+        "projectile": "blue",
+        "projectileTextures": [],
+        "projectileTexturesArrayLength": 4,
+        "description": "",
+        "stats": {
+            "damage": 2,
+            "cooldown": 2000,
+            "gemSlotsAmount": 3,
+            "cost": 125,
+            "range": 2.5,
+            "timeToLive": 12,
+            "pierce": 30
+        }
+    },
+    {
+        "name": "Strong Tower",
+        "behaviour": "StrongTowerBehaviour",
+        "sprite": "strong_tower",
+        "texture": null,
+        "projectile": "white",
+        "projectileTextures": [],
+        "projectileTexturesArrayLength": 5,
+        "description": "",
+        "stats": {
+            "damage": 2,
+            "cooldown": 2000,
+            "gemSlotsAmount": 3,
+            "cost": 125,
+            "range": 2.5,
+            "timeToLive": 12,
+            "pierce": 30
+        }
+    },
+    {
+        "name": "Rail Tower",
+        "behaviour": "RailTowerBehaviour",
+        "sprite": "rail_tower",
+        "texture": null,
+        "projectile": "red",
+        "projectileTextures": [],
+        "projectileTexturesArrayLength": 4,
+        "description": "If you feel a little circular.",
+        "stats": {
+            "damage": 2,
+            "cooldown": 2000,
+            "gemSlotsAmount": 3,
+            "cost": 125,
+            "range": 2.5,
+            "timeToLive": 12,
+            "pierce": 30
+        }
+    },
+    {
+        "name": "Trapper Tower",
+        "behaviour": "TrapperTowerBehaviour",
+        "sprite": "trapper_tower",
+        "texture": null,
+        "projectile": "stone",
+        "projectileTextures": [],
+        "projectileTexturesArrayLength": 2,
+        "description": "If you feel a little circular.",
+        "stats": {
+            "damage": 2,
+            "cooldown": 2000,
+            "gemSlotsAmount": 3,
+            "cost": 125,
+            "range": 2.5,
+            "timeToLive": 12,
+            "pierce": 30
+        }
+    },
+    {
+        "name": "Advanced Tower",
+        "behaviour": "AdvancedTowerBehaviour",
+        "sprite": "advanced_tower",
+        "texture": null,
+        "projectile": "red",
         "projectileTextures": [],
         "projectileTexturesArrayLength": 4,
         "description": "If you feel a little circular.",

@@ -7,7 +7,16 @@ import { TowerBehaviours } from './TowerManager';
 import Projectile, { calculateAngleToPoint } from './Projectile';
 import Creep from './Creep';
 import Gem from './Gem';
-import { BasicTowerBehaviour, CircleTowerBehaviour } from './TowerBehaviours';
+import {
+    AdvancedTowerBehaviour,
+    BasicTowerBehaviour,
+    CircleTowerBehaviour,
+    ElectricTowerBehaviour,
+    QuickTowerBehaviour,
+    RailTowerBehaviour,
+    StrongTowerBehaviour,
+    TrapperTowerBehaviour,
+} from './TowerBehaviours';
 
 export function distance(x1, y1, x2, y2) {
     return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
@@ -143,6 +152,12 @@ export class Tower extends GameObject {
         }
         if (this.behaviour == TowerBehaviours.BasicTowerBehaviour) BasicTowerBehaviour(this, elapsedMS);
         if (this.behaviour == TowerBehaviours.CircleTowerBehaviour) CircleTowerBehaviour(this, elapsedMS);
+        if (this.behaviour == TowerBehaviours.ElectricTowerBehaviour) ElectricTowerBehaviour(this, elapsedMS);
+        if (this.behaviour == TowerBehaviours.QuickTowerBehaviour) QuickTowerBehaviour(this, elapsedMS);
+        if (this.behaviour == TowerBehaviours.StrongTowerBehaviour) StrongTowerBehaviour(this, elapsedMS);
+        if (this.behaviour == TowerBehaviours.RailTowerBehaviour) RailTowerBehaviour(this, elapsedMS);
+        if (this.behaviour == TowerBehaviours.TrapperTowerBehaviour) TrapperTowerBehaviour(this, elapsedMS);
+        if (this.behaviour == TowerBehaviours.AdvancedTowerBehaviour) AdvancedTowerBehaviour(this, elapsedMS);
     }
 
     public destroy(): void {

@@ -122,8 +122,80 @@ export default class TowerTab extends GuiObject {
                 70,
                 this.container,
                 GameAssets.RedBackground,
-                'Basic Tower',
+                GameAssets.Towers[0].name,
                 GameAssets.Towers[0].texture
+            )
+        );
+        this.towerButtons.push(
+            new TowerButton(
+                1,
+                0,
+                70,
+                70,
+                this.container,
+                GameAssets.RedBackground,
+                GameAssets.Towers[1].name,
+                GameAssets.Towers[1].texture
+            )
+        );
+        this.towerButtons.push(
+            new TowerButton(
+                2,
+                0,
+                70,
+                70,
+                this.container,
+                GameAssets.BlueBackground,
+                GameAssets.Towers[2].name,
+                GameAssets.Towers[2].texture
+            )
+        );
+        this.towerButtons.push(
+            new TowerButton(
+                3,
+                0,
+                70,
+                70,
+                this.container,
+                GameAssets.BlueBackground,
+                GameAssets.Towers[3].name,
+                GameAssets.Towers[3].texture
+            )
+        );
+        this.towerButtons.push(
+            new TowerButton(
+                0,
+                1,
+                70,
+                70,
+                this.container,
+                GameAssets.GreenBackground,
+                GameAssets.Towers[4].name,
+                GameAssets.Towers[4].texture
+            )
+        );
+        this.towerButtons.push(
+            new TowerButton(
+                1,
+                1,
+                70,
+                70,
+                this.container,
+                GameAssets.GreenBackground,
+                GameAssets.Towers[5].name,
+                GameAssets.Towers[5].texture
+            )
+        );
+        this.towerButtons.push(
+            new TowerButton(
+                2,
+                1,
+                70,
+                70,
+                this.container,
+                GameAssets.YellowBackground,
+                GameAssets.Towers[6].name,
+                GameAssets.Towers[6].texture
             )
         );
         this.towerButtons.push(
@@ -133,9 +205,9 @@ export default class TowerTab extends GuiObject {
                 70,
                 70,
                 this.container,
-                GameAssets.GreenBackground,
-                'Circle Tower',
-                GameAssets.Towers[1].texture
+                GameAssets.YellowBackground,
+                GameAssets.Towers[7].name,
+                GameAssets.Towers[7].texture
             )
         );
     }

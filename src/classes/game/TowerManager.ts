@@ -9,6 +9,12 @@ import { GridEvents, TowerEvents } from '../Events';
 export enum TowerBehaviours {
     BasicTowerBehaviour = 'BasicTowerBehaviour',
     CircleTowerBehaviour = 'CircleTowerBehaviour',
+    ElectricTowerBehaviour = 'ElectricTowerBehaviour',
+    QuickTowerBehaviour = 'QuickTowerBehaviour',
+    StrongTowerBehaviour = 'StrongTowerBehaviour',
+    RailTowerBehaviour = 'RailTowerBehaviour',
+    TrapperTowerBehaviour = 'TrapperTowerBehaviour',
+    AdvancedTowerBehaviour = 'AdvancedTowerBehaviour',
 }
 
 export default class TowerManager {

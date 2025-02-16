@@ -1,10 +1,11 @@
 import * as PIXI from 'pixi.js';
 import GameObject from '../GameObject';
-import { GameMapDefinition, TerrainType } from '../Definitions';
+import { GameMapDefinition, TerrainType, TowerType } from '../Definitions';
 import GameAssets from '../Assets';
 import { Engine } from '../Bastion';
 import Creep from './Creep';
 import { CreepEvents, TowerEvents, GridEvents } from '../Events';
+import { distance, Tower } from './Tower';
 
 let genPath = [];
 
@@ -15,6 +16,7 @@ export class Cell extends GameObject {
     public isPath: boolean = false;
     public g: PIXI.Graphics;
     public hasTowerPlaced: boolean = false;
+    public isBuffedBy: Tower[] = [];
     public clickDetector: PIXI.Graphics;
 
     constructor(type: TerrainType, row: number, column: number, isPath: boolean) {
@@ -55,19 +57,32 @@ export class Cell extends GameObject {
         this.clickDetector.on('pointerleave', (e) => {
             if (!Engine.Grid.gridInteractionEnabled || Engine.GameScene.towerPanel.isShown) return;
             Engine.GameScene.events.emit(GridEvents.CellMouseLeave, this);
-            Engine.Grid.rangePreview.clear();
         });
 
-        Engine.GameScene.events.on(TowerEvents.TowerPlacedEvent, (_, row, col) => {
+        Engine.GameScene.events.on(TowerEvents.TowerPlacedEvent, (towerName, row, col) => {
             if (row == this.row && col == this.column) {
                 this.hasTowerPlaced = true;
                 Engine.Grid.rangePreview.clear();
+            } else if (towerName == GameAssets.Towers[TowerType.Buff].name) {
+                let twr = Engine.TowerManager.GetTowerByRowAndCol(row, col);
+                if (Engine.Grid.IsCellInRangeOfOtherCell(row, col, twr.computedRange, this)) {
+                    this.isBuffedBy.push(twr);
+                }
             }
         });
-        Engine.GameScene.events.on(TowerEvents.TowerSoldEvent, (_, row, col) => {
+        Engine.GameScene.events.on(TowerEvents.TowerSoldEvent, (towerName, row, col) => {
+            console.log(towerName, row, col);
             if (row == this.row && col == this.column) {
                 this.hasTowerPlaced = false;
                 Engine.Grid.rangePreview.clear();
+            } else if (towerName == GameAssets.Towers[TowerType.Buff].name) {
+                console.log('TRIpped!');
+                let twr = Engine.TowerManager.GetTowerByRowAndCol(row, col);
+                if (Engine.Grid.IsCellInRangeOfOtherCell(row, col, twr.computedRange, this)) {
+                    console.log('REMOVED!');
+                    this.isBuffedBy.splice(this.isBuffedBy.indexOf(twr), 1);
+                    console.log(this.isBuffedBy);
+                }
             }
         });
 
@@ -118,10 +133,12 @@ export class Cell extends GameObject {
                 this.row * Engine.GridCellSize + Engine.GridCellSize / 2
             }y`
         );
-        Engine.Grid.rangePreview.circle(
-            this.column * Engine.GridCellSize + Engine.GridCellSize / 2,
-            this.row * Engine.GridCellSize + Engine.GridCellSize / 2,
-            range * Engine.GridCellSize
+        console.log(
+            Engine.Grid.rangePreview.circle(
+                this.column * Engine.GridCellSize + Engine.GridCellSize / 2,
+                this.row * Engine.GridCellSize + Engine.GridCellSize / 2,
+                range * Engine.GridCellSize
+            )
         );
         Engine.Grid.rangePreview.fill({ color: color, alpha: 0.3 });
     }
@@ -187,6 +204,10 @@ export class Grid extends GameObject {
         }
         this.rangePreview = new PIXI.Graphics({
             zIndex: 10,
+            x: 0,
+            y: 0,
+            width: Engine.app.canvas.width,
+            height: Engine.app.canvas.height,
         });
         this.container.addChild(this.rangePreview);
     }
@@ -215,6 +236,17 @@ export class Grid extends GameObject {
         });
 
         console.log(JSON.stringify(newGrid));
+    }
+
+    public IsCellInRangeOfOtherCell(row, col, range, otherCell) {
+        range = range * Engine.GridCellSize;
+        const x = otherCell.column * Engine.GridCellSize + Engine.GridCellSize / 2;
+        const y = otherCell.row * Engine.GridCellSize + Engine.GridCellSize / 2;
+        const cellX = col * Engine.GridCellSize + Engine.GridCellSize / 2;
+        const cellY = row * Engine.GridCellSize + Engine.GridCellSize / 2;
+        const d = distance(cellX, cellY, x, y);
+        if (d < range + Engine.GridCellSize / 2) return true;
+        else return false;
     }
     public toggleGrid(force?: 'hide' | 'show') {
         this.cells.forEach((cell) => {

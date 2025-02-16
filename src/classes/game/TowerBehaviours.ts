@@ -1,6 +1,11 @@
+import GameAssets from '../Assets';
 import { Engine } from '../Bastion';
-import { calculateAngleToPoint } from './Projectile';
-import { Tower } from './Tower';
+import { TowerType } from '../Definitions';
+import { CreepEvents } from '../Events';
+import Creep from './Creep';
+import Projectile, { calculateAngleToPoint, VisualLightning } from './Projectile';
+import { distance, Tower } from './Tower';
+import * as PIXI from 'pixi.js';
 
 /**
  * Checks the projectiles of the tower and updates or removes them based on their state.
@@ -44,34 +49,47 @@ export function computeGemImprovements(tower: Tower) {
         physical: 0,
     };
     tower.slottedGems.forEach((gem) => {
-        let ccurrentGemImprovements = gem.currentGemImprovement();
-        gemDamage += ccurrentGemImprovements.damageUp;
-        gemAttackSpeedUp += ccurrentGemImprovements.attackSpeedUp;
-        gemRangeUp += ccurrentGemImprovements.rangeUp;
-        gemTimeToLiveUp += ccurrentGemImprovements.timeToLiveUp;
-        gemPierceUp += ccurrentGemImprovements.pierceUp;
+        let improvements = gem.currentGemImprovement();
+        gemDamage += improvements.damageUp;
+        gemAttackSpeedUp += improvements.attackSpeedUp;
+        gemRangeUp += improvements.rangeUp;
+        gemTimeToLiveUp += improvements.timeToLiveUp;
+        gemPierceUp += improvements.pierceUp;
 
-        let gemResMod = gem.currentGemResistanceModifications();
-        tower.totalGemResistanceModifications.physical += gemResMod.physical;
-        tower.totalGemResistanceModifications.ice += gemResMod.ice;
-        tower.totalGemResistanceModifications.fire += gemResMod.fire;
-        tower.totalGemResistanceModifications.divine += gemResMod.divine;
-        tower.totalGemResistanceModifications.frostfire += gemResMod.frostfire;
+        let resistances = gem.currentGemResistanceModifications();
+        tower.totalGemResistanceModifications.physical += resistances.physical;
+        tower.totalGemResistanceModifications.ice += resistances.ice;
+        tower.totalGemResistanceModifications.fire += resistances.fire;
+        tower.totalGemResistanceModifications.divine += resistances.divine;
+        tower.totalGemResistanceModifications.frostfire += resistances.frostfire;
     });
+
     tower.computedDamageToDeal = tower.definition.stats.damage + gemDamage;
     tower.computedCooldown = tower.definition.stats.cooldown - gemAttackSpeedUp;
     tower.computedRange = tower.definition.stats.range + gemRangeUp;
     tower.computedTimeToLive = tower.definition.stats.timeToLive + gemTimeToLiveUp;
     tower.computedPierce = tower.definition.stats.pierce + gemPierceUp;
+
+    // Buff tower
+    if (tower.parent.isBuffedBy.length > 0 && tower.definition.name != GameAssets.Towers[TowerType.Buff].name) {
+        let buffedBy = tower.parent.isBuffedBy[0];
+        tower.computedDamageToDeal += Math.ceil(buffedBy.computedDamageToDeal / 3);
+        tower.computedCooldown -= Math.ceil(buffedBy.computedCooldown / 5);
+        tower.computedRange += Math.ceil(buffedBy.computedRange / 10);
+        tower.computedTimeToLive += Math.ceil(buffedBy.computedTimeToLive / 5);
+        tower.computedPierce += Math.ceil(buffedBy.computedPierce / 4);
+
+        tower.totalGemResistanceModifications.physical +=
+            (buffedBy.totalGemResistanceModifications.physical * 100) / 2 / 100;
+        tower.totalGemResistanceModifications.ice += (buffedBy.totalGemResistanceModifications.ice * 100) / 2 / 100;
+        tower.totalGemResistanceModifications.fire += (buffedBy.totalGemResistanceModifications.fire * 100) / 2 / 100;
+        tower.totalGemResistanceModifications.divine +=
+            (buffedBy.totalGemResistanceModifications.divine * 100) / 2 / 100;
+        tower.totalGemResistanceModifications.frostfire +=
+            (buffedBy.totalGemResistanceModifications.frostfire * 100) / 2 / 100;
+    }
 }
 
-/**
- * Defines the basic behavior of a tower, including computing damage, checking projectiles,
- * and handling shooting at creeps within range.
- *
- * @param tower - The tower whose behavior is being defined.
- * @param elapsedMS - The elapsed time in milliseconds since the last update.
- */
 export function BasicTowerBehaviour(tower: Tower, elapsedMS: number) {
     computeGemImprovements(tower);
     projectileCheck(tower, elapsedMS);
@@ -96,7 +114,6 @@ export function CircleTowerBehaviour(tower: Tower, elapsedMS: number) {
         tower.millisecondsUntilNextShot -= elapsedMS * Engine.GameScene.gameSpeedMultiplier;
     let creepsInRange = tower.GetCreepsInRange();
     if (creepsInRange.length > 0) {
-        let focus = creepsInRange[0];
         if (tower.millisecondsUntilNextShot <= 0) {
             tower.millisecondsUntilNextShot = tower.computedCooldown;
             let x = tower.column * Engine.GridCellSize + Engine.GridCellSize / 2;
@@ -119,34 +136,52 @@ export function ElectricTowerBehaviour(tower: Tower, elapsedMS: number) {
 
     if (tower.millisecondsUntilNextShot > 0)
         tower.millisecondsUntilNextShot -= elapsedMS * Engine.GameScene.gameSpeedMultiplier;
+
     let creepsInRange = tower.GetCreepsInRange();
+
     if (creepsInRange.length > 0) {
         let focus = creepsInRange[0];
         if (tower.millisecondsUntilNextShot <= 0) {
             let x = tower.column * Engine.GridCellSize + Engine.GridCellSize / 2;
             let y = tower.row * Engine.GridCellSize + Engine.GridCellSize / 2;
             tower.millisecondsUntilNextShot = tower.computedCooldown;
-            tower.Shoot(calculateAngleToPoint(x, y, focus.x, focus.y));
+            let proj = tower.Shoot(calculateAngleToPoint(x, y, focus.x, focus.y));
+            proj.onCollide = (creep: Creep, proj: Projectile) => {
+                proj.pierce = 0;
+                let nearByCreeps = Engine.Grid.creeps.filter((nCreep) => {
+                    if (nCreep.id != creep.id) {
+                        const x = nCreep.x;
+                        const y = nCreep.y;
+                        const radius = 3.5 * Engine.GridCellSize;
+                        const d = distance(creep.x, creep.y, x, y);
+                        return d < radius;
+                    }
+                });
+                nearByCreeps.forEach((nearCreep) => {
+                    new VisualLightning(creep, nearCreep);
+                    Engine.GameScene.events.emit(
+                        CreepEvents.TakenDamage,
+                        nearCreep.id,
+                        proj.damage / 2,
+                        proj.gemResistanceModifications
+                    );
+                });
+                Engine.GameScene.events.emit(
+                    CreepEvents.TakenDamage,
+                    creep.id,
+                    proj.damage,
+                    proj.gemResistanceModifications
+                );
+            };
         }
     }
 }
 
-export function QuickTowerBehaviour(tower: Tower, elapsedMS: number) {
+export function BuffTowerBehaviour(tower: Tower, elapsedMS: number) {
     computeGemImprovements(tower);
-    projectileCheck(tower, elapsedMS);
-
-    if (tower.millisecondsUntilNextShot > 0)
-        tower.millisecondsUntilNextShot -= elapsedMS * Engine.GameScene.gameSpeedMultiplier;
-    let creepsInRange = tower.GetCreepsInRange();
-    if (creepsInRange.length > 0) {
-        let focus = creepsInRange[0];
-        if (tower.millisecondsUntilNextShot <= 0) {
-            let x = tower.column * Engine.GridCellSize + Engine.GridCellSize / 2;
-            let y = tower.row * Engine.GridCellSize + Engine.GridCellSize / 2;
-            tower.millisecondsUntilNextShot = tower.computedCooldown;
-            tower.Shoot(calculateAngleToPoint(x, y, focus.x, focus.y));
-        }
-    }
+    // Buff tower does not do anything and doesn't have a behaviour.
+    // For how its implemented, Cell tracks when it's placed and removed (via event)
+    // and tower takes improvements via computeGemImprovements()
 }
 
 export function StrongTowerBehaviour(tower: Tower, elapsedMS: number) {
@@ -203,7 +238,7 @@ export function TrapperTowerBehaviour(tower: Tower, elapsedMS: number) {
     }
 }
 
-export function AdvancedTowerBehaviour(tower: Tower, elapsedMS: number) {
+export function DebuffTowerBehaviour(tower: Tower, elapsedMS: number) {
     computeGemImprovements(tower);
     projectileCheck(tower, elapsedMS);
 

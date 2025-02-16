@@ -8,11 +8,11 @@ import Projectile, { calculateAngleToPoint } from './Projectile';
 import Creep from './Creep';
 import Gem from './Gem';
 import {
-    AdvancedTowerBehaviour,
+    DebuffTowerBehaviour,
     BasicTowerBehaviour,
     CircleTowerBehaviour,
     ElectricTowerBehaviour,
-    QuickTowerBehaviour,
+    BuffTowerBehaviour,
     RailTowerBehaviour,
     StrongTowerBehaviour,
     TrapperTowerBehaviour,
@@ -35,12 +35,18 @@ export class Tower extends GameObject {
     public sprite: PIXI.Sprite;
     public millisecondsUntilNextShot: number;
     public graphics: PIXI.Graphics = new PIXI.Graphics();
-    public computedDamageToDeal: number;
-    public computedCooldown: number;
-    public computedRange: number;
-    public computedTimeToLive: number;
-    public computedPierce: number;
-    public totalGemResistanceModifications: CreepResistancesDefinition;
+    public computedDamageToDeal: number = 0;
+    public computedCooldown: number = 0;
+    public computedRange: number = 0;
+    public computedTimeToLive: number = 0;
+    public computedPierce: number = 0;
+    public totalGemResistanceModifications: CreepResistancesDefinition = {
+        fire: 0,
+        frostfire: 0,
+        divine: 0,
+        ice: 0,
+        physical: 0,
+    };
     public parent: Cell;
 
     constructor(row, column, texture, definition, behaviour) {
@@ -59,6 +65,7 @@ export class Tower extends GameObject {
         });
         this.container.addChild(this.sprite);
         this.computedDamageToDeal = this.definition.stats.damage;
+        this.computedRange = this.definition.stats.range;
         this.parent.container.addChild(this.container);
         this.container.interactiveChildren = true;
         this.parent.clickDetector.on('pointerenter', this.onParentCellEnter);
@@ -113,6 +120,7 @@ export class Tower extends GameObject {
             return d < radius + (Engine.GridCellSize * 2) / 3;
         });
     }
+
     public Shoot(angle) {
         let x = this.column * Engine.GridCellSize + Engine.GridCellSize / 2;
         let y = this.row * Engine.GridCellSize + Engine.GridCellSize / 2;
@@ -153,11 +161,11 @@ export class Tower extends GameObject {
         if (this.behaviour == TowerBehaviours.BasicTowerBehaviour) BasicTowerBehaviour(this, elapsedMS);
         if (this.behaviour == TowerBehaviours.CircleTowerBehaviour) CircleTowerBehaviour(this, elapsedMS);
         if (this.behaviour == TowerBehaviours.ElectricTowerBehaviour) ElectricTowerBehaviour(this, elapsedMS);
-        if (this.behaviour == TowerBehaviours.QuickTowerBehaviour) QuickTowerBehaviour(this, elapsedMS);
+        if (this.behaviour == TowerBehaviours.BuffTowerBehaviour) BuffTowerBehaviour(this, elapsedMS);
         if (this.behaviour == TowerBehaviours.StrongTowerBehaviour) StrongTowerBehaviour(this, elapsedMS);
         if (this.behaviour == TowerBehaviours.RailTowerBehaviour) RailTowerBehaviour(this, elapsedMS);
         if (this.behaviour == TowerBehaviours.TrapperTowerBehaviour) TrapperTowerBehaviour(this, elapsedMS);
-        if (this.behaviour == TowerBehaviours.AdvancedTowerBehaviour) AdvancedTowerBehaviour(this, elapsedMS);
+        if (this.behaviour == TowerBehaviours.DebuffTowerBehaviour) DebuffTowerBehaviour(this, elapsedMS);
     }
 
     public destroy(): void {

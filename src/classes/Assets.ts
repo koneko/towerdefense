@@ -28,6 +28,7 @@ export default class GameAssets {
     public static TitleTexture: PIXI.Texture;
     public static BannerGemsmith: PIXI.Texture;
     public static EndScreenDialog: PIXI.Texture;
+    public static SpecialLightning: PIXI.Texture[] = [];
 
     public static Tutorial01: PIXI.Texture;
     public static Tutorial02: PIXI.Texture;
@@ -192,6 +193,9 @@ export default class GameAssets {
                 tower.projectileTextures[i] = projTexture;
             }
             tower.texture = await this.Load(`./assets/towers/${tower.sprite}.png`);
+        }
+        for (let idx = 0; idx < 4; idx++) {
+            this.SpecialLightning[idx] = await this.Load(`./assets/projectiles/lightning/${idx}.png`);
         }
     }
 

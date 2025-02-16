@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js';
 import { Engine } from '../Bastion';
 import { TerrainType, TowerDefinition } from '../Definitions';
 import GameAssets from '../Assets';
-import { Tower } from './Tower';
+import { distance, Tower } from './Tower';
 import { Cell } from './Grid';
 import { GridEvents, TowerEvents } from '../Events';
 
@@ -10,11 +10,11 @@ export enum TowerBehaviours {
     BasicTowerBehaviour = 'BasicTowerBehaviour',
     CircleTowerBehaviour = 'CircleTowerBehaviour',
     ElectricTowerBehaviour = 'ElectricTowerBehaviour',
-    QuickTowerBehaviour = 'QuickTowerBehaviour',
+    BuffTowerBehaviour = 'BuffTowerBehaviour',
     StrongTowerBehaviour = 'StrongTowerBehaviour',
     RailTowerBehaviour = 'RailTowerBehaviour',
     TrapperTowerBehaviour = 'TrapperTowerBehaviour',
-    AdvancedTowerBehaviour = 'AdvancedTowerBehaviour',
+    DebuffTowerBehaviour = 'DebuffTowerBehaviour',
 }
 
 export default class TowerManager {
@@ -127,10 +127,10 @@ export default class TowerManager {
                 while (twr.slottedGems.length > 0) {
                     twr.UnslotGem(0);
                 }
+                Engine.GameScene.events.emit(TowerEvents.TowerSoldEvent, twr.definition.name, twr.row, twr.column);
                 Engine.GameScene.MissionStats.earnGold(twr.definition.stats.cost);
                 twr.destroy();
                 this.towers.splice(idx, 1);
-                Engine.GameScene.events.emit(TowerEvents.TowerSoldEvent, twr.name, twr.row, twr.column);
             } else twr.update(elapsedMS);
         });
     }

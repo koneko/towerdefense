@@ -125,9 +125,9 @@ export enum TowerType {
     Basic = 0,
     Circle = 1,
     Electric = 2,
-    Quick = 3,
+    Buff = 3,
     Strong = 4,
     Rail = 5,
     Trapper = 6,
-    Advanced = 7,
+    Debuff = 7,
 }

@@ -57,9 +57,9 @@
         }
     },
     {
-        "name": "Quick Tower",
-        "behaviour": "QuickTowerBehaviour",
-        "sprite": "quick_tower",
+        "name": "Buff Tower",
+        "behaviour": "BuffTowerBehaviour",
+        "sprite": "buff_tower",
         "texture": null,
         "projectile": "blue",
         "projectileTextures": [],
@@ -133,9 +133,9 @@
         }
     },
     {
-        "name": "Advanced Tower",
-        "behaviour": "AdvancedTowerBehaviour",
-        "sprite": "advanced_tower",
+        "name": "Debuff Tower",
+        "behaviour": "DebuffTowerBehaviour",
+        "sprite": "debuff_tower",
         "texture": null,
         "projectile": "red",
         "projectileTextures": [],

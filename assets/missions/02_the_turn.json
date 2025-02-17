@@ -98,8 +98,8 @@
             "waves": [
                 {
                     "firstCreepSpawnTick": 500,
-                    "spawnIntervalTicks": 1000,
-                    "creeps": [0, 0, 0, 0, 0]
+                    "spawnIntervalTicks": 500,
+                    "creeps": [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 2]
                 }
             ],
             "offeredGems": [0, 0, 0, 0]
@@ -109,10 +109,35 @@
                 {
                     "firstCreepSpawnTick": 500,
                     "spawnIntervalTicks": 1000,
-                    "creeps": [1, 1, 1, 1, 1]
+                    "creeps": [0, 0, 1, 1, 1, 4, 5, 5, 5, 1, 1, 0, 0]
                 }
             ],
-            "offeredGems": [0, 1, 2, 3]
+            "offeredGems": [1, 1, 1, 0]
+        },
+        {
+            "waves": [
+                {
+                    "firstCreepSpawnTick": 500,
+                    "spawnIntervalTicks": 1000,
+                    "creeps": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                },
+                {
+                    "firstCreepSpawnTick": 500,
+                    "spawnIntervalTicks": 500,
+                    "creeps": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                }
+            ],
+            "offeredGems": [0, 2, 2, 3]
+        },
+        {
+            "waves": [
+                {
+                    "firstCreepSpawnTick": 500,
+                    "spawnIntervalTicks": 100,
+                    "creeps": [1, 1, 1, 1, 1, 1, 1, 1, 1]
+                }
+            ],
+            "offeredGems": [0, 2, 2, 3]
         },
         {
             "waves": [
@@ -122,7 +147,7 @@
                     "creeps": [2, 2, 2, 2, 2]
                 }
             ],
-            "offeredGems": [0, 1, 2, 3]
+            "offeredGems": [0, 1, 3, 3]
         }
     ]
 }

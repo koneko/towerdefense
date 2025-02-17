@@ -1,11 +1,10 @@
 import { Engine } from '../Bastion';
 import * as PIXI from 'pixi.js';
 import GameObject from '../GameObject';
-import { CreepResistancesDefinition, GemType, TowerDefinition } from '../Definitions';
+import { CreepResistancesDefinition, TowerDefinition } from '../Definitions';
 import { Cell } from './Grid';
 import { TowerBehaviours } from './TowerManager';
-import Projectile, { calculateAngleToPoint } from './Projectile';
-import Creep from './Creep';
+import Projectile from './Projectile';
 import Gem from './Gem';
 import {
     DebuffTowerBehaviour,
@@ -145,13 +144,13 @@ export class Tower extends GameObject {
             this.totalGemResistanceModifications
         );
         const time = new Date().toISOString();
-        console.log(`${time} ${this.definition.name} shot at ${angle} degrees`);
+        // console.log(`${time} ${this.definition.name} shot at ${angle} degrees`);
         this.projectiles.push(proj);
         return proj;
     }
     public Sell() {
-        this.setAsSold = true;
         // Selling logic is handled in TowerManager.update()
+        this.setAsSold = true;
     }
     public update(elapsedMS: any): void {
         if (this.sold) return;

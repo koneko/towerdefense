@@ -76,7 +76,6 @@ export class Cell extends GameObject {
                 this.hasTowerPlaced = false;
                 Engine.Grid.rangePreview.clear();
             } else if (towerName == GameAssets.Towers[TowerType.Buff].name) {
-                console.log('TRIpped!');
                 let twr = Engine.TowerManager.GetTowerByRowAndCol(row, col);
                 if (Engine.Grid.IsCellInRangeOfOtherCell(row, col, twr.computedRange, this)) {
                     console.log('REMOVED!');
@@ -86,59 +85,16 @@ export class Cell extends GameObject {
             }
         });
 
-        // Disable this if you want to add new maps.
-        if (true) return;
-
-        const text = new PIXI.Text({
-            text: `${this.column}|${this.row}`,
-            style: new PIXI.TextStyle({
-                fill: 0xffffff,
-                fontSize: 16,
-                stroke: {
-                    color: 0x000000,
-                    width: 2,
-                },
-            }),
-        });
-        this.container.addChild(text);
-        text.anchor.set(0.5, 0.5);
-        text.x = this.bb.width / 2;
-        text.y = this.bb.height / 2;
-        if (this.type == TerrainType.Path) {
-            text.style.fill = 'green';
-            text.style.fontWeight = 'bold';
-        }
-        if (this.type == TerrainType.Restricted) {
-            text.style.fill = 'gold';
-        }
-        this.clickDetector.on('pointerup', () => {
-            const cellIndex = genPath.findIndex(([col, row]) => col === this.column && row === this.row);
-            if (cellIndex !== -1) {
-                text.style.fill = 0xffffff;
-                genPath.splice(cellIndex, 1);
-            } else {
-                text.style.fill = 0xff0000;
-                genPath.push([this.column, this.row]);
-            }
-            console.log('updated gen path');
-            console.log(JSON.stringify(genPath));
-        });
+        // See commit f84108847b6ba6c337954a742f4dc1a38a2c925b
     }
     public showRangePreview(invalid, range) {
         let color = 0xffffff;
         if (invalid) color = 0xff0000;
         Engine.Grid.rangePreview.clear();
-        console.log(
-            `Showing range preview ${this.column * Engine.GridCellSize + Engine.GridCellSize / 2}x - ${
-                this.row * Engine.GridCellSize + Engine.GridCellSize / 2
-            }y`
-        );
-        console.log(
-            Engine.Grid.rangePreview.circle(
-                this.column * Engine.GridCellSize + Engine.GridCellSize / 2,
-                this.row * Engine.GridCellSize + Engine.GridCellSize / 2,
-                range * Engine.GridCellSize
-            )
+        Engine.Grid.rangePreview.circle(
+            this.column * Engine.GridCellSize + Engine.GridCellSize / 2,
+            this.row * Engine.GridCellSize + Engine.GridCellSize / 2,
+            range * Engine.GridCellSize
         );
         Engine.Grid.rangePreview.fill({ color: color, alpha: 0.3 });
     }

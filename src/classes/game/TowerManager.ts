@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js';
 import { Engine } from '../Bastion';
 import { TerrainType, TowerDefinition } from '../Definitions';
 import GameAssets from '../Assets';
-import { distance, Tower } from './Tower';
+import { Tower } from './Tower';
 import { Cell } from './Grid';
 import { GridEvents, TowerEvents } from '../Events';
 
@@ -93,7 +93,6 @@ export default class TowerManager {
         this.towers.forEach((tower) => {
             if (tower.row == row && tower.column == col) returnTower = tower;
         });
-        // console.log(returnTower, row, col);
         return returnTower;
     }
     public PlaceTower(definition: TowerDefinition, row, column, behaviour: string, ignoreCost?) {
@@ -117,7 +116,6 @@ export default class TowerManager {
                 'Can not place tower on path or other tower, choose another spot.',
                 'warn'
             );
-            console.warn('Can not place tower on occupied spot or path. Try again.');
         }
     }
     public update(elapsedMS) {

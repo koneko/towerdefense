@@ -49,7 +49,7 @@ export default class Projectile extends GameObject {
         this.sprite.play();
         this.container.x = this.x;
         this.container.y = this.y;
-        this.sprite.tint = tint;
+        // this.sprite.tint = tint;
         this.container.addChild(this.sprite);
         Engine.GameMaster.currentScene.stage.addChild(this.container);
 

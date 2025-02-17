@@ -44,7 +44,7 @@ import DebrisManager from './classes/game/DebrisManager';
         app.canvas.style.marginBottom = `0`;
         app.canvas.style.display = 'block';
     }
-    Engine.latestCommit = await fetch('/latest_commit').then((res) => res.text());
+    Engine.latestCommit = await fetch('./latest_commit').then((res) => res.text());
     window.addEventListener('resize', resize);
 
     resize();
@@ -78,14 +78,12 @@ import DebrisManager from './classes/game/DebrisManager';
     let gamePausedDueToBlur = false;
 
     window.addEventListener('blur', () => {
-        console.log('blur');
         if (Engine.GameScene && !Engine.GameScene.isPaused) {
             Engine.GameScene.PauseGame();
             gamePausedDueToBlur = true;
         }
     });
     window.addEventListener('focus', () => {
-        console.log('focus');
         if (Engine.GameScene && gamePausedDueToBlur && Engine.GameScene.isPaused) {
             gamePausedDueToBlur = false;
             Engine.GameScene.UnpauseGame();

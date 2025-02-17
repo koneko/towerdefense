@@ -8,7 +8,7 @@
         "textures": [],
         "cantCombineWith": [],
         "specialCombine": [],
-        "initialGemValue": 10,
+        "initialGemValue": 100,
         "genericImprovements": [
             {
                 "damageUp": 2,
@@ -16,7 +16,7 @@
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
-                "gemValueUp": 0
+                "gemValueUp": 50
             },
             {
                 "damageUp": 2,
@@ -24,14 +24,14 @@
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
-                "gemValueUp": 10
+                "gemValueUp": 100
             }
         ],
         "gemResistanceModifications": [
             {
                 "physical": 0,
                 "divine": 0,
-                "fire": 0.25,
+                "fire": 0.1,
                 "ice": 0,
                 "frostfire": 0
             },

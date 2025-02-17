@@ -1,10 +1,11 @@
 import * as PIXI from 'pixi.js';
 import GameObject from '../GameObject';
-import { GameMapDefinition, TerrainType } from '../Definitions';
+import { GameMapDefinition, TerrainType, TowerType } from '../Definitions';
 import GameAssets from '../Assets';
 import { Engine } from '../Bastion';
 import Creep from './Creep';
 import { CreepEvents, TowerEvents, GridEvents } from '../Events';
+import { distance, Tower } from './Tower';
 
 let genPath = [];
 
@@ -15,6 +16,7 @@ export class Cell extends GameObject {
     public isPath: boolean = false;
     public g: PIXI.Graphics;
     public hasTowerPlaced: boolean = false;
+    public isBuffedBy: Tower[] = [];
     public clickDetector: PIXI.Graphics;
 
     constructor(type: TerrainType, row: number, column: number, isPath: boolean) {
@@ -55,59 +57,35 @@ export class Cell extends GameObject {
         this.clickDetector.on('pointerleave', (e) => {
             if (!Engine.Grid.gridInteractionEnabled || Engine.GameScene.towerPanel.isShown) return;
             Engine.GameScene.events.emit(GridEvents.CellMouseLeave, this);
-            Engine.Grid.rangePreview.clear();
         });
 
-        Engine.GameScene.events.on(TowerEvents.TowerPlacedEvent, (_, row, col) => {
+        Engine.GameScene.events.on(TowerEvents.TowerPlacedEvent, (towerName, row, col) => {
             if (row == this.row && col == this.column) {
                 this.hasTowerPlaced = true;
                 Engine.Grid.rangePreview.clear();
+            } else if (towerName == GameAssets.Towers[TowerType.Buff].name) {
+                let twr = Engine.TowerManager.GetTowerByRowAndCol(row, col);
+                if (Engine.Grid.IsCellInRangeOfOtherCell(row, col, twr.computedRange, this)) {
+                    this.isBuffedBy.push(twr);
+                }
             }
         });
-        Engine.GameScene.events.on(TowerEvents.TowerSoldEvent, (_, row, col) => {
+        Engine.GameScene.events.on(TowerEvents.TowerSoldEvent, (towerName, row, col) => {
+            console.log(towerName, row, col);
             if (row == this.row && col == this.column) {
                 this.hasTowerPlaced = false;
                 Engine.Grid.rangePreview.clear();
+            } else if (towerName == GameAssets.Towers[TowerType.Buff].name) {
+                let twr = Engine.TowerManager.GetTowerByRowAndCol(row, col);
+                if (Engine.Grid.IsCellInRangeOfOtherCell(row, col, twr.computedRange, this)) {
+                    console.log('REMOVED!');
+                    this.isBuffedBy.splice(this.isBuffedBy.indexOf(twr), 1);
+                    console.log(this.isBuffedBy);
+                }
             }
         });
 
-        // Disable this if you want to add new maps.
-        if (true) return;
-
-        const text = new PIXI.Text({
-            text: `${this.column}|${this.row}`,
-            style: new PIXI.TextStyle({
-                fill: 0xffffff,
-                fontSize: 16,
-                stroke: {
-                    color: 0x000000,
-                    width: 2,
-                },
-            }),
-        });
-        this.container.addChild(text);
-        text.anchor.set(0.5, 0.5);
-        text.x = this.bb.width / 2;
-        text.y = this.bb.height / 2;
-        if (this.type == TerrainType.Path) {
-            text.style.fill = 'green';
-            text.style.fontWeight = 'bold';
-        }
-        if (this.type == TerrainType.Restricted) {
-            text.style.fill = 'gold';
-        }
-        this.clickDetector.on('pointerup', () => {
-            const cellIndex = genPath.findIndex(([col, row]) => col === this.column && row === this.row);
-            if (cellIndex !== -1) {
-                text.style.fill = 0xffffff;
-                genPath.splice(cellIndex, 1);
-            } else {
-                text.style.fill = 0xff0000;
-                genPath.push([this.column, this.row]);
-            }
-            console.log('updated gen path');
-            console.log(JSON.stringify(genPath));
-        });
+        // See commit f84108847b6ba6c337954a742f4dc1a38a2c925b
     }
     public showRangePreview(invalid, range) {
         let color = 0xffffff;
@@ -182,6 +160,10 @@ export class Grid extends GameObject {
         }
         this.rangePreview = new PIXI.Graphics({
             zIndex: 10,
+            x: 0,
+            y: 0,
+            width: Engine.app.canvas.width,
+            height: Engine.app.canvas.height,
         });
         this.container.addChild(this.rangePreview);
     }
@@ -210,6 +192,17 @@ export class Grid extends GameObject {
         });
 
         console.log(JSON.stringify(newGrid));
+    }
+
+    public IsCellInRangeOfOtherCell(row, col, range, otherCell) {
+        range = range * Engine.GridCellSize;
+        const x = otherCell.column * Engine.GridCellSize + Engine.GridCellSize / 2;
+        const y = otherCell.row * Engine.GridCellSize + Engine.GridCellSize / 2;
+        const cellX = col * Engine.GridCellSize + Engine.GridCellSize / 2;
+        const cellY = row * Engine.GridCellSize + Engine.GridCellSize / 2;
+        const d = distance(cellX, cellY, x, y);
+        if (d < range + Engine.GridCellSize / 2) return true;
+        else return false;
     }
     public toggleGrid(force?: 'hide' | 'show') {
         this.cells.forEach((cell) => {

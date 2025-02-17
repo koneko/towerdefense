@@ -7,7 +7,7 @@ import { AnimationManager } from './classes/game/AnimationManager';
 import NotificationManager from './classes/game/NotificationManager';
 import GameUIConstants from './classes/GameUIConstants';
 import KeyboardManager from './classes/game/KeyboardManager';
-import { GemType } from './classes/Definitions';
+import DebrisManager from './classes/game/DebrisManager';
 
 (async () => {
     const app = new PIXI.Application();
@@ -44,7 +44,7 @@ import { GemType } from './classes/Definitions';
         app.canvas.style.marginBottom = `0`;
         app.canvas.style.display = 'block';
     }
-    Engine.latestCommit = await fetch('/latest_commit').then((res) => res.text());
+    Engine.latestCommit = await fetch('./latest_commit').then((res) => res.text());
     window.addEventListener('resize', resize);
 
     resize();
@@ -54,10 +54,12 @@ import { GemType } from './classes/Definitions';
     new GameMaster();
     Engine.AnimationManager = new AnimationManager();
     Engine.NotificationManager = new NotificationManager();
+    Engine.DebrisManager = new DebrisManager();
     globalThis.Engine = Engine;
     PIXI.Ticker.shared.add((ticker) => {
         Engine.NotificationManager.update(ticker.elapsedMS);
         Engine.AnimationManager.update(ticker.elapsedMS);
+        Engine.DebrisManager.update(ticker.elapsedMS);
     });
     app.canvas.addEventListener('pointermove', function (event) {
         Engine.MouseX = ((event.clientX - app.canvas.offsetLeft) / app.canvas.offsetWidth) * 1920;
@@ -76,14 +78,12 @@ import { GemType } from './classes/Definitions';
     let gamePausedDueToBlur = false;
 
     window.addEventListener('blur', () => {
-        console.log('blur');
         if (Engine.GameScene && !Engine.GameScene.isPaused) {
             Engine.GameScene.PauseGame();
             gamePausedDueToBlur = true;
         }
     });
     window.addEventListener('focus', () => {
-        console.log('focus');
         if (Engine.GameScene && gamePausedDueToBlur && Engine.GameScene.isPaused) {
             gamePausedDueToBlur = false;
             Engine.GameScene.UnpauseGame();

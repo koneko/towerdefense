@@ -4,17 +4,18 @@
         "behaviour": "BasicTowerBehaviour",
         "sprite": "basic_tower",
         "texture": null,
+        "projectile": "white",
         "projectileTextures": [],
         "projectileTexturesArrayLength": 5,
         "description": "The building block of society, nothing more basic exists.",
         "stats": {
             "damage": 2,
-            "cooldown": 2000,
-            "gemSlotsAmount": 2,
-            "cost": 100,
-            "range": 4,
+            "cooldown": 1500,
+            "gemSlotsAmount": 1,
+            "cost": 50,
+            "range": 3,
             "timeToLive": 20,
-            "pierce": 1
+            "pierce": 2
         }
     },
     {
@@ -22,6 +23,121 @@
         "behaviour": "CircleTowerBehaviour",
         "sprite": "circle_tower",
         "texture": null,
+        "projectile": "blue",
+        "projectileTextures": [],
+        "projectileTexturesArrayLength": 4,
+        "description": "If you feel a little circular.",
+        "stats": {
+            "damage": 3,
+            "cooldown": 4000,
+            "gemSlotsAmount": 2,
+            "cost": 100,
+            "range": 2.5,
+            "timeToLive": 12,
+            "pierce": 30
+        }
+    },
+    {
+        "name": "Electric Tower",
+        "behaviour": "ElectricTowerBehaviour",
+        "sprite": "electric_tower",
+        "texture": null,
+        "projectile": "yellow",
+        "projectileTextures": [],
+        "projectileTexturesArrayLength": 4,
+        "description": "Zap zap zap!",
+        "stats": {
+            "damage": 3,
+            "cooldown": 3500,
+            "gemSlotsAmount": 2,
+            "cost": 150,
+            "range": 3,
+            "timeToLive": 12,
+            "pierce": 10
+        }
+    },
+    {
+        "name": "Buff Tower",
+        "behaviour": "BuffTowerBehaviour",
+        "sprite": "buff_tower",
+        "texture": null,
+        "projectile": "blue",
+        "projectileTextures": [],
+        "projectileTexturesArrayLength": 4,
+        "description": "",
+        "stats": {
+            "damage": 4,
+            "cooldown": 1000,
+            "gemSlotsAmount": 3,
+            "cost": 200,
+            "range": 2,
+            "timeToLive": 15,
+            "pierce": 5
+        }
+    },
+    {
+        "name": "Strong Tower",
+        "behaviour": "StrongTowerBehaviour",
+        "sprite": "strong_tower",
+        "texture": null,
+        "projectile": "white",
+        "projectileTextures": [],
+        "projectileTexturesArrayLength": 5,
+        "description": "",
+        "stats": {
+            "damage": 2,
+            "cooldown": 2000,
+            "gemSlotsAmount": 3,
+            "cost": 125,
+            "range": 2.5,
+            "timeToLive": 12,
+            "pierce": 30
+        }
+    },
+    {
+        "name": "Rail Tower",
+        "behaviour": "RailTowerBehaviour",
+        "sprite": "rail_tower",
+        "texture": null,
+        "projectile": "red",
+        "projectileTextures": [],
+        "projectileTexturesArrayLength": 4,
+        "description": "If you feel a little circular.",
+        "stats": {
+            "damage": 2,
+            "cooldown": 2000,
+            "gemSlotsAmount": 3,
+            "cost": 125,
+            "range": 2.5,
+            "timeToLive": 12,
+            "pierce": 30
+        }
+    },
+    {
+        "name": "Trapper Tower",
+        "behaviour": "TrapperTowerBehaviour",
+        "sprite": "trapper_tower",
+        "texture": null,
+        "projectile": "stone",
+        "projectileTextures": [],
+        "projectileTexturesArrayLength": 2,
+        "description": "If you feel a little circular.",
+        "stats": {
+            "damage": 2,
+            "cooldown": 2000,
+            "gemSlotsAmount": 3,
+            "cost": 125,
+            "range": 2.5,
+            "timeToLive": 12,
+            "pierce": 30
+        }
+    },
+    {
+        "name": "Debuff Tower",
+        "behaviour": "DebuffTowerBehaviour",
+        "sprite": "debuff_tower",
+        "texture": null,
+        "projectile": "red",
         "projectileTextures": [],
         "projectileTexturesArrayLength": 4,
         "description": "If you feel a little circular.",

@@ -9,6 +9,8 @@ import { AnimationManager } from './game/AnimationManager';
 import NotificationManager from './game/NotificationManager';
 import Gem from './game/Gem';
 import GameAssets from './Assets';
+import { TowerType } from './Definitions';
+import DebrisManager from './game/DebrisManager';
 
 export class Engine {
     public static app: PIXI.Application;
@@ -18,6 +20,7 @@ export class Engine {
     public static TowerManager: TowerManager;
     public static AnimationManager: AnimationManager;
     public static NotificationManager: NotificationManager;
+    public static DebrisManager: DebrisManager;
     public static GameScene: GameScene;
     public static latestCommit: string;
     public static latestGemId = 0;
@@ -32,7 +35,7 @@ export class Engine {
         let params = new URLSearchParams(location.href);
         if (params.entries().next().value[1] != 'game') return;
         Engine.NotificationManager.Notify('Loaded testing suite.', 'danger');
-        let tower = GameAssets.Towers[0];
+        let tower = GameAssets.Towers[TowerType.Electric];
         Engine.TowerManager.ToggleChoosingTowerLocation('RESET');
         Engine.TowerManager.PlaceTower(tower, 6, 10, tower.behaviour, true);
         for (let i = 0; i < 29; i++) {

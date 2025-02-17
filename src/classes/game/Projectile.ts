@@ -3,8 +3,9 @@ import GameObject from '../GameObject';
 import { Engine } from '../Bastion';
 import Creep from './Creep';
 import { CreepEvents } from '../Events';
-import { Tower } from './Tower';
+import { distance, Tower } from './Tower';
 import { CreepResistancesDefinition } from '../Definitions';
+import GameAssets from '../Assets';
 
 export function calculateAngleToPoint(x, y, targetX, targetY) {
     const dx = targetX - x;
@@ -48,13 +49,14 @@ export default class Projectile extends GameObject {
         this.sprite.play();
         this.container.x = this.x;
         this.container.y = this.y;
-        this.sprite.tint = tint;
+        // this.sprite.tint = tint;
         this.container.addChild(this.sprite);
         Engine.GameMaster.currentScene.stage.addChild(this.container);
 
         this.angle = angle;
         this.speed = 0.9;
     }
+
     public destroy(): void {
         super.destroy();
         this.deleteMe = true;
@@ -72,7 +74,7 @@ export default class Projectile extends GameObject {
                 if (!exists) {
                     this.collidedCreepIDs.push(creep);
                     this.pierce--;
-                    this.onCollide(creep);
+                    this.onCollide(creep, this);
                     return;
                 }
             }
@@ -84,14 +86,14 @@ export default class Projectile extends GameObject {
         this.container.y = this.y;
     }
 
-    public onCollide(creep) {
+    public onCollide(creep, proj) {
         /*
         Note:
         Right now it is possible for the bullet to 'overshoot' the creep if the bullet speed is too fast and the position is updated so that the 
         new position is beyond the creep (i.e. the bullet is never 'in the creep').
         This should be fixed so that we calculate the hit if the creep is in a line from the previous position to the new position.
         */
-        Engine.GameScene.events.emit(CreepEvents.TakenDamage, creep.id, this.damage, this.gemResistanceModifications);
+        Engine.GameScene.events.emit(CreepEvents.TakenDamage, creep.id, proj.damage, proj.gemResistanceModifications);
     }
 
     public checkCollision(creep: Creep) {
@@ -100,5 +102,44 @@ export default class Projectile extends GameObject {
         let mybb = this.copyContainerToBB();
         let otherbb = creep.copyContainerToBB();
         return mybb.getBounds().intersects(otherbb.getBounds());
+    }
+}
+
+export class VisualLightning extends GameObject {
+    public deleteMe: boolean = false;
+    private c: Creep;
+    private oc: Creep;
+    private Lightning: PIXI.AnimatedSprite;
+    constructor(creep: Creep, otherCreep: Creep) {
+        super();
+        this.c = creep;
+        this.oc = otherCreep;
+        let lightningAngle = calculateAngleToPoint(creep.x, creep.y, otherCreep.x, otherCreep.y);
+        this.Lightning = new PIXI.AnimatedSprite({
+            textures: GameAssets.SpecialLightning,
+            x: creep.x,
+            y: creep.y,
+            width: distance(this.c.x, this.c.y, this.oc.x, this.oc.y),
+            height: 64,
+            scale: 1.2,
+            rotation: lightningAngle,
+        });
+        this.Lightning.anchor.set(0, 0.5);
+        this.Lightning.play();
+        Engine.GameMaster.currentScene.stage.addChild(this.Lightning);
+        Engine.DebrisManager.CreateDebris(this, 30);
+    }
+    public destroy(): void {
+        this.deleteMe = true;
+        this.container.destroy();
+        this.Lightning.destroy();
+    }
+    public update() {
+        if (this.deleteMe) {
+            return;
+        }
+        this.Lightning.x = this.c.x;
+        this.Lightning.y = this.c.y;
+        this.Lightning.width = distance(this.c.x, this.c.y, this.oc.x, this.oc.y);
     }
 }

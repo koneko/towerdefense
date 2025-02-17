@@ -1,13 +1,21 @@
 import { Engine } from '../Bastion';
 import * as PIXI from 'pixi.js';
 import GameObject from '../GameObject';
-import { CreepResistancesDefinition, GemType, TowerDefinition } from '../Definitions';
+import { CreepResistancesDefinition, TowerDefinition } from '../Definitions';
 import { Cell } from './Grid';
 import { TowerBehaviours } from './TowerManager';
-import Projectile, { calculateAngleToPoint } from './Projectile';
-import Creep from './Creep';
+import Projectile from './Projectile';
 import Gem from './Gem';
-import { BasicTowerBehaviour, CircleTowerBehaviour } from './TowerBehaviours';
+import {
+    DebuffTowerBehaviour,
+    BasicTowerBehaviour,
+    CircleTowerBehaviour,
+    ElectricTowerBehaviour,
+    BuffTowerBehaviour,
+    RailTowerBehaviour,
+    StrongTowerBehaviour,
+    TrapperTowerBehaviour,
+} from './TowerBehaviours';
 
 export function distance(x1, y1, x2, y2) {
     return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
@@ -26,12 +34,18 @@ export class Tower extends GameObject {
     public sprite: PIXI.Sprite;
     public millisecondsUntilNextShot: number;
     public graphics: PIXI.Graphics = new PIXI.Graphics();
-    public computedDamageToDeal: number;
-    public computedCooldown: number;
-    public computedRange: number;
-    public computedTimeToLive: number;
-    public computedPierce: number;
-    public totalGemResistanceModifications: CreepResistancesDefinition;
+    public computedDamageToDeal: number = 0;
+    public computedCooldown: number = 0;
+    public computedRange: number = 0;
+    public computedTimeToLive: number = 0;
+    public computedPierce: number = 0;
+    public totalGemResistanceModifications: CreepResistancesDefinition = {
+        fire: 0,
+        frostfire: 0,
+        divine: 0,
+        ice: 0,
+        physical: 0,
+    };
     public parent: Cell;
 
     constructor(row, column, texture, definition, behaviour) {
@@ -50,6 +64,7 @@ export class Tower extends GameObject {
         });
         this.container.addChild(this.sprite);
         this.computedDamageToDeal = this.definition.stats.damage;
+        this.computedRange = this.definition.stats.range;
         this.parent.container.addChild(this.container);
         this.container.interactiveChildren = true;
         this.parent.clickDetector.on('pointerenter', this.onParentCellEnter);
@@ -104,6 +119,7 @@ export class Tower extends GameObject {
             return d < radius + (Engine.GridCellSize * 2) / 3;
         });
     }
+
     public Shoot(angle) {
         let x = this.column * Engine.GridCellSize + Engine.GridCellSize / 2;
         let y = this.row * Engine.GridCellSize + Engine.GridCellSize / 2;
@@ -128,13 +144,13 @@ export class Tower extends GameObject {
             this.totalGemResistanceModifications
         );
         const time = new Date().toISOString();
-        console.log(`${time} ${this.definition.name} shot at ${angle} degrees`);
+        // console.log(`${time} ${this.definition.name} shot at ${angle} degrees`);
         this.projectiles.push(proj);
         return proj;
     }
     public Sell() {
-        this.setAsSold = true;
         // Selling logic is handled in TowerManager.update()
+        this.setAsSold = true;
     }
     public update(elapsedMS: any): void {
         if (this.sold) return;
@@ -143,6 +159,12 @@ export class Tower extends GameObject {
         }
         if (this.behaviour == TowerBehaviours.BasicTowerBehaviour) BasicTowerBehaviour(this, elapsedMS);
         if (this.behaviour == TowerBehaviours.CircleTowerBehaviour) CircleTowerBehaviour(this, elapsedMS);
+        if (this.behaviour == TowerBehaviours.ElectricTowerBehaviour) ElectricTowerBehaviour(this, elapsedMS);
+        if (this.behaviour == TowerBehaviours.BuffTowerBehaviour) BuffTowerBehaviour(this, elapsedMS);
+        if (this.behaviour == TowerBehaviours.StrongTowerBehaviour) StrongTowerBehaviour(this, elapsedMS);
+        if (this.behaviour == TowerBehaviours.RailTowerBehaviour) RailTowerBehaviour(this, elapsedMS);
+        if (this.behaviour == TowerBehaviours.TrapperTowerBehaviour) TrapperTowerBehaviour(this, elapsedMS);
+        if (this.behaviour == TowerBehaviours.DebuffTowerBehaviour) DebuffTowerBehaviour(this, elapsedMS);
     }
 
     public destroy(): void {

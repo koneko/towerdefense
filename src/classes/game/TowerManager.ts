@@ -9,6 +9,12 @@ import { GridEvents, TowerEvents } from '../Events';
 export enum TowerBehaviours {
     BasicTowerBehaviour = 'BasicTowerBehaviour',
     CircleTowerBehaviour = 'CircleTowerBehaviour',
+    ElectricTowerBehaviour = 'ElectricTowerBehaviour',
+    BuffTowerBehaviour = 'BuffTowerBehaviour',
+    StrongTowerBehaviour = 'StrongTowerBehaviour',
+    RailTowerBehaviour = 'RailTowerBehaviour',
+    TrapperTowerBehaviour = 'TrapperTowerBehaviour',
+    DebuffTowerBehaviour = 'DebuffTowerBehaviour',
 }
 
 export default class TowerManager {
@@ -43,6 +49,7 @@ export default class TowerManager {
         });
         Engine.GameScene.events.on(GridEvents.CellMouseLeave, (cell: Cell) => {
             this.previewSprite.texture = null;
+            Engine.Grid.rangePreview.clear();
         });
     }
     public ResetChooseTower() {
@@ -86,7 +93,6 @@ export default class TowerManager {
         this.towers.forEach((tower) => {
             if (tower.row == row && tower.column == col) returnTower = tower;
         });
-        // console.log(returnTower, row, col);
         return returnTower;
     }
     public PlaceTower(definition: TowerDefinition, row, column, behaviour: string, ignoreCost?) {
@@ -110,7 +116,6 @@ export default class TowerManager {
                 'Can not place tower on path or other tower, choose another spot.',
                 'warn'
             );
-            console.warn('Can not place tower on occupied spot or path. Try again.');
         }
     }
     public update(elapsedMS) {
@@ -120,10 +125,10 @@ export default class TowerManager {
                 while (twr.slottedGems.length > 0) {
                     twr.UnslotGem(0);
                 }
+                Engine.GameScene.events.emit(TowerEvents.TowerSoldEvent, twr.definition.name, twr.row, twr.column);
                 Engine.GameScene.MissionStats.earnGold(twr.definition.stats.cost);
                 twr.destroy();
                 this.towers.splice(idx, 1);
-                Engine.GameScene.events.emit(TowerEvents.TowerSoldEvent, twr.name, twr.row, twr.column);
             } else twr.update(elapsedMS);
         });
     }

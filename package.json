@@ -13,6 +13,7 @@
         "vite": "^5.4.1"
     },
     "dependencies": {
+        "pixi-spine": "^4.0.4",
         "pixi-viewport": "^6.0.3",
         "pixi.js": "^8.4.0"
     }

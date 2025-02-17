@@ -77,14 +77,14 @@
                 "physical": 0,
                 "divine": 0,
                 "fire": 0,
-                "ice": 0,
+                "ice": 0.1,
                 "frostfire": 0
             },
             {
                 "physical": 0,
                 "divine": 0,
                 "fire": 0,
-                "ice": 0,
+                "ice": 0.2,
                 "frostfire": 0
             }
         ]
@@ -127,21 +127,21 @@
         ],
         "gemResistanceModifications": [
             {
-                "physical": 0,
+                "physical": 0.1,
                 "divine": 0,
                 "fire": 0,
                 "ice": 0,
                 "frostfire": 0
             },
             {
-                "physical": 0,
+                "physical": 0.1,
                 "divine": 0,
                 "fire": 0,
                 "ice": 0,
                 "frostfire": 0
             },
             {
-                "physical": 0,
+                "physical": 0.25,
                 "divine": 0,
                 "fire": 0,
                 "ice": 0,
@@ -179,18 +179,18 @@
         ],
         "gemResistanceModifications": [
             {
-                "physical": 0,
-                "divine": 0,
-                "fire": 0,
-                "ice": 0,
-                "frostfire": 0
+                "physical": 0.05,
+                "divine": 0.05,
+                "fire": 0.05,
+                "ice": 0.05,
+                "frostfire": 0.05
             },
             {
-                "physical": 0,
-                "divine": 0,
-                "fire": 0,
-                "ice": 0,
-                "frostfire": 0
+                "physical": 0.05,
+                "divine": 0.05,
+                "fire": 0.05,
+                "ice": 0.05,
+                "frostfire": 0.05
             }
         ]
     }

@@ -167,7 +167,6 @@ export class GameScene extends Scene {
 
         this.ticker.add(() => {
             if (this.update) this.update(this.ticker.elapsedMS);
-            // if (this.isFastForwarded) this.update(this.ticker.elapsedMS);
         });
         this.ticker.start();
     }

@@ -91,7 +91,7 @@
             "cost": 125,
             "range": 2.5,
             "timeToLive": 12,
-            "pierce": 30
+            "pierce": 1
         }
     },
     {

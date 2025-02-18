@@ -143,6 +143,7 @@ export class RailProjectile extends Projectile {
             newVisual.anchor.set(0.5, 0.5);
             this.visuals.push(newVisual);
             this.visuals.forEach((visual) => {
+                if (visual.scale == null) return visual.destroy();
                 if (visual.width && visual.height && visual.alpha) {
                     visual.width -= 4;
                     visual.height -= 4;

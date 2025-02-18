@@ -2,7 +2,7 @@ import GameAssets from '../Assets';
 import { Engine } from '../Bastion';
 import { TowerType } from '../Definitions';
 import { CreepEvents } from '../Events';
-import Creep from './Creep';
+import Creep, { CreepEffects } from './Creep';
 import Projectile, { calculateAngleToPoint, VisualLightning } from './Projectile';
 import { distance, Tower } from './Tower';
 import * as PIXI from 'pixi.js';
@@ -16,17 +16,21 @@ import * as PIXI from 'pixi.js';
  * @param elapsedMS - The elapsed time in milliseconds since the last update.
  */
 function projectileCheck(tower: Tower, elapsedMS: number) {
-    tower.projectiles.forEach((proj) => {
+    for (let i = tower.projectiles.length - 1; i >= 0; i--) {
+        let proj = tower.projectiles[i];
+
         if (proj.deleteMe || tower.sold) {
             proj.collidedCreepIDs.forEach(() => {
                 tower.damageDealt += tower.computedDamageToDeal;
             });
             proj.collidedCreepIDs = [];
-            tower.projectiles.splice(tower.projectiles.indexOf(proj), 1);
+
             proj.destroy();
-            proj = null;
-        } else proj.update(elapsedMS);
-    });
+            tower.projectiles.splice(i, 1);
+        } else {
+            proj.update(elapsedMS);
+        }
+    }
 }
 
 /**
@@ -215,7 +219,10 @@ export function StrongTowerBehaviour(tower: Tower, elapsedMS: number) {
             let x = tower.column * Engine.GridCellSize + Engine.GridCellSize / 2;
             let y = tower.row * Engine.GridCellSize + Engine.GridCellSize / 2;
             tower.millisecondsUntilNextShot = tower.computedCooldown;
-            tower.Shoot(calculateAngleToPoint(x, y, focus.x, focus.y));
+            let proj = tower.Shoot(calculateAngleToPoint(x, y, focus.x, focus.y));
+            proj.onCollide = (creep: Creep, proj: Projectile) => {
+                Engine.GameScene.events.emit(CreepEvents.GiveEffect, creep.id, CreepEffects.MovingBackwards, 500);
+            };
         }
     }
 }
@@ -233,6 +240,7 @@ export function RailTowerBehaviour(tower: Tower, elapsedMS: number) {
             let x = tower.column * Engine.GridCellSize + Engine.GridCellSize / 2;
             let y = tower.row * Engine.GridCellSize + Engine.GridCellSize / 2;
             tower.millisecondsUntilNextShot = tower.computedCooldown;
+            // Custom logic handled via tower.Shoot
             tower.Shoot(calculateAngleToPoint(x, y, focus.x, focus.y));
         }
     }
@@ -259,7 +267,10 @@ export function DebuffTowerBehaviour(tower: Tower, elapsedMS: number) {
             let x = tower.column * Engine.GridCellSize + Engine.GridCellSize / 2;
             let y = tower.row * Engine.GridCellSize + Engine.GridCellSize / 2;
             tower.millisecondsUntilNextShot = tower.computedCooldown;
-            tower.Shoot(calculateAngleToPoint(x, y, focus.x, focus.y));
+            let proj = tower.Shoot(calculateAngleToPoint(x, y, focus.x, focus.y));
+            proj.onCollide = (creep: Creep, proj: Projectile) => {
+                Engine.GameScene.events.emit(CreepEvents.GiveEffect, creep.id, CreepEffects.DebuffTowerDebuff, 5000);
+            };
         }
     }
 }

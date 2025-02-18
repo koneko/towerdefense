@@ -143,10 +143,12 @@ export class RailProjectile extends Projectile {
             newVisual.anchor.set(0.5, 0.5);
             this.visuals.push(newVisual);
             this.visuals.forEach((visual) => {
-                visual.width -= 4;
-                visual.height -= 4;
-                visual.alpha -= 0.05;
-                if (visual.width <= 0 && visual.height <= 0) visual.destroy();
+                if (visual.width && visual.height && visual.alpha) {
+                    visual.width -= 4;
+                    visual.height -= 4;
+                    visual.alpha -= 0.1;
+                    if (visual.width <= 0 || visual.height <= 0 || visual.alpha <= 0) visual.destroy();
+                }
             });
             Engine.GameScene.stage.addChild(newVisual);
         } else this.counter++;

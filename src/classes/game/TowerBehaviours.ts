@@ -149,36 +149,47 @@ export function ElectricTowerBehaviour(tower: Tower, elapsedMS: number) {
             proj.onCollide = (creep: Creep, proj: Projectile) => {
                 let chainedCreepIds = [];
                 proj.pierce = 0;
-                function checkNearBy(c) {
-                    let nearByCreeps = Engine.Grid.creeps.filter((nCreep) => {
+                let recursionCount = 0;
+                function checkNearBy(c: Creep) {
+                    if (recursionCount >= 50) {
+                        Engine.GameScene.PauseGame();
+                        Engine.NotificationManager.Notify(
+                            'Electric Tower max recursion exceeded! Please tell koneko! (game paused)',
+                            'danger'
+                        );
+                        return;
+                    }
+                    recursionCount++;
+
+                    Engine.Grid.creeps.forEach((nCreep) => {
                         if (nCreep.id != creep.id) {
                             const x = nCreep.x;
                             const y = nCreep.y;
                             const radius = 1.5 * Engine.GridCellSize;
                             const d = distance(c.x, c.y, x, y);
-                            return d < radius;
+                            if (d < radius) {
+                                if (chainedCreepIds.find((crID) => crID == nCreep.id) != undefined) return;
+                                chainedCreepIds.push(nCreep.id);
+                                new VisualLightning(c, nCreep);
+                                Engine.GameScene.events.emit(
+                                    CreepEvents.TakenDamage,
+                                    nCreep.id,
+                                    Math.round(proj.damage / 2),
+                                    proj.gemResistanceModifications
+                                );
+                                checkNearBy(nCreep);
+                            }
                         }
                     });
-                    nearByCreeps.forEach((nearCreep) => {
-                        if (!chainedCreepIds.find((crID) => crID == nearCreep.id)) chainedCreepIds.push(nearCreep.id);
-                        else return;
-                        checkNearBy(nearCreep);
-                        new VisualLightning(c, nearCreep);
-                        Engine.GameScene.events.emit(
-                            CreepEvents.TakenDamage,
-                            nearCreep.id,
-                            Math.round(proj.damage / 2),
-                            proj.gemResistanceModifications
-                        );
-                    });
                 }
-                checkNearBy(creep);
                 Engine.GameScene.events.emit(
                     CreepEvents.TakenDamage,
                     creep.id,
                     proj.damage,
                     proj.gemResistanceModifications
                 );
+                chainedCreepIds.push(creep.id);
+                checkNearBy(creep);
             };
         }
     }

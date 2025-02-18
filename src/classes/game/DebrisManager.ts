@@ -12,7 +12,6 @@ class Debris {
         this.debris.destroy();
     }
     public update(elapsedMS) {
-        console.log(this.debris instanceof GameObject);
         if (this.debris instanceof GameObject) {
             this.debris.update(elapsedMS);
         }

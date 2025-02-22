@@ -1,9 +1,10 @@
+import { RoundMode } from '../../scenes/Game';
 import GameAssets from '../Assets';
 import { Engine } from '../Bastion';
 import { TowerType } from '../Definitions';
 import { CreepEvents } from '../Events';
 import Creep, { CreepEffects } from './Creep';
-import Projectile, { calculateAngleToPoint, VisualLightning } from './Projectile';
+import Projectile, { calculateAngleToPoint, TrapProjectile, VisualLightning } from './Projectile';
 import { distance, Tower } from './Tower';
 import * as PIXI from 'pixi.js';
 
@@ -78,10 +79,10 @@ export function computeGemImprovements(tower: Tower) {
     if (tower.parent.isBuffedBy.length > 0 && tower.definition.name != GameAssets.Towers[TowerType.Buff].name) {
         let buffedBy = tower.parent.isBuffedBy[0];
         tower.computedDamageToDeal += Number((buffedBy.computedDamageToDeal / 2).toFixed(1));
-        tower.computedCooldown -= (buffedBy.computedCooldown * 100) / 5 / 100;
+        tower.computedCooldown -= Number((buffedBy.computedCooldown / 5).toFixed(1));
         tower.computedRange += Number((buffedBy.computedRange / 10).toFixed(1));
-        tower.computedTimeToLive += (buffedBy.computedTimeToLive * 100) / 5 / 100;
-        tower.computedPierce += (buffedBy.computedPierce * 100) / 4 / 100;
+        tower.computedTimeToLive += Number((buffedBy.computedTimeToLive / 5).toFixed(1));
+        tower.computedPierce += Number((buffedBy.computedPierce / 4).toFixed(1));
 
         tower.totalGemResistanceModifications.physical +=
             (buffedBy.totalGemResistanceModifications.physical * 100) / 2 / 100;
@@ -99,10 +100,10 @@ export function BasicTowerBehaviour(tower: Tower, elapsedMS: number) {
     projectileCheck(tower, elapsedMS);
     if (tower.millisecondsUntilNextShot > 0)
         tower.millisecondsUntilNextShot -= elapsedMS * Engine.GameScene.gameSpeedMultiplier;
-    let creepsInRange = tower.GetCreepsInRange();
-    if (creepsInRange.length > 0) {
-        let focus = creepsInRange[0];
-        if (tower.millisecondsUntilNextShot <= 0) {
+    else {
+        let creepsInRange = tower.GetCreepsInRange();
+        if (creepsInRange.length > 0) {
+            let focus = creepsInRange[0];
             let x = tower.column * Engine.GridCellSize + Engine.GridCellSize / 2;
             let y = tower.row * Engine.GridCellSize + Engine.GridCellSize / 2;
             tower.millisecondsUntilNextShot = tower.computedCooldown;
@@ -116,9 +117,9 @@ export function CircleTowerBehaviour(tower: Tower, elapsedMS: number) {
     projectileCheck(tower, elapsedMS);
     if (tower.millisecondsUntilNextShot > 0)
         tower.millisecondsUntilNextShot -= elapsedMS * Engine.GameScene.gameSpeedMultiplier;
-    let creepsInRange = tower.GetCreepsInRange();
-    if (creepsInRange.length > 0) {
-        if (tower.millisecondsUntilNextShot <= 0) {
+    else {
+        let creepsInRange = tower.GetCreepsInRange();
+        if (creepsInRange.length > 0) {
             tower.millisecondsUntilNextShot = tower.computedCooldown;
             let x = tower.column * Engine.GridCellSize + Engine.GridCellSize / 2;
             let y = tower.row * Engine.GridCellSize + Engine.GridCellSize / 2;
@@ -140,12 +141,11 @@ export function ElectricTowerBehaviour(tower: Tower, elapsedMS: number) {
 
     if (tower.millisecondsUntilNextShot > 0)
         tower.millisecondsUntilNextShot -= elapsedMS * Engine.GameScene.gameSpeedMultiplier;
+    else {
+        let creepsInRange = tower.GetCreepsInRange();
 
-    let creepsInRange = tower.GetCreepsInRange();
-
-    if (creepsInRange.length > 0) {
-        let focus = creepsInRange[0];
-        if (tower.millisecondsUntilNextShot <= 0) {
+        if (creepsInRange.length > 0) {
+            let focus = creepsInRange[0];
             let x = tower.column * Engine.GridCellSize + Engine.GridCellSize / 2;
             let y = tower.row * Engine.GridCellSize + Engine.GridCellSize / 2;
             tower.millisecondsUntilNextShot = tower.computedCooldown;
@@ -212,16 +212,22 @@ export function StrongTowerBehaviour(tower: Tower, elapsedMS: number) {
 
     if (tower.millisecondsUntilNextShot > 0)
         tower.millisecondsUntilNextShot -= elapsedMS * Engine.GameScene.gameSpeedMultiplier;
-    let creepsInRange = tower.GetCreepsInRange();
-    if (creepsInRange.length > 0) {
-        let focus = creepsInRange[0];
-        if (tower.millisecondsUntilNextShot <= 0) {
+    else {
+        let creepsInRange = tower.GetCreepsInRange();
+        if (creepsInRange.length > 0) {
+            let focus = creepsInRange[0];
             let x = tower.column * Engine.GridCellSize + Engine.GridCellSize / 2;
             let y = tower.row * Engine.GridCellSize + Engine.GridCellSize / 2;
             tower.millisecondsUntilNextShot = tower.computedCooldown;
             let proj = tower.Shoot(calculateAngleToPoint(x, y, focus.x, focus.y));
             proj.onCollide = (creep: Creep, proj: Projectile) => {
-                Engine.GameScene.events.emit(CreepEvents.GiveEffect, creep.id, CreepEffects.MovingBackwards, 500);
+                Engine.GameScene.events.emit(CreepEvents.GiveEffect, creep.id, CreepEffects.MovingBackwards, 750);
+                Engine.GameScene.events.emit(
+                    CreepEvents.TakenDamage,
+                    creep.id,
+                    proj.damage / 2,
+                    proj.gemResistanceModifications
+                );
             };
         }
     }
@@ -233,10 +239,10 @@ export function RailTowerBehaviour(tower: Tower, elapsedMS: number) {
 
     if (tower.millisecondsUntilNextShot > 0)
         tower.millisecondsUntilNextShot -= elapsedMS * Engine.GameScene.gameSpeedMultiplier;
-    let creepsInRange = tower.GetCreepsInRange();
-    if (creepsInRange.length > 0) {
-        let focus = creepsInRange[0];
-        if (tower.millisecondsUntilNextShot <= 0) {
+    else {
+        let creepsInRange = tower.GetCreepsInRange();
+        if (creepsInRange.length > 0) {
+            let focus = creepsInRange[0];
             let x = tower.column * Engine.GridCellSize + Engine.GridCellSize / 2;
             let y = tower.row * Engine.GridCellSize + Engine.GridCellSize / 2;
             tower.millisecondsUntilNextShot = tower.computedCooldown;
@@ -252,6 +258,42 @@ export function TrapperTowerBehaviour(tower: Tower, elapsedMS: number) {
 
     if (tower.millisecondsUntilNextShot > 0)
         tower.millisecondsUntilNextShot -= elapsedMS * Engine.GameScene.gameSpeedMultiplier;
+    else {
+        if (Engine.GameScene.roundMode != RoundMode.Combat) return;
+        let x = tower.column * Engine.GridCellSize + Engine.GridCellSize / 2;
+        let y = tower.row * Engine.GridCellSize + Engine.GridCellSize / 2;
+        let cells = Engine.Grid.GetPathCellsInRange(tower.row, tower.column, tower.computedRange);
+        if (cells.length > 0) {
+            let idx = Math.floor(Math.random() * cells.length);
+            let cell = cells[idx];
+            let cellx = cell.column * Engine.GridCellSize + Engine.GridCellSize / 2;
+            let celly = cell.row * Engine.GridCellSize + Engine.GridCellSize / 2;
+            let combinedTint = new PIXI.Color('white');
+            if (tower.slottedGems.length > 0) {
+                let color = new PIXI.Color(tower.slottedGems[0].definition.color);
+                for (let i = 1; i < tower.slottedGems.length; i++) {
+                    const element = tower.slottedGems[i];
+                    color.multiply(element.definition.color);
+                }
+                combinedTint = color;
+            }
+            let proj = new TrapProjectile(
+                x,
+                y,
+                tower.definition.projectileTextures,
+                calculateAngleToPoint(x, y, cellx, celly),
+                cellx,
+                celly,
+                tower.computedDamageToDeal,
+                combinedTint,
+                tower.computedTimeToLive,
+                tower.computedPierce,
+                tower.totalGemResistanceModifications
+            );
+            tower.projectiles.push(proj);
+            tower.millisecondsUntilNextShot = tower.computedCooldown;
+        }
+    }
 }
 
 export function DebuffTowerBehaviour(tower: Tower, elapsedMS: number) {
@@ -270,6 +312,12 @@ export function DebuffTowerBehaviour(tower: Tower, elapsedMS: number) {
             let proj = tower.Shoot(calculateAngleToPoint(x, y, focus.x, focus.y));
             proj.onCollide = (creep: Creep, proj: Projectile) => {
                 Engine.GameScene.events.emit(CreepEvents.GiveEffect, creep.id, CreepEffects.DebuffTowerDebuff, 5000);
+                Engine.GameScene.events.emit(
+                    CreepEvents.TakenDamage,
+                    creep.id,
+                    proj.damage / 1.5,
+                    proj.gemResistanceModifications
+                );
             };
         }
     }

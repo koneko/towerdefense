@@ -20,7 +20,7 @@ import EndGameDialog from '../classes/gui/EndGameDialog';
 import HighScoreDialog, { HighScoreDialogButtons } from '../classes/gui/HighScoreDialog';
 import GamePausedDialog from '../classes/gui/GamePausedDialog';
 
-enum RoundMode {
+export enum RoundMode {
     Purchase = 0,
     Combat = 1,
     Misc = 2,

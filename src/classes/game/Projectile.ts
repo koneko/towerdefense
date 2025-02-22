@@ -177,6 +177,7 @@ export class TrapProjectile extends Projectile {
     ) {
         super(x, y, textures, angle, damage, tint, timeToLive, pierce, gemResistanceModifications);
         this.sprite.scale = 0.5;
+        this.sprite.rotation = Math.random() * Math.PI * 2;
         this.goalX = goalX;
         this.goalY = goalY;
     }

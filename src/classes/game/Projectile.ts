@@ -6,6 +6,7 @@ import { CreepEvents } from '../Events';
 import { distance, Tower } from './Tower';
 import { CreepResistancesDefinition } from '../Definitions';
 import GameAssets from '../Assets';
+import { RoundMode } from '../../scenes/Game';
 
 export function calculateAngleToPoint(x, y, targetX, targetY) {
     const dx = targetX - x;
@@ -64,7 +65,7 @@ export default class Projectile extends GameObject {
 
     public update(elapsedMS) {
         if (this.deleteMe) return;
-        if (this.x > 2000 || this.x < 0 || this.y > 2000 || this.y < 0 || this.pierce <= 0 || this.timeToLive <= 0)
+        if (this.x > 1720 || this.x < 0 || this.y > 2000 || this.y < 0 || this.pierce <= 0 || this.timeToLive <= 0)
             return this.destroy();
         this.timeToLive -= Engine.GameScene.gameSpeedMultiplier;
         Engine.Grid.creeps.forEach((creep) => {
@@ -102,6 +103,111 @@ export default class Projectile extends GameObject {
         let mybb = this.copyContainerToBB();
         let otherbb = creep.copyContainerToBB();
         return mybb.getBounds().intersects(otherbb.getBounds());
+    }
+}
+
+export class RailProjectile extends Projectile {
+    public visuals: PIXI.Sprite[] = [];
+    public counter: number = 0;
+    constructor(
+        x,
+        y,
+        textures,
+        angle,
+        damage,
+        tint,
+        timeToLive,
+        pierce,
+        gemResistanceModifications: CreepResistancesDefinition
+    ) {
+        super(x, y, textures, angle, damage, tint, timeToLive, pierce, gemResistanceModifications);
+        this.pierce = 1000;
+        this.timeToLive = 2000;
+    }
+
+    public destroy(): void {
+        super.destroy();
+        this.visuals.forEach((visual) => visual.destroy());
+        this.visuals = [];
+    }
+    public update(elapsedMS) {
+        super.update(elapsedMS);
+        if (this.counter == 2) {
+            this.counter = 0;
+            let newVisual = new PIXI.Sprite({
+                x: this.x,
+                y: this.y,
+                rotation: this.angle,
+                texture: this.sprite.texture,
+                scale: 0.25,
+            });
+            newVisual.anchor.set(0.5, 0.5);
+            this.visuals.push(newVisual);
+            this.visuals.forEach((visual) => {
+                if (visual.scale == null) return visual.destroy();
+                if (visual.width && visual.height && visual.alpha) {
+                    visual.width -= 4;
+                    visual.height -= 4;
+                    visual.alpha -= 0.1;
+                    if (visual.width <= 0 || visual.height <= 0 || visual.alpha <= 0) visual.destroy();
+                }
+            });
+            Engine.GameScene.stage.addChild(newVisual);
+        } else this.counter++;
+    }
+}
+
+export class TrapProjectile extends Projectile {
+    public visuals: PIXI.Sprite[] = [];
+    public counter: number = 0;
+    private goalX: number;
+    private goalY: number;
+    constructor(
+        x,
+        y,
+        textures,
+        angle,
+        goalX,
+        goalY,
+        damage,
+        tint,
+        timeToLive,
+        pierce,
+        gemResistanceModifications: CreepResistancesDefinition
+    ) {
+        super(x, y, textures, angle, damage, tint, timeToLive, pierce, gemResistanceModifications);
+        this.sprite.scale = 0.5;
+        this.goalX = goalX;
+        this.goalY = goalY;
+    }
+
+    public destroy(): void {
+        super.destroy();
+        this.visuals.forEach((visual) => visual.destroy());
+        this.visuals = [];
+    }
+    public update(elapsedMS) {
+        if (this.deleteMe) return;
+        if (this.x > 1720 || this.x < 0 || this.y > 2000 || this.y < 0 || this.pierce <= 0 || this.timeToLive <= 0)
+            return this.destroy();
+        if (distance(this.x, this.y, this.goalX, this.goalY) < 25) {
+            this.timeToLive -= Engine.GameScene.gameSpeedMultiplier;
+            Engine.Grid.creeps.forEach((creep) => {
+                if (this.pierce <= 0) return;
+                if (creep && creep.container && this.checkCollision(creep)) {
+                    this.collidedCreepIDs.push(creep);
+                    this.pierce--;
+                    this.onCollide(creep, this);
+                    return;
+                }
+            });
+        } else {
+            this.x += Math.cos(this.angle) * this.speed * elapsedMS * Engine.GameScene.gameSpeedMultiplier;
+            this.y += Math.sin(this.angle) * this.speed * elapsedMS * Engine.GameScene.gameSpeedMultiplier;
+
+            this.container.x = this.x;
+            this.container.y = this.y;
+        }
     }
 }
 

@@ -1,10 +1,24 @@
-import GameAssets from '../Assets';
 import Assets from '../Assets';
 import { Engine } from '../Bastion';
 import { CreepResistancesDefinition, CreepStatsDefinition, CreepType, PathDefinition } from '../Definitions';
 import GameObject from '../GameObject';
 import * as PIXI from 'pixi.js';
 import { CreepEvents } from '../Events';
+
+export enum CreepEffects {
+    MovingBackwards = 'MovingBackwards',
+    DebuffTowerDebuff = 'DebuffTowerDebuff',
+}
+
+class Effect {
+    public effectEnum: CreepEffects;
+    public durationInMS: number;
+    public ticks: number = 0;
+    constructor(effectEnum: CreepEffects, durationInMS: number) {
+        this.effectEnum = effectEnum;
+        this.durationInMS = durationInMS;
+    }
+}
 
 export default class Creep extends GameObject {
     public id: number;
@@ -17,6 +31,7 @@ export default class Creep extends GameObject {
     private direction: number = 1;
     private healthBarGraphics: PIXI.Graphics = new PIXI.Graphics();
     private healthBarWidth = 50;
+    private effects: Effect[] = [];
     public health: number;
     public maxHealth: number;
     public escaped: boolean = false;
@@ -56,7 +71,10 @@ export default class Creep extends GameObject {
             CreepEvents.TakenDamage,
             (creepID, damage, gemResistanceModifications: CreepResistancesDefinition) => {
                 if (creepID != this.id) return;
-
+                if (this.effects.find((e) => e.effectEnum == CreepEffects.DebuffTowerDebuff)) {
+                    damage = damage * 1.5;
+                    console.log('multiplying damage, ' + damage);
+                }
                 // Apply resistances.
                 this.health -= damage + damage * (gemResistanceModifications.physical - this.stats.resistance.physical);
                 if (gemResistanceModifications.fire != 0)
@@ -76,23 +94,49 @@ export default class Creep extends GameObject {
                 this.UpdateHealthbar();
             }
         );
+        Engine.GameScene.events.on(
+            CreepEvents.GiveEffect,
+            (creepID: number, effect: CreepEffects, durationInMS: number) => {
+                if (creepID != this.id) return;
+                console.log(' I CAUGHT THE EVENT!');
+                if (this.effects.find((e) => e.effectEnum == effect) == undefined)
+                    this.effects.push(new Effect(effect, durationInMS));
+            }
+        );
         Engine.Grid.container.addChild(this.container);
         this.container.addChild(this.healthBarGraphics);
         this.container.addChild(this.sprite);
         this.UpdateHealthbar();
     }
+    // Used ChatGPT to make this easier to understand.
     private UpdateHealthbar() {
         this.healthBarGraphics.clear();
+
         const hp = this.health;
         const maxHp = this.maxHealth;
-        const percent = hp / maxHp;
-        const width = this.healthBarWidth * percent;
-        // ! TODO: MAKE THIS BETTER! It works like this now, but I don't like how its implemented.
-        this.healthBarGraphics.rect(-this.healthBarWidth / 2 + 3, -32, this.healthBarWidth + 4, 14);
+        const percent = Math.max(0, hp / maxHp);
+
+        const barWidth = this.healthBarWidth;
+        const barHeight = 10; // Height of the health bar
+        const borderPadding = 2; // Border thickness around the health bar
+        const offsetX = -barWidth / 2; // Centering the bar
+        const offsetY = -32; // Position above the entity
+
+        // Border
+        this.healthBarGraphics.rect(
+            offsetX - borderPadding,
+            offsetY - borderPadding,
+            barWidth + borderPadding * 2,
+            barHeight + borderPadding * 2
+        );
         this.healthBarGraphics.fill({ color: 0x000000 });
-        this.healthBarGraphics.rect(-this.healthBarWidth / 2 + 5, -30, width, 10);
+
+        // Health
+        const healthWidth = barWidth * percent;
+        this.healthBarGraphics.rect(offsetX, offsetY, healthWidth, barHeight);
         this.healthBarGraphics.fill({ color: 0xff0000 });
     }
+
     public update(elapsedMS: number) {
         if (this.dead) return;
         if (this.health <= 0) {
@@ -110,14 +154,30 @@ export default class Creep extends GameObject {
             this.escaped = true;
             return;
         }
+
         const currentCell = this.path[this.pathIndex];
         const targetCell = this.path[this.pathIndex + 1];
+        const previousCell = this.pathIndex - 1 != 0 ? this.path[this.pathIndex - 1] : this.path[0];
+        let isMovingBackwards = false;
+        for (let i = this.effects.length - 1; i >= 0; i--) {
+            let effect = this.effects[i];
+            effect.ticks += elapsedMS * Engine.GameScene.gameSpeedMultiplier;
+            if (effect.ticks >= effect.durationInMS) this.effects.splice(i, 1);
+            else if (effect.effectEnum == CreepEffects.MovingBackwards) return (isMovingBackwards = true);
+        }
 
-        // Added + 32 for centering.
-        const targetX = targetCell[0] * Engine.GridCellSize + Engine.GridCellSize / 2;
-        const targetY = targetCell[1] * Engine.GridCellSize + Engine.GridCellSize / 2;
-        const directionX = targetCell[0] - currentCell[0];
-        const directionY = targetCell[1] - currentCell[1];
+        let targetX, targetY, directionX, directionY;
+        if (!isMovingBackwards) {
+            targetX = targetCell[0] * Engine.GridCellSize + Engine.GridCellSize / 2;
+            targetY = targetCell[1] * Engine.GridCellSize + Engine.GridCellSize / 2;
+            directionX = targetCell[0] - currentCell[0];
+            directionY = targetCell[1] - currentCell[1];
+        } else {
+            targetX = previousCell[0] * Engine.GridCellSize + Engine.GridCellSize / 2;
+            targetY = previousCell[1] * Engine.GridCellSize + Engine.GridCellSize / 2;
+            directionX = currentCell[0] - previousCell[0];
+            directionY = previousCell[1] - currentCell[1];
+        }
         if (directionX > 0) {
             // Going right
             if (this.direction != 1) {
@@ -157,7 +217,9 @@ export default class Creep extends GameObject {
         }
         this.x += deltaX;
         this.y += deltaY;
-        if (increaseIndex) this.pathIndex++;
+        if (increaseIndex) {
+            if (!isMovingBackwards) this.pathIndex++;
+        }
         this.container.x = this.x;
         this.container.y = this.y;
     }

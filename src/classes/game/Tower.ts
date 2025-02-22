@@ -4,7 +4,7 @@ import GameObject from '../GameObject';
 import { CreepResistancesDefinition, TowerDefinition } from '../Definitions';
 import { Cell } from './Grid';
 import { TowerBehaviours } from './TowerManager';
-import Projectile from './Projectile';
+import Projectile, { RailProjectile } from './Projectile';
 import Gem from './Gem';
 import {
     DebuffTowerBehaviour,
@@ -132,18 +132,34 @@ export class Tower extends GameObject {
             }
             combinedTint = color;
         }
-        let proj = new Projectile(
-            x,
-            y,
-            this.definition.projectileTextures,
-            angle,
-            this.computedDamageToDeal,
-            combinedTint,
-            this.computedTimeToLive,
-            this.computedPierce,
-            this.totalGemResistanceModifications
-        );
-        const time = new Date().toISOString();
+
+        let proj;
+        if (this.behaviour == TowerBehaviours.RailTowerBehaviour) {
+            proj = new RailProjectile(
+                x,
+                y,
+                this.definition.projectileTextures,
+                angle,
+                this.computedDamageToDeal,
+                combinedTint,
+                this.computedTimeToLive,
+                this.computedPierce,
+                this.totalGemResistanceModifications
+            );
+        } else {
+            proj = new Projectile(
+                x,
+                y,
+                this.definition.projectileTextures,
+                angle,
+                this.computedDamageToDeal,
+                combinedTint,
+                this.computedTimeToLive,
+                this.computedPierce,
+                this.totalGemResistanceModifications
+            );
+        }
+        // const time = new Date().toISOString();
         // console.log(`${time} ${this.definition.name} shot at ${angle} degrees`);
         this.projectiles.push(proj);
         return proj;

@@ -91,7 +91,7 @@
             "cost": 125,
             "range": 2.5,
             "timeToLive": 12,
-            "pierce": 30
+            "pierce": 1
         }
     },
     {
@@ -120,7 +120,7 @@
         "texture": null,
         "projectile": "stone",
         "projectileTextures": [],
-        "projectileTexturesArrayLength": 2,
+        "projectileTexturesArrayLength": 1,
         "description": "If you feel a little circular.",
         "stats": {
             "damage": 2,
@@ -128,8 +128,8 @@
             "gemSlotsAmount": 3,
             "cost": 125,
             "range": 2.5,
-            "timeToLive": 12,
-            "pierce": 30
+            "timeToLive": 400,
+            "pierce": 2
         }
     },
     {

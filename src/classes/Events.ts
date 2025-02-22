@@ -7,6 +7,7 @@ export enum WaveManagerEvents {
 export enum CreepEvents {
     Died = 'died',
     TakenDamage = 'takenDamage',
+    GiveEffect = 'giveEffect',
     Escaped = 'escaped',
     Moved = 'moved',
 }

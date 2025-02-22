@@ -204,6 +204,17 @@ export class Grid extends GameObject {
         if (d < range + Engine.GridCellSize / 2) return true;
         else return false;
     }
+    public GetPathCellsInRange(row, col, range) {
+        let result = [];
+        this.cells.forEach((cell) => {
+            if (cell.isPath) {
+                if (this.IsCellInRangeOfOtherCell(row, col, range, cell)) {
+                    result.push(cell);
+                }
+            }
+        });
+        return result;
+    }
     public toggleGrid(force?: 'hide' | 'show') {
         this.cells.forEach((cell) => {
             if (force) {

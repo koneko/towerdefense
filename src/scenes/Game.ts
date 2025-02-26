@@ -191,7 +191,6 @@ export class GameScene extends Scene {
             );
             if (this.currentRound + 1 == this.mission.rounds.length) {
                 Engine.NotificationManager.Notify(`Mission victory!!`, 'reward');
-                this.changeRoundButton.buttonIcon.texture = GameAssets.HomeIconTexture;
                 this.playerWon = true;
             } else {
                 this.OfferPlayerGems();

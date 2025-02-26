@@ -1,21 +1,21 @@
 [
     {
         "name": "Fire Gem",
-        "description": "Forged from molten lava, the Fire Gem imbues your tower's attacks and adds 50% extra fire damage. It can be merged with any gem and is common.",
+        "description": "Forged from molten lava, the Fire Gem imbues your tower's attacks and add extra fire damage. It can be merged with any gem and is common.",
         "color": "red",
         "type": "Fire",
         "totalLevels": 9,
         "textures": [],
         "cantCombineWith": [],
         "specialCombine": [],
-        "initialGemValue": 100,
+        "initialGemValue": 50,
         "genericImprovements": [
             {
-                "damageUp": 2,
+                "damageUp": 1,
                 "attackSpeedUp": 0,
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
-                "pierceUp": 1,
+                "pierceUp": 0,
                 "gemValueUp": 50
             },
             {
@@ -548,7 +548,7 @@
         "textures": [],
         "cantCombineWith": [],
         "specialCombine": [],
-        "initialGemValue": 200,
+        "initialGemValue": 250,
         "genericImprovements": [
             {
                 "damageUp": 0,

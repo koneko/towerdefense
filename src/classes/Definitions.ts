@@ -31,6 +31,7 @@ export type WaveDefinition = {
 
 export type CreepDefinition = {
     name: string;
+    sprite: string;
     textures: PIXI.Texture[];
     textureArrayLength: number;
     stats: CreepStatsDefinition;

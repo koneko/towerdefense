@@ -165,8 +165,27 @@ export default class GameAssets {
         for (let idx = 0; idx < this.Creeps.length; idx++) {
             const creep = this.Creeps[idx];
             for (let i = 0; i < creep.textureArrayLength; i++) {
-                const texture = await this.Load(`./assets/creeps/${creep.name}/${i}.png`);
-                creep.textures[i] = texture;
+                const texture = await this.Load(`./assets/creeps/${creep.sprite}/spritesheet.png`);
+                const spritesheet = new PIXI.Spritesheet(texture, {
+                    frames: {
+                        [`${creep.sprite}_${i}.png`]: {
+                            frame: { x: i * 128, y: 0, w: 128, h: 128 },
+                            rotated: false,
+                            trimmed: false,
+                            spriteSourceSize: { x: 0, y: 0, w: 128, h: 128 },
+                            sourceSize: { w: 128, h: 128 },
+                        },
+                    },
+                    meta: {
+                        image: `./assets/creeps/${creep.sprite}/spritesheet.png`,
+                        format: 'RGBA8888',
+                        size: { w: 128 * creep.textureArrayLength, h: 128 },
+                        scale: '1',
+                    },
+                });
+                await spritesheet.parse();
+                creep.textures[i] = spritesheet.textures[`${creep.sprite}_${i}.png`];
+                // creep.textures[i] = texture;
             }
         }
     }

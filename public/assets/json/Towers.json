@@ -64,7 +64,7 @@
         "projectile": "blue",
         "projectileTextures": [],
         "projectileTexturesArrayLength": 4,
-        "description": "",
+        "description": "Doesn't shoot, instead buffs other towers with 50% of its power.",
         "stats": {
             "damage": 4,
             "cooldown": 1000,
@@ -83,7 +83,7 @@
         "projectile": "white",
         "projectileTextures": [],
         "projectileTexturesArrayLength": 5,
-        "description": "",
+        "description": "Like a regular tower, just slows down creeps.",
         "stats": {
             "damage": 2,
             "cooldown": 2000,
@@ -102,7 +102,7 @@
         "projectile": "red",
         "projectileTextures": [],
         "projectileTexturesArrayLength": 4,
-        "description": "If you feel a little circular.",
+        "description": "Shoots a quick, high pierce rail projectile at creeps.",
         "stats": {
             "damage": 2,
             "cooldown": 2000,
@@ -121,7 +121,7 @@
         "projectile": "stone",
         "projectileTextures": [],
         "projectileTexturesArrayLength": 1,
-        "description": "If you feel a little circular.",
+        "description": "Randomly places traps on the track, instead of attacking creeps.",
         "stats": {
             "damage": 2,
             "cooldown": 2000,
@@ -140,7 +140,7 @@
         "projectile": "red",
         "projectileTextures": [],
         "projectileTexturesArrayLength": 4,
-        "description": "If you feel a little circular.",
+        "description": "On top of a regular attack, this tower gives creeps a debuff, making them take more damage.",
         "stats": {
             "damage": 2,
             "cooldown": 2000,

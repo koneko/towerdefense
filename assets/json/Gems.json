@@ -1,22 +1,22 @@
 [
     {
         "name": "Fire Gem",
-        "description": "Forged from molten lava, the Fire Gem imbues your tower's attacks and adds 50% extra fire damage. It can be merged with any gem and is common.",
+        "description": "Forged from molten lava, the Fire Gem imbues your tower's attacks and add extra fire damage. Well researched and common.",
         "color": "red",
         "type": "Fire",
-        "totalLevels": 2,
+        "totalLevels": 9,
         "textures": [],
         "cantCombineWith": [],
         "specialCombine": [],
-        "initialGemValue": 100,
+        "initialGemValue": 50,
         "genericImprovements": [
             {
-                "damageUp": 2,
+                "damageUp": 1,
                 "attackSpeedUp": 0,
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
-                "pierceUp": 1,
-                "gemValueUp": 50
+                "pierceUp": 0,
+                "gemValueUp": 100
             },
             {
                 "damageUp": 2,
@@ -24,10 +24,73 @@
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
-                "gemValueUp": 100
+                "gemValueUp": 150
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 0,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1,
+                "gemValueUp": 250
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 0,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1,
+                "gemValueUp": 400
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 0,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1,
+                "gemValueUp": 650
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 0,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1,
+                "gemValueUp": 750
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 0,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1,
+                "gemValueUp": 900
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 0,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1,
+                "gemValueUp": 1000
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 0,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1,
+                "gemValueUp": 1200
             }
         ],
         "gemResistanceModifications": [
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0.05,
+                "ice": 0,
+                "frostfire": 0
+            },
             {
                 "physical": 0,
                 "divine": 0,
@@ -38,7 +101,49 @@
             {
                 "physical": 0,
                 "divine": 0,
+                "fire": 0.15,
+                "ice": 0,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0.2,
+                "ice": 0,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
                 "fire": 0.25,
+                "ice": 0,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0.3,
+                "ice": 0,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0.35,
+                "ice": 0,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0.4,
+                "ice": 0,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0.45,
                 "ice": 0,
                 "frostfire": 0
             }
@@ -46,15 +151,63 @@
     },
     {
         "name": "Yeti Gem",
-        "description": "Yeti gem description. Something something, write this while drunk or something.",
+        "description": "Crafted from the essence of the frozen bears, the Yeti Gem enhances your tower's attacks with the chilling power of ice. It gives ice damage and is known for its rarity.",
         "color": "#32e4fc",
         "type": "Yeti",
-        "totalLevels": 2,
+        "totalLevels": 8,
         "textures": [],
         "cantCombineWith": [],
         "specialCombine": [],
         "initialGemValue": 10,
         "genericImprovements": [
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 10,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1,
+                "gemValueUp": 0
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 10,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1,
+                "gemValueUp": 10
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 10,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1,
+                "gemValueUp": 0
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 10,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1,
+                "gemValueUp": 10
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 10,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1,
+                "gemValueUp": 0
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 10,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1,
+                "gemValueUp": 10
+            },
             {
                 "damageUp": 2,
                 "attackSpeedUp": 10,
@@ -86,15 +239,57 @@
                 "fire": 0,
                 "ice": 0.2,
                 "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0.1,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0.2,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0.1,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0.2,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0.1,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0.2,
+                "frostfire": 0
             }
         ]
     },
     {
         "name": "Titalium Gem",
-        "description": "Titalium gem description. Something something zombie creeps working for you something something.",
+        "description": "Created from distilled creep eyes, the Titalium gem is known for boosting tower range, at the sacrifice for other stats.",
         "color": "pink",
         "type": "Titalium",
-        "totalLevels": 3,
+        "totalLevels": 7,
         "textures": [],
         "cantCombineWith": [],
         "specialCombine": [],
@@ -122,36 +317,96 @@
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
+                "gemValueUp": 0
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 10,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1,
                 "gemValueUp": 10
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 10,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1,
+                "gemValueUp": 0
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 10,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1,
+                "gemValueUp": 10
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 10,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1,
+                "gemValueUp": 0
             }
         ],
         "gemResistanceModifications": [
             {
-                "physical": 0.1,
+                "physical": 0,
                 "divine": 0,
                 "fire": 0,
-                "ice": 0,
+                "ice": 0.1,
                 "frostfire": 0
             },
             {
-                "physical": 0.1,
+                "physical": 0,
                 "divine": 0,
                 "fire": 0,
-                "ice": 0,
+                "ice": 0.2,
                 "frostfire": 0
             },
             {
-                "physical": 0.25,
+                "physical": 0,
                 "divine": 0,
                 "fire": 0,
-                "ice": 0,
+                "ice": 0.1,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0.2,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0.1,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0.2,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0.1,
                 "frostfire": 0
             }
         ]
     },
     {
         "name": "Soulforge Gem",
-        "description": "Soulforge gem description, have to write later.",
+        "description": "Made from the wandering souls of the damned, the Soulforge gem accelerates your towers cooldowns and acts as a repellant for all things unholy.",
         "color": "gray",
         "type": "Soulforge",
         "totalLevels": 2,
@@ -175,22 +430,172 @@
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
                 "gemValueUp": 10
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 10,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1,
+                "gemValueUp": 0
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 10,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1,
+                "gemValueUp": 10
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 10,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1,
+                "gemValueUp": 0
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 10,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1,
+                "gemValueUp": 10
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 10,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1,
+                "gemValueUp": 0
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 10,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1,
+                "gemValueUp": 10
             }
         ],
         "gemResistanceModifications": [
             {
-                "physical": 0.05,
-                "divine": 0.05,
-                "fire": 0.05,
-                "ice": 0.05,
-                "frostfire": 0.05
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0.1,
+                "frostfire": 0
             },
             {
-                "physical": 0.05,
-                "divine": 0.05,
-                "fire": 0.05,
-                "ice": 0.05,
-                "frostfire": 0.05
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0.2,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0.1,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0.2,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0.1,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0.2,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0.1,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0.2,
+                "frostfire": 0
+            }
+        ]
+    },
+    {
+        "name": "Golden Gem",
+        "description": "An inherently useless gem, providing no tower buffs, but high in monetary value. Highly sought after by all rich people.",
+        "color": "gold",
+        "type": "Gold",
+        "totalLevels": 1,
+        "textures": [],
+        "cantCombineWith": [],
+        "specialCombine": [],
+        "initialGemValue": 250,
+        "genericImprovements": [
+            {
+                "damageUp": 0,
+                "attackSpeedUp": 0,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 0,
+                "gemValueUp": 0
+            }
+        ],
+        "gemResistanceModifications": [
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0,
+                "frostfire": 0
+            }
+        ]
+    },
+    {
+        "name": "Artifact",
+        "description": "An insanely rare gem of unknown origin, packed with power. No one knows how it works, yet your towers oddly resonate stronger with it.",
+        "color": "blue",
+        "type": "Artifact",
+        "totalLevels": 1,
+        "textures": [],
+        "cantCombineWith": [],
+        "specialCombine": [],
+        "initialGemValue": 1000,
+        "genericImprovements": [
+            {
+                "damageUp": 10,
+                "attackSpeedUp": 100,
+                "rangeUp": 2,
+                "timeToLiveUp": 200,
+                "pierceUp": 20,
+                "gemValueUp": 0
+            }
+        ],
+        "gemResistanceModifications": [
+            {
+                "physical": 0.25,
+                "divine": 0.25,
+                "fire": 0.25,
+                "ice": 0.25,
+                "frostfire": 0.25
             }
         ]
     }

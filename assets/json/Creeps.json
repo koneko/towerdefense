@@ -1,6 +1,7 @@
 [
     {
         "name": "basic",
+        "sprite": "wood",
         "textures": [],
         "textureArrayLength": 12,
         "stats": {
@@ -18,6 +19,7 @@
     },
     {
         "name": "quick",
+        "sprite": "zombie",
         "textures": [],
         "textureArrayLength": 8,
         "stats": {
@@ -35,6 +37,7 @@
     },
     {
         "name": "tank",
+        "sprite": "skeleton",
         "textures": [],
         "textureArrayLength": 12,
         "stats": {
@@ -52,6 +55,7 @@
     },
     {
         "name": "cloaker",
+        "sprite": "hood",
         "textures": [],
         "textureArrayLength": 12,
         "stats": {
@@ -69,6 +73,7 @@
     },
     {
         "name": "demon",
+        "sprite": "demon",
         "textures": [],
         "textureArrayLength": 8,
         "stats": {
@@ -86,6 +91,7 @@
     },
     {
         "name": "maker",
+        "sprite": "pumpkin",
         "textures": [],
         "textureArrayLength": 11,
         "stats": {

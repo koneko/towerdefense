@@ -10,17 +10,13 @@ export default class GameAssets {
     public static Frame03Texture: PIXI.Texture;
     public static Frame04Texture: PIXI.Texture;
     public static Frame05Texture: PIXI.Texture;
-    public static FrameInventory: PIXI.Texture;
-    public static FrameBackground: PIXI.Texture;
     public static FrameTowerTab: PIXI.Texture;
-    public static VioletBackground: PIXI.Texture;
     public static RedBackground: PIXI.Texture;
     public static GreenBackground: PIXI.Texture;
     public static BlueBackground: PIXI.Texture;
     public static YellowBackground: PIXI.Texture;
     public static Button01Texture: PIXI.Texture;
     public static Button02Texture: PIXI.Texture;
-    public static ButtonSmallTexture: PIXI.Texture;
     public static HealthTexture: PIXI.Texture;
     public static GoldTexture: PIXI.Texture;
     public static WaveTexture: PIXI.Texture;
@@ -40,8 +36,6 @@ export default class GameAssets {
     public static PauseIconTexture: PIXI.Texture;
     public static ExclamationIconTexture: PIXI.Texture;
     public static FastForwardIconTexture: PIXI.Texture;
-    public static HomeIconTexture: PIXI.Texture;
-    public static HammerIconTexture: PIXI.Texture;
     public static XIconTexture: PIXI.Texture;
     public static PlusIconTexture: PIXI.Texture;
     public static GemAmountIcons: PIXI.Texture[] = [];
@@ -53,8 +47,10 @@ export default class GameAssets {
     public static Gems: GemDefinition[];
 
     private static text;
+    private static counter = 0;
     private static async Load(src) {
-        this.text.text = 'Loading asset: ' + src;
+        this.text.text = `Loading asset: ${src} (${this.counter}/99)`;
+        this.counter++;
         return await PIXI.Assets.load({
             src: src,
         });
@@ -91,19 +87,14 @@ export default class GameAssets {
         Engine.app.stage.addChild(this.text);
 
         await Promise.all([
-            this.Load('./aclonica.woff2'),
             this.Load('./assets/gui/button_01.png').then((texture) => (this.Button01Texture = texture)),
             this.Load('./assets/gui/button_02.png').then((texture) => (this.Button02Texture = texture)),
-            this.Load('./assets/gui/button_small.png').then((texture) => (this.ButtonSmallTexture = texture)),
             this.Load('./assets/gui/frame_01.png').then((texture) => (this.Frame01Texture = texture)),
             this.Load('./assets/gui/frame_02.png').then((texture) => (this.Frame02Texture = texture)),
             this.Load('./assets/gui/frame_03.png').then((texture) => (this.Frame03Texture = texture)),
             this.Load('./assets/gui/frame_04.png').then((texture) => (this.Frame04Texture = texture)),
             this.Load('./assets/gui/frame_05.png').then((texture) => (this.Frame05Texture = texture)),
-            this.Load('./assets/gui/frame_inv.png').then((texture) => (this.FrameInventory = texture)),
-            this.Load('./assets/gui/background_01.png').then((texture) => (this.FrameBackground = texture)),
             this.Load('./assets/gui/background_02.png').then((texture) => (this.FrameTowerTab = texture)),
-            this.Load('./assets/gui/frame_violet.png').then((texture) => (this.VioletBackground = texture)),
             this.Load('./assets/gui/frame_red.png').then((texture) => (this.RedBackground = texture)),
             this.Load('./assets/gui/frame_green.png').then((texture) => (this.GreenBackground = texture)),
             this.Load('./assets/gui/frame_blue.png').then((texture) => (this.BlueBackground = texture)),
@@ -125,10 +116,7 @@ export default class GameAssets {
             this.Load('./assets/gui/title01.png').then((texture) => (this.TitleTexture = texture)),
             this.Load('./assets/gui/icons/play.png').then((texture) => (this.PlayIconTexture = texture)),
             this.Load('./assets/gui/icons/pause.png').then((texture) => (this.PauseIconTexture = texture)),
-            this.Load('./assets/gui/icons/pause.png').then((texture) => (this.PauseIconTexture = texture)),
             this.Load('./assets/gui/icons/fastforward.png').then((texture) => (this.FastForwardIconTexture = texture)),
-            this.Load('./assets/gui/icons/home.png').then((texture) => (this.HomeIconTexture = texture)),
-            this.Load('./assets/gui/icons/hammer.png').then((texture) => (this.HammerIconTexture = texture)),
             this.Load('./assets/gui/icons/cross.png').then((texture) => (this.XIconTexture = texture)),
             this.Load('./assets/gui/icons/plus.png').then((texture) => (this.PlusIconTexture = texture)),
             this.LoadMissions(),
@@ -148,9 +136,27 @@ export default class GameAssets {
 
         for (let idx = 0; idx < gems.length; idx++) {
             const gem = this.Gems[idx];
+            const texture = await this.Load(`./assets/gems/${gem.type}_spritesheet.png`);
             for (let i = 1; i <= gem.totalLevels; i++) {
-                const texture = await this.Load(`./assets/gems/${gem.type}/${i}.png`);
-                gem.textures[i - 1] = texture;
+                const spritesheet = new PIXI.Spritesheet(texture, {
+                    frames: {
+                        [`${gem.type}_${i}.png`]: {
+                            frame: { x: (i - 1) * 64, y: 0, w: 64, h: 64 },
+                            rotated: false,
+                            trimmed: false,
+                            spriteSourceSize: { x: 0, y: 0, w: 64, h: 64 },
+                            sourceSize: { w: 64, h: 64 },
+                        },
+                    },
+                    meta: {
+                        image: `./assets/gems/${gem.type}_spritesheet.png`,
+                        format: 'RGBA8888',
+                        size: { w: 64 * gem.totalLevels, h: 64 },
+                        scale: '1',
+                    },
+                });
+                await spritesheet.parse();
+                gem.textures[i - 1] = spritesheet.textures[`${gem.type}_${i}.png`];
             }
         }
         for (let i = 0; i < 7; i++) {
@@ -164,9 +170,27 @@ export default class GameAssets {
         this.Creeps = creeps;
         for (let idx = 0; idx < this.Creeps.length; idx++) {
             const creep = this.Creeps[idx];
+            const texture = await this.Load(`./assets/creeps/${creep.sprite}_spritesheet.png`);
             for (let i = 0; i < creep.textureArrayLength; i++) {
-                const texture = await this.Load(`./assets/creeps/${creep.name}/${i}.png`);
-                creep.textures[i] = texture;
+                const spritesheet = new PIXI.Spritesheet(texture, {
+                    frames: {
+                        [`${creep.sprite}_${i}.png`]: {
+                            frame: { x: i * 128, y: 0, w: 128, h: 128 },
+                            rotated: false,
+                            trimmed: false,
+                            spriteSourceSize: { x: 0, y: 0, w: 128, h: 128 },
+                            sourceSize: { w: 128, h: 128 },
+                        },
+                    },
+                    meta: {
+                        image: `./assets/creeps/${creep.sprite}/spritesheet.png`,
+                        format: 'RGBA8888',
+                        size: { w: 128 * creep.textureArrayLength, h: 128 },
+                        scale: '1',
+                    },
+                });
+                await spritesheet.parse();
+                creep.textures[i] = spritesheet.textures[`${creep.sprite}_${i}.png`];
             }
         }
     }
@@ -189,6 +213,8 @@ export default class GameAssets {
         for (let idx = 0; idx < this.Towers.length; idx++) {
             const tower = this.Towers[idx];
             for (let i = 0; i < tower.projectileTexturesArrayLength; i++) {
+                // My only grievance is that projectiles have to load like this, not like a spritesheet
+                // due to them not being a fixed w/h.
                 const projTexture = await this.Load(`./assets/projectiles/${tower.projectile}/${i}.png`);
                 tower.projectileTextures[i] = projTexture;
             }
@@ -202,7 +228,7 @@ export default class GameAssets {
     private static async LoadMission(missionUrl: string) {
         const res = await fetch(missionUrl);
         const mission = await res.json();
-        console.log(`Loading mission: ${missionUrl} [${mission.name} / ${mission.mapImage.url}]`);
+        // console.log(`Loading mission: ${missionUrl} [${mission.name} / ${mission.mapImage.url}]`);
         GameAssets.Missions.push(mission);
         GameAssets.MissionBackgrounds.push(await this.Load(mission.mapImage.url));
     }

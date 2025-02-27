@@ -39,7 +39,7 @@ export class Engine {
         Engine.TowerManager.ToggleChoosingTowerLocation('RESET');
         Engine.TowerManager.PlaceTower(tower, 6, 10, tower.behaviour, true);
         for (let i = 0; i < 29; i++) {
-            this.GameScene.MissionStats.giveGem(new Gem(i % 4), true);
+            this.GameScene.MissionStats.giveGem(new Gem(i % 6), true);
         }
     }
 }

@@ -119,7 +119,9 @@ export default class EndGameDialog extends ModalDialogBase {
     override close(button?: string): void {
         if (button === EndGameDialogButtons.Confirm) {
             if (this.playerNameTextInput.getText().length == 0) {
-                MessageBox.show('Please enter your name.', ['OK']);
+                MessageBox.show('Please enter your name.\n(Just start typing, input bar is automatically selected.)', [
+                    'OK',
+                ]);
             } else {
                 this.highScore.addScore({
                     playerName: this.playerNameTextInput.getText(),

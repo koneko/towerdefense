@@ -116,13 +116,12 @@ export class GameScene extends Scene {
                 }
                 return;
             }
-            if (this.isGameOver) return Engine.NotificationManager.Notify('No more waves.', 'danger');
             if (this.roundMode == RoundMode.Misc) return;
             this.setRoundMode(RoundMode.Combat);
             this.changeRoundButton.buttonIcon.texture = GameAssets.FastForwardIconTexture;
             this.events.emit(WaveManagerEvents.NewWave, `${this.currentRound + 1}`);
         };
-        this.MissionStats = new MissionStats(125, 450);
+        this.MissionStats = new MissionStats(100, 250);
         this.events.on(GemEvents.TowerPanelSelectGem, (gem, index, tower) => {
             if (gem == null) {
                 if (!this.MissionStats.checkIfPlayerHasAnyGems())
@@ -192,7 +191,6 @@ export class GameScene extends Scene {
             );
             if (this.currentRound + 1 == this.mission.rounds.length) {
                 Engine.NotificationManager.Notify(`Mission victory!!`, 'reward');
-                this.changeRoundButton.buttonIcon.texture = GameAssets.HomeIconTexture;
                 this.playerWon = true;
             } else {
                 this.OfferPlayerGems();

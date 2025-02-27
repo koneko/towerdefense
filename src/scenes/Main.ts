@@ -14,7 +14,7 @@ export class MainScene extends Scene {
         this.addMainBackground();
 
         const NewGameButton = {
-            caption: 'New Game',
+            caption: 'Play',
             rect: new PIXI.Rectangle(Engine.app.canvas.width / 2 - 300 / 2, 400 + 0 * 70, 300, 60),
 
             texture: ButtonTexture.Button01,

@@ -1,7 +1,7 @@
 [
     {
         "name": "Fire Gem",
-        "description": "Forged from molten lava, the Fire Gem imbues your tower's attacks and add extra fire damage. It can be merged with any gem and is common.",
+        "description": "Forged from molten lava, the Fire Gem imbues your tower's attacks and add extra fire damage. Well researched and common.",
         "color": "red",
         "type": "Fire",
         "totalLevels": 9,
@@ -16,14 +16,6 @@
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 0,
-                "gemValueUp": 50
-            },
-            {
-                "damageUp": 2,
-                "attackSpeedUp": 0,
-                "rangeUp": 0,
-                "timeToLiveUp": 0,
-                "pierceUp": 1,
                 "gemValueUp": 100
             },
             {
@@ -32,7 +24,7 @@
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
-                "gemValueUp": 100
+                "gemValueUp": 150
             },
             {
                 "damageUp": 2,
@@ -40,7 +32,7 @@
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
-                "gemValueUp": 100
+                "gemValueUp": 250
             },
             {
                 "damageUp": 2,
@@ -48,7 +40,7 @@
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
-                "gemValueUp": 100
+                "gemValueUp": 400
             },
             {
                 "damageUp": 2,
@@ -56,7 +48,7 @@
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
-                "gemValueUp": 100
+                "gemValueUp": 650
             },
             {
                 "damageUp": 2,
@@ -64,7 +56,7 @@
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
-                "gemValueUp": 100
+                "gemValueUp": 750
             },
             {
                 "damageUp": 2,
@@ -72,7 +64,7 @@
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
-                "gemValueUp": 100
+                "gemValueUp": 900
             },
             {
                 "damageUp": 2,
@@ -80,10 +72,25 @@
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
-                "gemValueUp": 100
+                "gemValueUp": 1000
+            },
+            {
+                "damageUp": 2,
+                "attackSpeedUp": 0,
+                "rangeUp": 0,
+                "timeToLiveUp": 0,
+                "pierceUp": 1,
+                "gemValueUp": 1200
             }
         ],
         "gemResistanceModifications": [
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0.05,
+                "ice": 0,
+                "frostfire": 0
+            },
             {
                 "physical": 0,
                 "divine": 0,
@@ -94,7 +101,14 @@
             {
                 "physical": 0,
                 "divine": 0,
-                "fire": 0.25,
+                "fire": 0.15,
+                "ice": 0,
+                "frostfire": 0
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0.2,
                 "ice": 0,
                 "frostfire": 0
             },
@@ -115,14 +129,7 @@
             {
                 "physical": 0,
                 "divine": 0,
-                "fire": 0.3,
-                "ice": 0,
-                "frostfire": 0
-            },
-            {
-                "physical": 0,
-                "divine": 0,
-                "fire": 0.3,
+                "fire": 0.35,
                 "ice": 0,
                 "frostfire": 0
             },
@@ -139,19 +146,12 @@
                 "fire": 0.45,
                 "ice": 0,
                 "frostfire": 0
-            },
-            {
-                "physical": 0,
-                "divine": 0,
-                "fire": 0.5,
-                "ice": 0,
-                "frostfire": 0
             }
         ]
     },
     {
         "name": "Yeti Gem",
-        "description": "Yeti gem description. Something something, write this while drunk or something.",
+        "description": "Crafted from the essence of the frozen bears, the Yeti Gem enhances your tower's attacks with the chilling power of ice. It gives ice damage and is known for its rarity.",
         "color": "#32e4fc",
         "type": "Yeti",
         "totalLevels": 8,
@@ -286,7 +286,7 @@
     },
     {
         "name": "Titalium Gem",
-        "description": "Titalium gem description. Something something zombie creeps working for you something something.",
+        "description": "Created from distilled creep eyes, the Titalium gem is known for boosting tower range, at the sacrifice for other stats.",
         "color": "pink",
         "type": "Titalium",
         "totalLevels": 7,
@@ -406,7 +406,7 @@
     },
     {
         "name": "Soulforge Gem",
-        "description": "Soulforge gem description, have to write later.",
+        "description": "Made from the wandering souls of the damned, the Soulforge gem accelerates your towers cooldowns and acts as a repellant for all things unholy.",
         "color": "gray",
         "type": "Soulforge",
         "totalLevels": 2,
@@ -541,7 +541,7 @@
     },
     {
         "name": "Golden Gem",
-        "description": "An inherently useless gem, but high monetary value. Perhaps someone would pay a lot for this.",
+        "description": "An inherently useless gem, providing no tower buffs, but high in monetary value. Highly sought after by all rich people.",
         "color": "gold",
         "type": "Gold",
         "totalLevels": 1,
@@ -571,14 +571,14 @@
     },
     {
         "name": "Artifact",
-        "description": "A wildly rare gem, packed with power. No monetary value, yet your towers oddly resonate stronger with it.",
+        "description": "An insanely rare gem of unknown origin, packed with power. No one knows how it works, yet your towers oddly resonate stronger with it.",
         "color": "blue",
         "type": "Artifact",
         "totalLevels": 1,
         "textures": [],
         "cantCombineWith": [],
         "specialCombine": [],
-        "initialGemValue": 0,
+        "initialGemValue": 1000,
         "genericImprovements": [
             {
                 "damageUp": 10,

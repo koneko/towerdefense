@@ -26,7 +26,7 @@
         "projectile": "blue",
         "projectileTextures": [],
         "projectileTexturesArrayLength": 4,
-        "description": "If you feel a little circular.",
+        "description": "If you feel like shooting in a circle around you, projectiles may miss.",
         "stats": {
             "damage": 3,
             "cooldown": 4000,
@@ -45,7 +45,7 @@
         "projectile": "yellow",
         "projectileTextures": [],
         "projectileTexturesArrayLength": 4,
-        "description": "Zap zap zap!",
+        "description": "Zap zap zap! This towers shots connect to other enemies!",
         "stats": {
             "damage": 3,
             "cooldown": 3500,

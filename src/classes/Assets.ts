@@ -49,9 +49,8 @@ export default class GameAssets {
     private static text;
     private static counter = 0;
     private static async Load(src) {
-        this.text.text = 'Loading asset: ' + src;
+        this.text.text = `Loading asset: ${src} (${this.counter}/99)`;
         this.counter++;
-        console.log(this.counter);
         return await PIXI.Assets.load({
             src: src,
         });
@@ -88,7 +87,6 @@ export default class GameAssets {
         Engine.app.stage.addChild(this.text);
 
         await Promise.all([
-            this.Load('./aclonica.woff2'),
             this.Load('./assets/gui/button_01.png').then((texture) => (this.Button01Texture = texture)),
             this.Load('./assets/gui/button_02.png').then((texture) => (this.Button02Texture = texture)),
             this.Load('./assets/gui/frame_01.png').then((texture) => (this.Frame01Texture = texture)),
@@ -138,9 +136,27 @@ export default class GameAssets {
 
         for (let idx = 0; idx < gems.length; idx++) {
             const gem = this.Gems[idx];
+            const texture = await this.Load(`./assets/gems/${gem.type}_spritesheet.png`);
             for (let i = 1; i <= gem.totalLevels; i++) {
-                const texture = await this.Load(`./assets/gems/${gem.type}/${i}.png`);
-                gem.textures[i - 1] = texture;
+                const spritesheet = new PIXI.Spritesheet(texture, {
+                    frames: {
+                        [`${gem.type}_${i}.png`]: {
+                            frame: { x: (i - 1) * 64, y: 0, w: 64, h: 64 },
+                            rotated: false,
+                            trimmed: false,
+                            spriteSourceSize: { x: 0, y: 0, w: 64, h: 64 },
+                            sourceSize: { w: 64, h: 64 },
+                        },
+                    },
+                    meta: {
+                        image: `./assets/gems/${gem.type}_spritesheet.png`,
+                        format: 'RGBA8888',
+                        size: { w: 64 * gem.totalLevels, h: 64 },
+                        scale: '1',
+                    },
+                });
+                await spritesheet.parse();
+                gem.textures[i - 1] = spritesheet.textures[`${gem.type}_${i}.png`];
             }
         }
         for (let i = 0; i < 7; i++) {
@@ -154,8 +170,8 @@ export default class GameAssets {
         this.Creeps = creeps;
         for (let idx = 0; idx < this.Creeps.length; idx++) {
             const creep = this.Creeps[idx];
+            const texture = await this.Load(`./assets/creeps/${creep.sprite}_spritesheet.png`);
             for (let i = 0; i < creep.textureArrayLength; i++) {
-                const texture = await this.Load(`./assets/creeps/${creep.sprite}_spritesheet.png`);
                 const spritesheet = new PIXI.Spritesheet(texture, {
                     frames: {
                         [`${creep.sprite}_${i}.png`]: {
@@ -197,6 +213,8 @@ export default class GameAssets {
         for (let idx = 0; idx < this.Towers.length; idx++) {
             const tower = this.Towers[idx];
             for (let i = 0; i < tower.projectileTexturesArrayLength; i++) {
+                // My only grievance is that projectiles have to load like this, not like a spritesheet
+                // due to them not being a fixed w/h.
                 const projTexture = await this.Load(`./assets/projectiles/${tower.projectile}/${i}.png`);
                 tower.projectileTextures[i] = projTexture;
             }
@@ -210,7 +228,7 @@ export default class GameAssets {
     private static async LoadMission(missionUrl: string) {
         const res = await fetch(missionUrl);
         const mission = await res.json();
-        console.log(`Loading mission: ${missionUrl} [${mission.name} / ${mission.mapImage.url}]`);
+        // console.log(`Loading mission: ${missionUrl} [${mission.name} / ${mission.mapImage.url}]`);
         GameAssets.Missions.push(mission);
         GameAssets.MissionBackgrounds.push(await this.Load(mission.mapImage.url));
     }

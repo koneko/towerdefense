@@ -62,11 +62,11 @@ export function computeGemImprovements(tower: Tower) {
         gemPierceUp += improvements.pierceUp;
 
         let resistances = gem.currentGemResistanceModifications();
-        tower.totalGemResistanceModifications.physical += resistances.physical;
-        tower.totalGemResistanceModifications.ice += resistances.ice;
-        tower.totalGemResistanceModifications.fire += resistances.fire;
-        tower.totalGemResistanceModifications.divine += resistances.divine;
-        tower.totalGemResistanceModifications.frostfire += resistances.frostfire;
+        tower.totalGemResistanceModifications.physical += Number(resistances.physical.toFixed(2));
+        tower.totalGemResistanceModifications.ice += Number(resistances.ice.toFixed(2));
+        tower.totalGemResistanceModifications.fire += Number(resistances.fire.toFixed(2));
+        tower.totalGemResistanceModifications.divine += Number(resistances.divine.toFixed(2));
+        tower.totalGemResistanceModifications.frostfire += Number(resistances.frostfire.toFixed(2));
     });
 
     tower.computedDamageToDeal = tower.definition.stats.damage + gemDamage;
@@ -84,14 +84,21 @@ export function computeGemImprovements(tower: Tower) {
         tower.computedTimeToLive += Number((buffedBy.computedTimeToLive / 5).toFixed(1));
         tower.computedPierce += Number((buffedBy.computedPierce / 4).toFixed(1));
 
-        tower.totalGemResistanceModifications.physical +=
-            (buffedBy.totalGemResistanceModifications.physical * 100) / 2 / 100;
-        tower.totalGemResistanceModifications.ice += (buffedBy.totalGemResistanceModifications.ice * 100) / 2 / 100;
-        tower.totalGemResistanceModifications.fire += (buffedBy.totalGemResistanceModifications.fire * 100) / 2 / 100;
-        tower.totalGemResistanceModifications.divine +=
-            (buffedBy.totalGemResistanceModifications.divine * 100) / 2 / 100;
-        tower.totalGemResistanceModifications.frostfire +=
-            (buffedBy.totalGemResistanceModifications.frostfire * 100) / 2 / 100;
+        tower.totalGemResistanceModifications.physical += Number(
+            (buffedBy.totalGemResistanceModifications.physical / 2).toFixed(2)
+        );
+        tower.totalGemResistanceModifications.ice += Number(
+            (buffedBy.totalGemResistanceModifications.ice / 2).toFixed(2)
+        );
+        tower.totalGemResistanceModifications.fire += Number(
+            (buffedBy.totalGemResistanceModifications.fire / 2).toFixed(2)
+        );
+        tower.totalGemResistanceModifications.divine += Number(
+            (buffedBy.totalGemResistanceModifications.divine / 2).toFixed(2)
+        );
+        tower.totalGemResistanceModifications.frostfire += Number(
+            (buffedBy.totalGemResistanceModifications.frostfire / 2).toFixed(2)
+        );
     }
 }
 

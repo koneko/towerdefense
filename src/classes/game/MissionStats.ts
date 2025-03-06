@@ -10,9 +10,9 @@ export default class MissionStats extends GameObject {
     private gold: number = 0;
     private goldEarned: number = 0;
     private goldSpent: number = 0;
-    private wavesSurvived: number = 0;
-    private damageDealt: number = 0;
-    private creepsKilled: number = 0;
+    public damageDealt: number = 0;
+    public wavesSurvived: number = 0;
+    public creepsKilled: number = 0;
     private goldText: PIXI.Text;
     private healthText: PIXI.Text;
     private waveText: PIXI.Text;
@@ -44,11 +44,13 @@ export default class MissionStats extends GameObject {
     public earnGold(gold: number) {
         this.gold += gold;
         this.goldText.text = this.gold;
+        this.goldEarned += gold;
     }
 
     public spendGold(amount: number) {
         this.gold -= amount;
         this.goldText.text = this.gold;
+        this.goldSpent += amount;
     }
 
     public giveGem(gem: Gem, noNotify?) {
@@ -82,6 +84,7 @@ export default class MissionStats extends GameObject {
         super();
         this.hp = initialHP;
         this.gold = initialGold;
+        this.goldEarned = initialGold;
         this.container.x = 0;
         this.container.y = 20;
         Engine.GameMaster.currentScene.stage.addChild(this.container);
@@ -161,20 +164,25 @@ export default class MissionStats extends GameObject {
     }
 
     private calculateScore() {
-        const uniqueGems = [];
+        const gems = [];
         for (const gem of this.inventory) {
-            if (!uniqueGems.includes(gem.definition.name)) {
-                uniqueGems.push(gem.definition.name);
-            }
+            gems.push(gem.definition.name);
         }
+        Engine.TowerManager.towers.forEach((tower) => {
+            tower.slottedGems.forEach((gem) => {
+                gems.push(gem.definition.name);
+            });
+        });
         return (
             this.damageDealt * 2 +
             this.hp * 10 +
             (this.goldEarned - this.goldSpent) * 3 +
             this.wavesSurvived * 100 +
-            uniqueGems.length * 100
+            gems.length * 100 +
+            1000
         );
     }
 
+    // Because it's a game object, must have this.
     public update() {}
 }

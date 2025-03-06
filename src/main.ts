@@ -48,6 +48,23 @@ import DebrisManager from './classes/game/DebrisManager';
     window.addEventListener('resize', resize);
 
     resize();
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+        let ttxt = new PIXI.Text({
+            text: 'Bastion: The Watchers Lament is currently unsupported on mobile.\nPlease play it on your computer instead.',
+            style: new PIXI.TextStyle({
+                fill: 0x333333,
+                fontSize: 50,
+                textBaseline: 'middle',
+            }),
+        });
+        ttxt.x = Engine.app.canvas.width / 2;
+        ttxt.y = Engine.app.canvas.height / 2 + 50;
+        ttxt.anchor.set(0.5, 0.5);
+        Engine.app.stage.addChild(ttxt);
+
+        return;
+    }
     await Assets.LoadAssets();
     GameUIConstants.init();
     KeyboardManager.init();

@@ -85,6 +85,8 @@ export class GameScene extends Scene {
             this.isWaveManagerFinished = true;
         });
         this.events.on(CreepEvents.Died, (playerAward, creepThatDied) => {
+            this.MissionStats.damageDealt += playerAward;
+            this.MissionStats.creepsKilled++;
             this.MissionStats.earnGold(playerAward);
         });
         this.towerPanel = new TowerPanel(GameUIConstants.SidebarRect);
@@ -185,6 +187,7 @@ export class GameScene extends Scene {
             this.isWaveManagerFinished = false;
             this.setRoundMode(RoundMode.Purchase);
             this.changeRoundButton.buttonIcon.texture = GameAssets.PlayIconTexture;
+            this.MissionStats.wavesSurvived++;
             Engine.NotificationManager.Notify(
                 `Round ${this.currentRound + 1}/${this.mission.rounds.length} completed.`,
                 'info'

@@ -9,13 +9,13 @@
         "projectileTexturesArrayLength": 5,
         "description": "The building block of society, nothing more basic exists.",
         "stats": {
-            "damage": 2,
+            "damage": 1,
             "cooldown": 1500,
             "gemSlotsAmount": 1,
-            "cost": 50,
+            "cost": 25,
             "range": 3,
             "timeToLive": 20,
-            "pierce": 2
+            "pierce": 1
         }
     },
     {
@@ -26,15 +26,15 @@
         "projectile": "blue",
         "projectileTextures": [],
         "projectileTexturesArrayLength": 4,
-        "description": "If you feel like shooting in a circle around you, projectiles may miss.",
+        "description": "Shoots 8 projectiles in a circle, they may miss.",
         "stats": {
             "damage": 3,
-            "cooldown": 4000,
+            "cooldown": 3000,
             "gemSlotsAmount": 2,
-            "cost": 100,
-            "range": 2.5,
-            "timeToLive": 12,
-            "pierce": 30
+            "cost": 50,
+            "range": 3,
+            "timeToLive": 20,
+            "pierce": 5
         }
     },
     {
@@ -50,10 +50,10 @@
             "damage": 3,
             "cooldown": 3500,
             "gemSlotsAmount": 2,
-            "cost": 150,
+            "cost": 100,
             "range": 3,
             "timeToLive": 12,
-            "pierce": 10
+            "pierce": 1
         }
     },
     {
@@ -64,13 +64,13 @@
         "projectile": "blue",
         "projectileTextures": [],
         "projectileTexturesArrayLength": 4,
-        "description": "Doesn't shoot, instead buffs other towers with 50% of its power.",
+        "description": "Doesn't shoot, instead buffs other towers with some of its power.",
         "stats": {
             "damage": 4,
             "cooldown": 1000,
             "gemSlotsAmount": 3,
             "cost": 200,
-            "range": 2,
+            "range": 2.5,
             "timeToLive": 15,
             "pierce": 5
         }
@@ -83,13 +83,13 @@
         "projectile": "white",
         "projectileTextures": [],
         "projectileTexturesArrayLength": 5,
-        "description": "Like a regular tower, just slows down creeps.",
+        "description": "Behaves like the Basic Tower, only its shots stop creeps in their tracks!",
         "stats": {
             "damage": 2,
-            "cooldown": 2000,
-            "gemSlotsAmount": 3,
-            "cost": 125,
-            "range": 2.5,
+            "cooldown": 2250,
+            "gemSlotsAmount": 2,
+            "cost": 75,
+            "range": 3.25,
             "timeToLive": 12,
             "pierce": 1
         }
@@ -104,8 +104,8 @@
         "projectileTexturesArrayLength": 4,
         "description": "Shoots a quick, high pierce rail projectile at creeps.",
         "stats": {
-            "damage": 2,
-            "cooldown": 2000,
+            "damage": 4,
+            "cooldown": 3750,
             "gemSlotsAmount": 3,
             "cost": 125,
             "range": 2.5,
@@ -121,15 +121,15 @@
         "projectile": "stone",
         "projectileTextures": [],
         "projectileTexturesArrayLength": 1,
-        "description": "Randomly places traps on the track, instead of attacking creeps.",
+        "description": "Randomly places expiring traps on the track, instead of attacking creeps.",
         "stats": {
             "damage": 2,
             "cooldown": 2000,
             "gemSlotsAmount": 3,
-            "cost": 125,
-            "range": 2.5,
+            "cost": 150,
+            "range": 3,
             "timeToLive": 400,
-            "pierce": 2
+            "pierce": 3
         }
     },
     {
@@ -143,12 +143,12 @@
         "description": "On top of a regular attack, this tower gives creeps a debuff, making them take more damage.",
         "stats": {
             "damage": 2,
-            "cooldown": 2000,
+            "cooldown": 1750,
             "gemSlotsAmount": 3,
-            "cost": 125,
+            "cost": 200,
             "range": 2.5,
             "timeToLive": 12,
-            "pierce": 30
+            "pierce": 2
         }
     }
 ]

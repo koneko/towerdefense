@@ -123,7 +123,7 @@ export class GameScene extends Scene {
             this.changeRoundButton.buttonIcon.texture = GameAssets.FastForwardIconTexture;
             this.events.emit(WaveManagerEvents.NewWave, `${this.currentRound + 1}`);
         };
-        this.MissionStats = new MissionStats(100, 250);
+        this.MissionStats = new MissionStats(100, 75);
         this.events.on(GemEvents.TowerPanelSelectGem, (gem, index, tower) => {
             if (gem == null) {
                 if (!this.MissionStats.checkIfPlayerHasAnyGems())

@@ -251,7 +251,6 @@ export class GameScene extends Scene {
                 },
             },
         });
-        // offerText.x -= offerText.width;
         Engine.GameMaster.currentScene.stage.addChildAt(offerText, 0);
         gemsToOffer.forEach((gType, index) => {
             let _Gem = new Gem(gType, true);

@@ -19,16 +19,15 @@ export default class GamePausedDialog extends ModalDialogBase {
 
     protected override createContent(): PIXI.Container {
         const container = new PIXI.Container();
-        this.btnMainMenu = new Button(new PIXI.Rectangle(0, 0, 300, 60), 'Main Menu', ButtonTexture.Button01);
-        this.btnMainMenu.onClick = this.onMainMenuClick.bind(this);
-        container.addChild(this.btnMainMenu.container);
+        this.btnContinue = new Button(new PIXI.Rectangle(0, 0, 300, 60), 'Continue', ButtonTexture.Button01);
+        this.btnContinue.onClick = this.onContinueClick.bind(this);
+        container.addChild(this.btnContinue.container);
         this.btnRetry = new Button(new PIXI.Rectangle(0, 70, 300, 60), 'Retry', ButtonTexture.Button01);
         this.btnRetry.onClick = this.onRetryClick.bind(this);
         container.addChild(this.btnRetry.container);
-
-        this.btnContinue = new Button(new PIXI.Rectangle(0, 140, 300, 60), 'Continue', ButtonTexture.Button01);
-        this.btnContinue.onClick = this.onContinueClick.bind(this);
-        container.addChild(this.btnContinue.container);
+        this.btnMainMenu = new Button(new PIXI.Rectangle(0, 140, 300, 60), 'Main Menu', ButtonTexture.Button01);
+        this.btnMainMenu.onClick = this.onMainMenuClick.bind(this);
+        container.addChild(this.btnMainMenu.container);
 
         return container;
     }

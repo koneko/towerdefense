@@ -584,7 +584,7 @@
                 "attackSpeedUp": 100,
                 "rangeUp": 2,
                 "timeToLiveUp": 200,
-                "pierceUp": 20,
+                "pierceUp": 3,
                 "gemValueUp": 0
             }
         ],

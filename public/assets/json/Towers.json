@@ -28,12 +28,12 @@
         "projectileTexturesArrayLength": 4,
         "description": "Shoots 8 projectiles in a circle, they may miss.",
         "stats": {
-            "damage": 3,
-            "cooldown": 3000,
+            "damage": 1,
+            "cooldown": 2000,
             "gemSlotsAmount": 2,
-            "cost": 50,
+            "cost": 55,
             "range": 3,
-            "timeToLive": 20,
+            "timeToLive": 18,
             "pierce": 5
         }
     },
@@ -47,10 +47,10 @@
         "projectileTexturesArrayLength": 4,
         "description": "Zap zap zap! This towers shots connect to other enemies!",
         "stats": {
-            "damage": 3,
+            "damage": 2,
             "cooldown": 3500,
             "gemSlotsAmount": 2,
-            "cost": 100,
+            "cost": 110,
             "range": 3,
             "timeToLive": 12,
             "pierce": 1
@@ -66,7 +66,7 @@
         "projectileTexturesArrayLength": 4,
         "description": "Doesn't shoot, instead buffs other towers with some of its power.",
         "stats": {
-            "damage": 4,
+            "damage": 3,
             "cooldown": 1000,
             "gemSlotsAmount": 3,
             "cost": 200,
@@ -86,12 +86,12 @@
         "description": "Behaves like the Basic Tower, only its shots stop creeps in their tracks!",
         "stats": {
             "damage": 2,
-            "cooldown": 2250,
+            "cooldown": 2200,
             "gemSlotsAmount": 2,
-            "cost": 75,
+            "cost": 80,
             "range": 3.25,
             "timeToLive": 12,
-            "pierce": 1
+            "pierce": 2
         }
     },
     {
@@ -104,13 +104,13 @@
         "projectileTexturesArrayLength": 4,
         "description": "Shoots a quick, high pierce rail projectile at creeps.",
         "stats": {
-            "damage": 4,
-            "cooldown": 3750,
+            "damage": 5,
+            "cooldown": 5020,
             "gemSlotsAmount": 3,
-            "cost": 125,
+            "cost": 134,
             "range": 2.5,
             "timeToLive": 12,
-            "pierce": 30
+            "pierce": 10
         }
     },
     {

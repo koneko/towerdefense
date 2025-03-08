@@ -49,6 +49,7 @@ export default class Creep extends GameObject {
         this.sprite.scale.x *= -1;
         this.sprite.anchor.set(0.5, 0.5);
         this.sprite.animationSpeed = 0.3;
+        this.sprite.tint = Assets.Creeps[this.creepType].tint;
         this.sprite.play();
         this.id = id;
         // Explanation: WaveManager spawns all creeps instantly, and since I don't want
@@ -63,20 +64,20 @@ export default class Creep extends GameObject {
         this.health = this.stats.health;
         this.maxHealth = this.stats.health;
         this.path = path;
-        // Added + 32 to center them.
         this.x = path[0][0] * Engine.GridCellSize + Engine.GridCellSize / 2;
         this.y = path[0][1] * Engine.GridCellSize + Engine.GridCellSize / 2;
-        // TODO: Unsubscribe from events once the scene is destroyed
         Engine.GameScene.events.on(
             CreepEvents.TakenDamage,
             (creepID, damage, gemResistanceModifications: CreepResistancesDefinition) => {
                 if (creepID != this.id) return;
                 if (this.effects.find((e) => e.effectEnum == CreepEffects.DebuffTowerDebuff)) {
                     damage = damage * 1.5;
-                    console.log('multiplying damage, ' + damage);
                 }
                 // Apply resistances.
-                this.health -= damage + damage * (gemResistanceModifications.physical - this.stats.resistance.physical);
+                this.health -= Math.max(
+                    damage + damage * (gemResistanceModifications.physical - this.stats.resistance.physical),
+                    0
+                );
                 if (gemResistanceModifications.fire != 0)
                     this.health -= Math.max(damage * (gemResistanceModifications.fire - this.stats.resistance.fire), 0);
                 if (gemResistanceModifications.ice != 0)
@@ -98,7 +99,6 @@ export default class Creep extends GameObject {
             CreepEvents.GiveEffect,
             (creepID: number, effect: CreepEffects, durationInMS: number) => {
                 if (creepID != this.id) return;
-                console.log(' I CAUGHT THE EVENT!');
                 if (this.effects.find((e) => e.effectEnum == effect) == undefined)
                     this.effects.push(new Effect(effect, durationInMS));
             }
@@ -224,13 +224,13 @@ export default class Creep extends GameObject {
         this.container.y = this.y;
     }
 
-    public takeDamage(amount: number) {
-        this.health -= amount;
-        if (this.health < 0 && !this.died) {
-            this.died = true;
-            this.events.emit(CreepEvents.Died, this);
-        }
-    }
+    // public takeDamage(amount: number) {
+    //     this.health -= amount;
+    //     if (this.health < 0 && !this.died) {
+    //         this.died = true;
+    //         this.events.emit(CreepEvents.Died, this);
+    //     }
+    // }
 
     public destroy() {
         super.destroy();

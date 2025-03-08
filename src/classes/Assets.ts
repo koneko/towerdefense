@@ -49,7 +49,7 @@ export default class GameAssets {
     private static text;
     private static counter = 0;
     private static async Load(src) {
-        this.text.text = `Loading asset: ${src} (${this.counter}/99)`;
+        this.text.text = `Loading asset: ${src} (${this.counter}/102)`;
         this.counter++;
         return await PIXI.Assets.load({
             src: src,

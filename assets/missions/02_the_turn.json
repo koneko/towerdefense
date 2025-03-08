@@ -99,7 +99,7 @@
                 {
                     "firstCreepSpawnTick": 500,
                     "spawnIntervalTicks": 500,
-                    "creeps": [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 2]
+                    "creeps": [0]
                 }
             ],
             "offeredGems": [0, 0, 0, 0]

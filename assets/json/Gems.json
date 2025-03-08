@@ -8,7 +8,7 @@
         "textures": [],
         "cantCombineWith": [],
         "specialCombine": [],
-        "initialGemValue": 50,
+        "initialGemValue": 75,
         "genericImprovements": [
             {
                 "damageUp": 1,
@@ -29,9 +29,9 @@
             {
                 "damageUp": 2,
                 "attackSpeedUp": 0,
-                "rangeUp": 0,
+                "rangeUp": 2,
                 "timeToLiveUp": 0,
-                "pierceUp": 1,
+                "pierceUp": 0,
                 "gemValueUp": 250
             },
             {
@@ -47,12 +47,12 @@
                 "attackSpeedUp": 0,
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
-                "pierceUp": 1,
+                "pierceUp": 0,
                 "gemValueUp": 650
             },
             {
                 "damageUp": 2,
-                "attackSpeedUp": 0,
+                "attackSpeedUp": 100,
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
@@ -63,7 +63,7 @@
                 "attackSpeedUp": 0,
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
-                "pierceUp": 1,
+                "pierceUp": 0,
                 "gemValueUp": 900
             },
             {
@@ -76,7 +76,7 @@
             },
             {
                 "damageUp": 2,
-                "attackSpeedUp": 0,
+                "attackSpeedUp": 250,
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
@@ -158,71 +158,71 @@
         "textures": [],
         "cantCombineWith": [],
         "specialCombine": [],
-        "initialGemValue": 10,
+        "initialGemValue": 80,
         "genericImprovements": [
             {
-                "damageUp": 2,
-                "attackSpeedUp": 10,
+                "damageUp": 1,
+                "attackSpeedUp": 0,
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
-                "pierceUp": 1,
-                "gemValueUp": 0
+                "pierceUp": 0,
+                "gemValueUp": 100
             },
             {
                 "damageUp": 2,
-                "attackSpeedUp": 10,
+                "attackSpeedUp": 0,
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
-                "gemValueUp": 10
+                "gemValueUp": 150
             },
             {
                 "damageUp": 2,
-                "attackSpeedUp": 10,
-                "rangeUp": 0,
+                "attackSpeedUp": 0,
+                "rangeUp": 2,
                 "timeToLiveUp": 0,
-                "pierceUp": 1,
-                "gemValueUp": 0
+                "pierceUp": 0,
+                "gemValueUp": 250
             },
             {
                 "damageUp": 2,
-                "attackSpeedUp": 10,
+                "attackSpeedUp": 0,
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
-                "gemValueUp": 10
+                "gemValueUp": 400
             },
             {
                 "damageUp": 2,
-                "attackSpeedUp": 10,
+                "attackSpeedUp": 0,
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
-                "pierceUp": 1,
-                "gemValueUp": 0
+                "pierceUp": 0,
+                "gemValueUp": 650
             },
             {
                 "damageUp": 2,
-                "attackSpeedUp": 10,
+                "attackSpeedUp": 0,
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
-                "gemValueUp": 10
+                "gemValueUp": 750
             },
             {
                 "damageUp": 2,
-                "attackSpeedUp": 10,
+                "attackSpeedUp": 0,
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
-                "pierceUp": 1,
-                "gemValueUp": 0
+                "pierceUp": 0,
+                "gemValueUp": 900
             },
             {
                 "damageUp": 2,
-                "attackSpeedUp": 10,
+                "attackSpeedUp": 100,
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
-                "gemValueUp": 10
+                "gemValueUp": 1000
             }
         ],
         "gemResistanceModifications": [
@@ -230,14 +230,7 @@
                 "physical": 0,
                 "divine": 0,
                 "fire": 0,
-                "ice": 0.1,
-                "frostfire": 0
-            },
-            {
-                "physical": 0,
-                "divine": 0,
-                "fire": 0,
-                "ice": 0.2,
+                "ice": 0.05,
                 "frostfire": 0
             },
             {
@@ -251,14 +244,7 @@
                 "physical": 0,
                 "divine": 0,
                 "fire": 0,
-                "ice": 0.2,
-                "frostfire": 0
-            },
-            {
-                "physical": 0,
-                "divine": 0,
-                "fire": 0,
-                "ice": 0.1,
+                "ice": 0.15,
                 "frostfire": 0
             },
             {
@@ -272,15 +258,29 @@
                 "physical": 0,
                 "divine": 0,
                 "fire": 0,
-                "ice": 0.1,
-                "frostfire": 0
+                "ice": 0.25,
+                "frostfire": 0.1
             },
             {
                 "physical": 0,
                 "divine": 0,
                 "fire": 0,
-                "ice": 0.2,
-                "frostfire": 0
+                "ice": 0.3,
+                "frostfire": 0.1
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0.35,
+                "frostfire": 0.2
+            },
+            {
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0.4,
+                "frostfire": 0.25
             }
         ]
     },
@@ -293,63 +293,63 @@
         "textures": [],
         "cantCombineWith": [],
         "specialCombine": [],
-        "initialGemValue": 10,
+        "initialGemValue": 100,
         "genericImprovements": [
             {
-                "damageUp": 2,
-                "attackSpeedUp": 10,
-                "rangeUp": 0,
+                "damageUp": 1,
+                "attackSpeedUp": 0,
+                "rangeUp": 1,
                 "timeToLiveUp": 0,
-                "pierceUp": 1,
-                "gemValueUp": 0
+                "pierceUp": 0,
+                "gemValueUp": 200
             },
             {
                 "damageUp": 2,
-                "attackSpeedUp": 10,
-                "rangeUp": 0,
+                "attackSpeedUp": 0,
+                "rangeUp": 1,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
-                "gemValueUp": 10
+                "gemValueUp": 350
             },
             {
                 "damageUp": 2,
-                "attackSpeedUp": 10,
-                "rangeUp": 0,
+                "attackSpeedUp": 0,
+                "rangeUp": 1,
                 "timeToLiveUp": 0,
-                "pierceUp": 1,
-                "gemValueUp": 0
+                "pierceUp": 2,
+                "gemValueUp": 450
             },
             {
                 "damageUp": 2,
-                "attackSpeedUp": 10,
-                "rangeUp": 0,
+                "attackSpeedUp": 200,
+                "rangeUp": 1,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
-                "gemValueUp": 10
+                "gemValueUp": 600
             },
             {
                 "damageUp": 2,
-                "attackSpeedUp": 10,
-                "rangeUp": 0,
+                "attackSpeedUp": 0,
+                "rangeUp": 1,
                 "timeToLiveUp": 0,
-                "pierceUp": 1,
-                "gemValueUp": 0
+                "pierceUp": 0,
+                "gemValueUp": 850
             },
             {
                 "damageUp": 2,
-                "attackSpeedUp": 10,
+                "attackSpeedUp": 0,
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
-                "pierceUp": 1,
-                "gemValueUp": 10
+                "pierceUp": 0,
+                "gemValueUp": 900
             },
             {
                 "damageUp": 2,
-                "attackSpeedUp": 10,
-                "rangeUp": 0,
+                "attackSpeedUp": 0,
+                "rangeUp": 2,
                 "timeToLiveUp": 0,
-                "pierceUp": 1,
-                "gemValueUp": 0
+                "pierceUp": 0,
+                "gemValueUp": 900
             }
         ],
         "gemResistanceModifications": [
@@ -357,49 +357,56 @@
                 "physical": 0,
                 "divine": 0,
                 "fire": 0,
-                "ice": 0.1,
+                "ice": 0,
                 "frostfire": 0
             },
             {
-                "physical": 0,
+                "physical": 0.05,
                 "divine": 0,
                 "fire": 0,
-                "ice": 0.2,
+                "ice": 0,
                 "frostfire": 0
             },
             {
-                "physical": 0,
+                "physical": 0.1,
                 "divine": 0,
                 "fire": 0,
-                "ice": 0.1,
+                "ice": 0,
                 "frostfire": 0
             },
             {
-                "physical": 0,
+                "physical": 0.1,
                 "divine": 0,
                 "fire": 0,
-                "ice": 0.2,
+                "ice": 0,
                 "frostfire": 0
             },
             {
-                "physical": 0,
+                "physical": 0.15,
                 "divine": 0,
                 "fire": 0,
-                "ice": 0.1,
+                "ice": 0,
                 "frostfire": 0
             },
             {
-                "physical": 0,
+                "physical": 0.2,
                 "divine": 0,
                 "fire": 0,
-                "ice": 0.2,
+                "ice": 0,
                 "frostfire": 0
             },
             {
-                "physical": 0,
+                "physical": 0.25,
                 "divine": 0,
                 "fire": 0,
-                "ice": 0.1,
+                "ice": 0,
+                "frostfire": 0
+            },
+            {
+                "physical": 0.3,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0,
                 "frostfire": 0
             }
         ]
@@ -409,132 +416,124 @@
         "description": "Made from the wandering souls of the damned, the Soulforge gem accelerates your towers cooldowns and acts as a repellant for all things unholy.",
         "color": "gray",
         "type": "Soulforge",
-        "totalLevels": 2,
+        "totalLevels": 7,
         "textures": [],
         "cantCombineWith": [],
         "specialCombine": [],
-        "initialGemValue": 10,
+        "initialGemValue": 150,
         "genericImprovements": [
             {
-                "damageUp": 2,
-                "attackSpeedUp": 10,
+                "damageUp": 0,
+                "attackSpeedUp": 100,
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
-                "pierceUp": 1,
-                "gemValueUp": 0
+                "pierceUp": 0,
+                "gemValueUp": 200
             },
             {
-                "damageUp": 2,
-                "attackSpeedUp": 10,
+                "damageUp": 0,
+                "attackSpeedUp": 100,
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
-                "gemValueUp": 10
+                "gemValueUp": 350
             },
             {
-                "damageUp": 2,
-                "attackSpeedUp": 10,
+                "damageUp": 0,
+                "attackSpeedUp": 150,
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
-                "pierceUp": 1,
-                "gemValueUp": 0
+                "pierceUp": 0,
+                "gemValueUp": 450
             },
             {
-                "damageUp": 2,
-                "attackSpeedUp": 10,
-                "rangeUp": 0,
+                "damageUp": 0,
+                "attackSpeedUp": 100,
+                "rangeUp": 1,
                 "timeToLiveUp": 0,
-                "pierceUp": 1,
-                "gemValueUp": 10
+                "pierceUp": 0,
+                "gemValueUp": 600
             },
             {
-                "damageUp": 2,
-                "attackSpeedUp": 10,
+                "damageUp": 0,
+                "attackSpeedUp": 250,
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
                 "pierceUp": 1,
-                "gemValueUp": 0
+                "gemValueUp": 850
             },
             {
-                "damageUp": 2,
-                "attackSpeedUp": 10,
+                "damageUp": 0,
+                "attackSpeedUp": 400,
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
-                "pierceUp": 1,
-                "gemValueUp": 10
+                "pierceUp": 0,
+                "gemValueUp": 900
             },
             {
-                "damageUp": 2,
-                "attackSpeedUp": 10,
+                "damageUp": 0,
+                "attackSpeedUp": 500,
                 "rangeUp": 0,
                 "timeToLiveUp": 0,
-                "pierceUp": 1,
-                "gemValueUp": 0
-            },
-            {
-                "damageUp": 2,
-                "attackSpeedUp": 10,
-                "rangeUp": 0,
-                "timeToLiveUp": 0,
-                "pierceUp": 1,
-                "gemValueUp": 10
+                "pierceUp": 0,
+                "gemValueUp": 900
             }
         ],
         "gemResistanceModifications": [
             {
                 "physical": 0,
-                "divine": 0,
+                "divine": 0.2,
                 "fire": 0,
-                "ice": 0.1,
+                "ice": 0,
                 "frostfire": 0
             },
             {
                 "physical": 0,
-                "divine": 0,
+                "divine": 0.3,
                 "fire": 0,
-                "ice": 0.2,
+                "ice": 0,
                 "frostfire": 0
             },
             {
                 "physical": 0,
-                "divine": 0,
+                "divine": 0.4,
                 "fire": 0,
-                "ice": 0.1,
+                "ice": 0,
                 "frostfire": 0
             },
             {
                 "physical": 0,
-                "divine": 0,
+                "divine": 0.5,
                 "fire": 0,
-                "ice": 0.2,
+                "ice": 0,
                 "frostfire": 0
             },
             {
                 "physical": 0,
-                "divine": 0,
+                "divine": 0.6,
                 "fire": 0,
-                "ice": 0.1,
+                "ice": 0,
                 "frostfire": 0
             },
             {
                 "physical": 0,
-                "divine": 0,
+                "divine": 0.7,
                 "fire": 0,
-                "ice": 0.2,
+                "ice": 0,
                 "frostfire": 0
             },
             {
                 "physical": 0,
-                "divine": 0,
+                "divine": 0.75,
                 "fire": 0,
-                "ice": 0.1,
+                "ice": 0,
                 "frostfire": 0
             },
             {
                 "physical": 0,
-                "divine": 0,
+                "divine": 0.8,
                 "fire": 0,
-                "ice": 0.2,
+                "ice": 0,
                 "frostfire": 0
             }
         ]
@@ -585,7 +584,7 @@
                 "attackSpeedUp": 100,
                 "rangeUp": 2,
                 "timeToLiveUp": 200,
-                "pierceUp": 20,
+                "pierceUp": 3,
                 "gemValueUp": 0
             }
         ],

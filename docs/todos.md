@@ -26,8 +26,7 @@ List of things to implement following the "release" of the minimum viable produc
 
 ## Other
 
--   [ ] Disable player action during combat phase.
 -   [ ] Add sound effects
 -   [x] Tutorial image/mission
--   [ ] Pause menu
+-   [x] Pause menu
 -   [x] Score screen when winning/losing map

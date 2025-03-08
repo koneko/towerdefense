@@ -85,6 +85,8 @@ export class GameScene extends Scene {
             this.isWaveManagerFinished = true;
         });
         this.events.on(CreepEvents.Died, (playerAward, creepThatDied) => {
+            this.MissionStats.damageDealt += playerAward;
+            this.MissionStats.creepsKilled++;
             this.MissionStats.earnGold(playerAward);
         });
         this.towerPanel = new TowerPanel(GameUIConstants.SidebarRect);
@@ -121,7 +123,7 @@ export class GameScene extends Scene {
             this.changeRoundButton.buttonIcon.texture = GameAssets.FastForwardIconTexture;
             this.events.emit(WaveManagerEvents.NewWave, `${this.currentRound + 1}`);
         };
-        this.MissionStats = new MissionStats(100, 250);
+        this.MissionStats = new MissionStats(100, 75);
         this.events.on(GemEvents.TowerPanelSelectGem, (gem, index, tower) => {
             if (gem == null) {
                 if (!this.MissionStats.checkIfPlayerHasAnyGems())
@@ -185,6 +187,7 @@ export class GameScene extends Scene {
             this.isWaveManagerFinished = false;
             this.setRoundMode(RoundMode.Purchase);
             this.changeRoundButton.buttonIcon.texture = GameAssets.PlayIconTexture;
+            this.MissionStats.wavesSurvived++;
             Engine.NotificationManager.Notify(
                 `Round ${this.currentRound + 1}/${this.mission.rounds.length} completed.`,
                 'info'
@@ -248,7 +251,6 @@ export class GameScene extends Scene {
                 },
             },
         });
-        // offerText.x -= offerText.width;
         Engine.GameMaster.currentScene.stage.addChildAt(offerText, 0);
         gemsToOffer.forEach((gType, index) => {
             let _Gem = new Gem(gType, true);

@@ -34,11 +34,12 @@ export class Engine {
     public static TestSuite() {
         let params = new URLSearchParams(location.href);
         if (params.entries().next().value[1] != 'game') return;
-        Engine.NotificationManager.Notify('Loaded testing suite.', 'danger');
+        Engine.NotificationManager.Notify('Loaded.', 'danger');
         let tower = GameAssets.Towers[TowerType.Electric];
         Engine.TowerManager.ToggleChoosingTowerLocation('RESET');
         Engine.TowerManager.PlaceTower(tower, 6, 10, tower.behaviour, true);
-        for (let i = 0; i < 29; i++) {
+        Engine.GameScene.MissionStats.earnGold(2000);
+        for (let i = 0; i < 24; i++) {
             this.GameScene.MissionStats.giveGem(new Gem(i % 6), true);
         }
     }

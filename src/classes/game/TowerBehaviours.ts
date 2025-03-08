@@ -7,6 +7,7 @@ import Creep, { CreepEffects } from './Creep';
 import Projectile, { calculateAngleToPoint, TrapProjectile, VisualLightning } from './Projectile';
 import { distance, Tower } from './Tower';
 import * as PIXI from 'pixi.js';
+import { TowerBehaviours } from './TowerManager';
 
 /**
  * Checks the projectiles of the tower and updates or removes them based on their state.
@@ -72,7 +73,9 @@ export function computeGemImprovements(tower: Tower) {
     tower.computedDamageToDeal = tower.definition.stats.damage + gemDamage;
     tower.computedCooldown = tower.definition.stats.cooldown - gemAttackSpeedUp;
     tower.computedRange = tower.definition.stats.range + gemRangeUp;
-    tower.computedTimeToLive = tower.definition.stats.timeToLive + gemTimeToLiveUp;
+    if (tower.behaviour != TowerBehaviours.TrapperTowerBehaviour)
+        tower.computedTimeToLive = tower.definition.stats.timeToLive + gemTimeToLiveUp;
+    else tower.computedTimeToLive = tower.definition.stats.timeToLive + gemTimeToLiveUp * 10;
     tower.computedPierce = tower.definition.stats.pierce + gemPierceUp;
 
     // Buff tower

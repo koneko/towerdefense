@@ -20,7 +20,7 @@ export class VisualGemSlot extends GuiObject {
         let gtexture;
         this.i = index;
         this.container.x = 10;
-        this.container.y = index * (Engine.GridCellSize + 6) + 300;
+        this.container.y = index * (Engine.GridCellSize + 6) + 350;
         this.background = new PIXI.Sprite({
             texture: GameAssets.Frame01Texture,
         });
@@ -115,6 +115,7 @@ export default class TowerPanel extends GuiObject {
     public divineResDamage: PIXI.Text;
     public physicalResDamage: PIXI.Text;
     private sellButton: Button;
+    private description: PIXI.Text;
 
     constructor(bounds: PIXI.Rectangle) {
         super(false);
@@ -282,6 +283,23 @@ export default class TowerPanel extends GuiObject {
             }),
         });
         this.container.addChild(this.physicalResDamage);
+        this.description = new PIXI.Text({
+            x: 10,
+            y: 270,
+            zIndex: 5,
+            style: {
+                fontSize: 18,
+                wordWrap: true,
+                wordWrapWidth: 245,
+                fill: 0x00ff00,
+                fontStyle: 'italic',
+                stroke: {
+                    color: 0x000000,
+                    width: 2,
+                },
+            },
+        });
+        this.container.addChild(this.description);
         this.sellButton = new Button(
             new PIXI.Rectangle(5, this.towerPanel.height - 70, this.towerPanel.width - 115, 60),
             'Sell',
@@ -348,6 +366,7 @@ export default class TowerPanel extends GuiObject {
         this.frostFireResDamage.text = `+${tower.totalGemResistanceModifications.frostfire * 100}% FrostFire damage`;
         this.divineResDamage.text = `+${tower.totalGemResistanceModifications.divine * 100}% Divine damage`;
         this.physicalResDamage.text = `+${tower.totalGemResistanceModifications.physical * 100}% Physical damage`;
+        this.description.text = `"${tower.definition.description}"`;
         this.sellButton.setCaption('Sell for ' + tower.definition.stats.cost + ' gold');
         this.sellButton.onClick = () => {
             tower.Sell();

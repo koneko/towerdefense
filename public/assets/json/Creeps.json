@@ -2,14 +2,15 @@
     {
         "name": "basic",
         "sprite": "wood",
+        "tint": "0xffffff",
         "textures": [],
         "textureArrayLength": 12,
         "stats": {
-            "health": 5,
-            "speed": 4,
+            "health": 2,
+            "speed": 3,
             "special": null,
             "resistance": {
-                "physical": 0,
+                "physical": 0.05,
                 "divine": 0,
                 "fire": 0,
                 "ice": 0,
@@ -20,11 +21,12 @@
     {
         "name": "quick",
         "sprite": "zombie",
+        "tint": "0xffffff",
         "textures": [],
         "textureArrayLength": 8,
         "stats": {
-            "health": 2,
-            "speed": 6,
+            "health": 1,
+            "speed": 5,
             "special": null,
             "resistance": {
                 "physical": 0,
@@ -38,10 +40,11 @@
     {
         "name": "tank",
         "sprite": "skeleton",
+        "tint": "0xffffff",
         "textures": [],
         "textureArrayLength": 12,
         "stats": {
-            "health": 12,
+            "health": 5,
             "speed": 2,
             "special": null,
             "resistance": {
@@ -56,29 +59,50 @@
     {
         "name": "cloaker",
         "sprite": "hood",
+        "tint": "0xffffff",
         "textures": [],
         "textureArrayLength": 12,
         "stats": {
-            "health": 12,
-            "speed": 2,
+            "health": 7,
+            "speed": 3,
             "special": null,
             "resistance": {
                 "physical": 0,
-                "divine": 0,
-                "fire": 0,
-                "ice": 0,
-                "frostfire": 0
+                "divine": 1,
+                "fire": 1,
+                "ice": 1,
+                "frostfire": 1
             }
         }
     },
     {
         "name": "demon",
         "sprite": "demon",
+        "tint": "0xffffff",
         "textures": [],
         "textureArrayLength": 8,
         "stats": {
-            "health": 12,
-            "speed": 2,
+            "health": 5,
+            "speed": 3,
+            "special": null,
+            "resistance": {
+                "physical": 1,
+                "divine": -0.25,
+                "fire": 1,
+                "ice": 1,
+                "frostfire": 1
+            }
+        }
+    },
+    {
+        "name": "maker",
+        "sprite": "pumpkin",
+        "tint": "0xffffff",
+        "textures": [],
+        "textureArrayLength": 11,
+        "stats": {
+            "health": 5,
+            "speed": 3,
             "special": null,
             "resistance": {
                 "physical": 0,
@@ -89,17 +113,57 @@
             }
         }
     },
+
     {
-        "name": "maker",
-        "sprite": "pumpkin",
+        "name": "monster",
+        "sprite": "green",
+        "tint": "0xffffff",
         "textures": [],
-        "textureArrayLength": 11,
+        "textureArrayLength": 12,
         "stats": {
-            "health": 11,
-            "speed": 2,
+            "health": 30,
+            "speed": 1,
             "special": null,
             "resistance": {
-                "physical": 0,
+                "physical": 0.05,
+                "divine": 0.05,
+                "fire": -0.25,
+                "ice": 0.05,
+                "frostfire": 0.05
+            }
+        }
+    },
+    {
+        "name": "remaker",
+        "sprite": "orange",
+        "tint": "0xffffff",
+        "textures": [],
+        "textureArrayLength": 12,
+        "stats": {
+            "health": 2,
+            "speed": 3,
+            "special": null,
+            "resistance": {
+                "physical": 0.05,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0,
+                "frostfire": 0
+            }
+        }
+    },
+    {
+        "name": "elite",
+        "sprite": "phood",
+        "tint": "0xffffff",
+        "textures": [],
+        "textureArrayLength": 12,
+        "stats": {
+            "health": 2,
+            "speed": 3,
+            "special": null,
+            "resistance": {
+                "physical": 0.05,
                 "divine": 0,
                 "fire": 0,
                 "ice": 0,

@@ -32,6 +32,7 @@ export type WaveDefinition = {
 export type CreepDefinition = {
     name: string;
     sprite: string;
+    tint: PIXI.ColorSource;
     textures: PIXI.Texture[];
     textureArrayLength: number;
     stats: CreepStatsDefinition;
@@ -113,6 +114,9 @@ export enum CreepType {
     Cloaker = 3,
     Demon = 4,
     Maker = 5,
+    Monster = 6,
+    Remaker = 7,
+    Elite = 8,
 }
 
 export enum GemType {

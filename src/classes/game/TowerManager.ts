@@ -28,7 +28,7 @@ export default class TowerManager {
         height: 64,
         alpha: 0.8,
     });
-    private towers: Tower[] = [];
+    public towers: Tower[] = [];
     constructor() {
         // TODO: Unsubscribe from events once the scene is destroyed
         Engine.TowerManager = this;

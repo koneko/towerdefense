@@ -224,14 +224,6 @@ export default class Creep extends GameObject {
         this.container.y = this.y;
     }
 
-    // public takeDamage(amount: number) {
-    //     this.health -= amount;
-    //     if (this.health < 0 && !this.died) {
-    //         this.died = true;
-    //         this.events.emit(CreepEvents.Died, this);
-    //     }
-    // }
-
     public destroy() {
         super.destroy();
         this.container.removeChildren();

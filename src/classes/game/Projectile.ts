@@ -6,7 +6,6 @@ import { CreepEvents } from '../Events';
 import { distance, Tower } from './Tower';
 import { CreepResistancesDefinition } from '../Definitions';
 import GameAssets from '../Assets';
-import { RoundMode } from '../../scenes/Game';
 
 export function calculateAngleToPoint(x, y, targetX, targetY) {
     const dx = targetX - x;
@@ -47,6 +46,7 @@ export default class Projectile extends GameObject {
         this.gemResistanceModifications = gemResistanceModifications;
         this.sprite = new PIXI.AnimatedSprite({ textures: textures, scale: 0.25, rotation: angle });
         this.sprite.anchor.set(0.5, 0.5);
+        // this.sprite.tint = tint;
         this.sprite.play();
         this.container.x = this.x;
         this.container.y = this.y;
@@ -71,7 +71,7 @@ export default class Projectile extends GameObject {
         Engine.Grid.creeps.forEach((creep) => {
             if (this.pierce <= 0) return;
             if (creep && creep.container && this.checkCollision(creep)) {
-                let exists = this.collidedCreepIDs.find((c) => creep.id == c.id);
+                const exists = this.collidedCreepIDs.find((c) => creep.id == c.id);
                 if (!exists) {
                     this.collidedCreepIDs.push(creep);
                     this.pierce--;
@@ -100,8 +100,8 @@ export default class Projectile extends GameObject {
     public checkCollision(creep: Creep) {
         //console.debug(creep);
         if (creep == null || creep.container == null || creep.container._position == null) return;
-        let mybb = this.copyContainerToBB();
-        let otherbb = creep.copyContainerToBB();
+        const mybb = this.copyContainerToBB();
+        const otherbb = creep.copyContainerToBB();
         return mybb.getBounds().intersects(otherbb.getBounds());
     }
 }

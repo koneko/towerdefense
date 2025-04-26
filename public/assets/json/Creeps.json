@@ -86,11 +86,11 @@
             "speed": 3,
             "special": null,
             "resistance": {
-                "physical": 1,
-                "divine": -0.25,
-                "fire": 1,
-                "ice": 1,
-                "frostfire": 1
+                "physical": 0,
+                "divine": 0,
+                "fire": 0,
+                "ice": 0,
+                "frostfire": 0
             }
         }
     },

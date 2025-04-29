@@ -62,7 +62,7 @@ export default class MissionStats extends GameObject {
         this.inventory.push(gem);
         if (!noNotify)
             Engine.NotificationManager.Notify(
-                `Lv. ${gem.level} ${gem.definition.name}` + ' added to your inventory.',
+                `Lv. ${gem.level} ${gem.definition.name} added to your inventory.`,
                 'gemaward'
             );
         Engine.GameScene.events.emit(StatsEvents.GemGivenEvent, gem);

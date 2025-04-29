@@ -178,7 +178,7 @@ export default class Tooltip extends GuiObject {
         this.gemAmount.alpha = 0;
         this.gemDescriptionText.alpha = 1;
 
-        this.titleText.text = `Lv. ${gem.level} ` + gem.definition.name;
+        this.titleText.text = `Lv. ${gem.level} ${gem.definition.name}`;
         let costToLevelUp;
         if (!gem.isMaxLevel())
             costToLevelUp = `Costs ${gem.definition.genericImprovements[gem.level].gemValueUp} gold to level up.`;

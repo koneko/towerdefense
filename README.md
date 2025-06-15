@@ -1,3 +1,5 @@
+# GREAT SUCCESS! This was my final project for high school and it was graded with a perfect score! I will no longer touch this.
+
 # Bastion
 
 ## Setup
